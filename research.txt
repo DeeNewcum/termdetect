@@ -1,0 +1,58 @@
+There are several request/reply codes that are mentioned in the VT510 manual that aren't implemented
+here yet.
+
+                http://www.vt100.net/docs/vt510-rm/contents
+
+    DECRQCRA—Request Checksum of Rectangular Area
+
+    DECRQDE—Request Displayed Extent
+    DECRPDE—Report Displayed Extent
+
+    DECRQKD—Request Key Definition
+
+    DECRQKT—Key Type Inquiry
+    DECRPKT—Report Key Type
+
+    DECRQM—Request Mode - Host To Terminal
+    DECRPM—Report Mode - Terminal To Host
+
+    DECRQPKFM—Program Key Free Memory Inquiry
+
+    DECRQPSR—Request Presentation State Report
+
+    DECRQSS—Request Selection or Setting
+    DECRPSS—Report Selection or Setting
+
+    DECRQTSR—Request Terminal State Report
+    DECTSR—Terminal State Report—Terminal to Host
+
+    DECRPAK—Report All Modifiers/Alphanumeric Key State
+
+    DECRPFK—Report Function Key Definition
+
+    DECRPTUI—Report Terminal Unit ID
+
+    DECCIR—Cursor Information Report (Terminal to Host)
+
+    DECEKBD—Extended Keyboard Report
+
+    DECMSR—Macro Space Report
+
+    DECSMKR—Select Modifier Key Reporting
+
+    DECTABSR—Tab Stop Report
+
+
+    DSR—Device Status Reports
+
+        Operating status
+        Keyboard status - language
+        Cursor position report
+        Cursor position with page
+        Printer port
+        User-defined keys
+        Macro space report
+        Memory checksum
+        Data integrity report
+    
+    DSR—Data Integrity Report

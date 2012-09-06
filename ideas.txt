@@ -1,0 +1,35 @@
+other ideas for terminal detection:
+
+- try to detect whether specific features are supported
+
+        - ones that can be detected by using the cursor-position query
+
+            - enable line wrap (<ESC>[7h) and disable line wrap (<ESC>[7l)
+
+            - save cursor, and restore
+
+            - save cursor and attributes, and restore
+
+            - set tab;  clear tab;  clear all tabs
+
+            - vertical tabs
+
+            - change scroll region
+
+            - right-to-left mode
+
+            - alternate screen
+
+            - support for Unicode combining characters
+
+            - support for double-width Unicode characters
+                    http://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms#Chart
+
+
+- look for specific bugs, or for different results in response to undefined behavior in the spec
+        (much like browser sniffing)
+
+
+- specify terminal strings in a generic way
+        (terminfo!)
+                `infocmp -L -1`

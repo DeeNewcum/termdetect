@@ -1,0 +1,10 @@
+	xterm #271	libVTE v2.90	Linux VT console v3.2.0	Putty v0.62	SecureCRT v6.7.2
+device status	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n
+printer status	\e[?15n	\e[?11n	X	X	\e[?10n
+device attributes	\e[?1;2c	\e[?62;9;c	\e[?6c	\e[?6c	\e[?1;2c
+secondary device attributes	\e[>0;271;0c	\e[>1;2600;0c	[+1]	\e[>0;136;0c	[+1]
+tertiary device attributes	X	X	[+1]	X	[+1]
+terminal parameters	\e[2;1;1;128;128;1;0x	X	X	\e[2;1;1;112;112;1;0x	\e[2;1;1;120;120;1;0x
+ENQ (enquiry character)	X	[+3]	X	PUTTY	X
+					
+? extended cursor position	Y	Y	N	N	N
