@@ -5,7 +5,7 @@
 # see http://paperlined.org/apps/terminals/queries.html
 
 
-echo "======== query cursor position ========"
+echo "======== CPR - cursor position report ========"
 ./ansi_reply.pl  '\e[6n' R
 echo
 
@@ -15,7 +15,7 @@ echo "======== query extended cursor position ========"
 echo
 
 
-echo "======== query device status ========"
+echo "======== DSR - device status report ========"
 ./ansi_reply.pl  '\e[5n' n
 echo
 
@@ -25,12 +25,17 @@ echo "======== query printer status ========"
 echo
 
 
-echo "======== query device attributes ========"
+echo "======== DA - device attributes ========"
 ./ansi_reply.pl  '\e[c' c
 echo
 
 
-echo "======== DECID -- DEC private identification ========"
+echo "======== DA - device attributes ========"
+./ansi_reply.pl  '\e[6c' c
+echo
+
+
+echo "======== DECID - identify terminal ========"
 ./ansi_reply.pl  '\eZ' ''
 echo
 
