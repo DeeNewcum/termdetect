@@ -1,13 +1,20 @@
 
-- don't do any parsing...   regular normal regexps are just fine
+
+
+
+- add the Xterm reporting features listed in:
+        vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
+
+
+- test the alternate-screen
 
 
 - change run_test() so that it only sends *one* CPR...   the first CPR should be changed to be
   just a move-to-beginning-of-line
 
 
-- line clearing:
-    - once all the tests are over, we should clear the line
-    - in run_and_display_test(), we should clear the line before we display the results
+- pick a better name for this...
+
+        - "termdet" and "termdetect" both get very few ghits
 
 

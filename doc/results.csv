@@ -6,5 +6,10 @@ secondary device attributes	\e[>0;271;0c	\e[>1;2600;0c	[+1]	\e[>0;136;0c	[+1]	X	
 tertiary device attributes	X	X	[+1]	X	[+1]	X	X
 terminal parameters	\e[2;1;1;128;128;1;0x	[+3]	X	\e[2;1;1;112;112;1;0x	\e[2;1;1;120;120;1;0x	X	\e[2;1;1;112;112;1;0x
 ENQ (enquiry character)	X	X	X	PUTTY	X	X	X
+[dtterm] window title	N	always “Terminal”	N	always blank	N	N	Y
+[dtterm] window icon label	N	always “Terminal”	N	always blank	N	N	N
+[dtterm] window size in pixels	N	Y	N	Y	N	N	N
+[dtterm] screen size in chars	N	Y	N	N	N	N	N
+[dtterm] window state	N	Y	N	Y	N	N	Y
 							
 ? extended cursor position	Y	Y	N	N	N	N	N

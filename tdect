@@ -32,6 +32,8 @@ if (!is_cursor_position_supported()) {
 }
 
 
+print "\n-------- replies --------\n";
+
 run_and_display_test("\e[5n",       "DSR - device status report");
 run_and_display_test("\e[?15n",     "printer status report");
 run_and_display_test("\e[c",        "DA - device attributes");
@@ -40,6 +42,27 @@ run_and_display_test("\e[>c",       "secondary device attributes");
 run_and_display_test("\e[=c",       "tertiary device attributes");
 run_and_display_test("\e[x",        "terminal parameters");
 run_and_display_test("\5",          "ENQ - enquiry character");
+
+print "\n-------- replies, more obscure --------\n";
+
+run_and_display_test("\e[?50n",     "DSR - keyboard status");
+run_and_display_test("\e[?20n",     "DSR - user-defined key status");
+run_and_display_test("\e[21t",      "[dtterm] window title");
+run_and_display_test("\e[20t",      "[dtterm] window's icon label");
+run_and_display_test("\e[14t",      "[dtterm] window size, in pixels");
+run_and_display_test("\e[18t",      "[dtterm] window size, in characters");
+run_and_display_test("\e[11t",      "[dtterm] window state (iconified, etc)");
+run_and_display_test("\e[13t",      "[dtterm] window position (pixels)");
+run_and_display_test("\e[19t",      "[dtterm] screen size, in characters");
+
+print "\n-------- no reply -- the only goal is to detect cursor movement --------\n";
+            # ie. the escape sequence gets displayed to the user
+            # ie. the terminal's lexer doesn't know about this sequence
+
+run_and_display_test("\e[=",        "application keypad mode");
+run_and_display_test("\e[>",        "numeric keypad mode");
+run_and_display_test("\e[7",        "save cursor and attributes");
+run_and_display_test("\eg",         "visual bell");
 
 
 exit;
@@ -81,10 +104,8 @@ sub run_test {
     if ($sequence eq "\e[6n" || $sequence eq "\e[?6n") {
         die "run_test() can't send a Cursor Position Report command, due to the way its internals work\n";
 
-            # The reason for this is that we're looking for something to come back IN BETWEEN two CPR-replies.
-            # Once we see the second CPR-reply, we stop reading.  If we had to wait for a third CPR-reply
-            # in some cases, our logic for pulling data out of the buffer would be much more complicated.
-            # Write another subroutine to do what you want, instead of using this.
+            # The reason for this -- We're looking for a CPR-reply to know when to stop reading.
+            # This code doesn't (currently) contain logic to continue reading after receiving the first CPR-reply.
     }
 
     print "\e[6n", $sequence, "\e[6n";      # send a CPR (cursor position report) before and after
