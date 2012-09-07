@@ -46,6 +46,7 @@ run_and_display_test("\5",          "ENQ - enquiry character");
 
 print "\n-------- replies, more obscure --------\n";
 
+run_and_display_test("\e[?6n",      "extended cursor position report");
 run_and_display_test("\e[?50n",     "DSR - keyboard status");
 run_and_display_test("\e[?20n",     "DSR - user-defined key status");
 run_and_display_test("\e[21t",      "[dtterm] window title");
@@ -100,14 +101,28 @@ sub run_and_display_test {
 }
 
 
+
+# From the outside, this routine merely sense an ANSI query, and reads the reply.
+# Internally thoguh, we do it a somewhat fairly sophisticated way.  We surroudn the request with a
+# CPR queries both before and after, which means that 1) we know if the query caused the cursor
+# to move, and 2) if the terminal doesn't send any reply at all, we know that too, without having
+# to do any waiting.
 sub run_test {
     my ($sequence) = @_;
 
-    if ($sequence eq "\e[6n" || $sequence eq "\e[?6n") {
-        die "run_test() can't send a Cursor Position Report command, due to the way its internals work\n";
-
-            # The reason for this -- We're looking for a CPR-reply to know when to stop reading.
-            # This code doesn't (currently) contain logic to continue reading after receiving the first CPR-reply.
+    if ($sequence =~ /^(?:\e\[|\x9B)\??6n$/) {
+        # run_test() isn't designed to work with a Cursor Position Report command.  This is because
+        # it uses a CPR-reply as a way to know when to stop reading.
+        #
+        # When we're asked to do a CPR sequence, we'll revert to much dumbed-down behavior instead.
+        
+        print $sequence,
+              "\e[5n";      # add a DSR (device status report) to the end, so we can at least
+                            # quickly determine a non-response
+                            
+        my $reply = read_ansi_reply(1.0, 'n');
+        $reply =~ s/\e\[\d+n$//s;
+        return $reply;
     }
 
     print "\e[6n", $sequence, "\e[6n";      # send a CPR (cursor position report) before and after
@@ -116,7 +131,7 @@ sub run_test {
     my $replies = '';
     while (1) {
         my $reply = read_ansi_reply(0.0, 'R');
-        $replies .= $reply;
+        $replies .= $reply      if defined($reply);
 
         if ($replies =~ /.*\e\[(\d+);(\d+)R(.*)\e\[(\d+);(\d+)R/s) {
             my $x_delta = $5 - $2;
