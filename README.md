@@ -1,3 +1,5 @@
-This project aims to produce a utility that performs various tests on the terminal emulator it's currently attached to, and then looks up in its database of known terminal emulators to guess which the current one is closest to.
+'tdect'  (Terminal Autodetect) is a tool that determines what terminal emulator it's currently attached to.
 
-That is, we do something akin to [browser sniffing](http://en.wikipedia.org/wiki/Browser_sniffing).
+Why not just use $TERM?  Because it has often been changed/overwritten, particularly if you've SSH'd somewhere.
+
+This tool does something akin to [browser sniffing](http://en.wikipedia.org/wiki/Browser_sniffing) -- it has its own database of how different terminals respond to different things, and it locates the closest match in its database.

@@ -11,6 +11,8 @@
 
     use Data::Dumper;
 
+    use constant DEBUG => 0;
+
     # from Regexp::Common::ANSIescape
     #       ^^ problem?  this doesn't allow things like "\e7" -- the manual for GNU Screen says that should save the cursor and attributes
     #use constant ansi_regexp => "(?:(?:\e\\[|\233)(?:[0-?]*)(?:[ -/]*[\@-~])|\e[\@-OQ-WYZ\\\\]|[\200-\217\221-\227\231\232\234]|(?:\e[]PX^_]|[\235\220\230\236\237])(?:.|\n)*?(?:\e\\\\|\234))";
@@ -34,7 +36,11 @@ END {
 if (!is_cursor_position_supported()) {
     die "Terminal is unable to report the cursor position.  This is required for many tests.\n";
 }
-run_test("\e[c", "c");
+
+
+run_and_display_test("\e[x", "\e");
+run_and_display_test("\e[c", "c");
+run_and_display_test("\5",   "\e");
 
 
 exit;
@@ -59,6 +65,17 @@ sub is_cursor_position_supported {
 }
 
 
+sub run_and_display_test {
+    my ($sequence, $response_end_character) = @_;
+
+    my $response = run_test(@_);
+
+    printf  "%-20s   %-20s\n",
+            ansi_escape($sequence),
+            ansi_escape($response);
+}
+
+
 sub run_test {
     my ($sequence, $response_end_character) = @_;
 
@@ -68,20 +85,48 @@ sub run_test {
     #debug_show_remaining_input();
 
     my @replies;
+    my $replies = '';
     while (1) {
         my $reply = get_ansi_reply(0.0, qr/[R$response_end_character]/);
         #print ansi_escape($reply), "\n"; sleep 5;exit;
 
-        push(@replies, parse_sequence($reply));
-        print ansi_escape(Dumper \@replies);
 
-        # keep reading replies until we've seen two CPR replies
-        #last if scalar(grep {ref{$_} eq 'HASH' && $_->{mnemonic} eq 'CPR-reply'} @replies) >= 2;
+
+        #push(@replies, parse_sequence($reply));
+
+
+        $replies .= $reply;
+        @replies = parse_sequence($replies);
+
+        last if (scalar(grep {is_CPR($_)} @replies) >= 2);
 
     }
-    print ansi_escape(Dumper \@replies); exit;
+    
+    my @cprs = grep {is_CPR($_)} @replies;
+    # we dropped down a line...   what do we do here??
+    die "don't know how to handle this" if ($cprs[0]{params}[0] != $cprs[-1]{params}[0]);
+    my $chars_moved = $cprs[-1]{params}[1] - $cprs[0]{params}[1];
+    if ($chars_moved > 0) {
+        return "[+$chars_moved]";
+    } elsif (@replies == 2) {
+        # no response
+        return "";
+    } else {
+        my $response = $replies[1];
+        if (ref($response)) {
+            return $response->{full};
+        } else {
+            return $response;
+        }
+    }
+    #print ansi_escape(Dumper \@replies); exit;
 }
 
+        sub is_CPR {
+            local $_ = shift;
+            return 0 unless ref($_) eq 'HASH';
+            return ($_->{mnemonic} && $_->{mnemonic} eq 'CPR-reply');
+        }
 
 
 
@@ -94,16 +139,18 @@ sub run_test {
 sub parse_sequence {
     my ($sequence) = @_;
 
-    print Dumper ['parse_sequence -- ', $sequence];
+    #print Dumper ['parse_sequence -- ', $sequence];
 
     return unless defined($sequence);
 
     my @parsed;
 
     #my @seqs = split /((@{[ansi_regexp()]}))/, $sequence;
-    my @seqs = split /(\e[^a-zA-Z]*[a-zA-Z])/, $sequence;
-    print Dumper \@seqs; exit;
+    my @seqs = grep {length($_)} split /(\e[^a-zA-Z]*[a-zA-Z])/, $sequence;
+    #print 'parse_sequence -- ', Dumper \@seqs; #exit;
+    #return;
     foreach my $seq (@seqs) {
+        next unless ($seq =~ /\S/);
         if ($seq =~ /^\e/) {
             push(@parsed, parse_one_sequence($seq));
         } else {
@@ -118,6 +165,8 @@ sub parse_sequence {
 sub parse_one_sequence {
     my ($sequence) = @_;
 
+    #print Dumper ['parse_one_sequence -- ', ansi_escape($sequence)];
+
     use constant sequences => { map {my @F = split ' ', $_, 3; $F[0] => [$F[1], $F[2]]} split /\n/, <<"EOF" };
             \e[...R       CPR-reply       Cursor Position Report - Reply
 EOF
@@ -125,10 +174,11 @@ EOF
     my %parsed;
     my $mnemonic;       # the mnemonic listed in ECMA-48
     my $mnemonic_long;  # the full name, listed in ECMA-48
-    if ($sequence =~ /^(\e[^\da-z]*)(\d*(?:;\d+)*)([^\d;]+)$/s) {
+    if ($sequence =~ /^(\e[^\da-z]*)(\d*(?:;\d*)*)([^\d;]+)$/s) {
         my %parsed;
         my $prefix = $1;
         my $suffix = $3;
+        $parsed{full} = $sequence;
         $parsed{params} = [ split /;/, $2 ];
 
         my $prefix_suffix = "$prefix...$suffix";
@@ -140,10 +190,13 @@ EOF
         if ($mnemonic) {
             $parsed{mnemonic} = $mnemonic;
             $parsed{name}     = $mnemonic_long;
-            return \%parsed;
+        } else {
+            $parsed{UNRECOGNIZED} = $prefix_suffix;
         }
+        return \%parsed;
     } else {
-        die "don't know what to do with:\n\t" . ansi_escape($sequence) . "\n\t";
+        #die "don't know what to do with:\n\t" . ansi_escape($sequence) . "\n\t";
+        return $sequence;
     }
 }
 
@@ -185,14 +238,14 @@ sub get_ansi_reply {
         return undef if ($@ eq "alarm\n");
         die $@;
     }
-    print "got reply: ", ansi_escape($reply), "\n";
+    print "got reply: ", ansi_escape($reply), "\n"      if (DEBUG);
     return $reply;
 }
 
 
 sub output {
     my $str = join("", @_);
-    print "  sending: ", ansi_escape($str), "\n";
+    print "  sending: ", ansi_escape($str), "\n"        if (DEBUG);
     print $str;
     $|++;
 }
@@ -225,7 +278,10 @@ sub perl_string_encode {
     return $encoded;
 }
 
-sub ansi_escape { map {(my $a = $_) =~ s/\e/\\e/g; $a} @_ }
+sub ansi_escape { map {(my $a = $_);
+        $a =~ s/\e/\\e/g;
+        $a =~ s/\x5/\\5/g;
+        $a} @_ }
 
 
 # display a string to the user, via `xxd`

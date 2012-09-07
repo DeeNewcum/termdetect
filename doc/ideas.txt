@@ -1,5 +1,9 @@
 other ideas for terminal detection:
 
+- try to detect which ANSI codes are displayed to the user and which aren't
+        (there is wide variation among lexers and such...   very different ideas about what is
+         a properly-formed ANSI sequence and what isn't)
+
 - try to detect whether specific features are supported
 
         - ones that can be detected by using the cursor-position query
