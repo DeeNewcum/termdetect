@@ -33,8 +33,12 @@ if (!is_cursor_position_supported()) {
 
 
 run_and_display_test("\e[5n",       "DSR - device status report");
-run_and_display_test("\e[x",        "terminal parameters");
+run_and_display_test("\e[?15n",     "printer status report");
 run_and_display_test("\e[c",        "DA - device attributes");
+run_and_display_test("\eZ",         "DECID - identify terminal");
+run_and_display_test("\e[>c",       "secondary device attributes");
+run_and_display_test("\e[=c",       "tertiary device attributes");
+run_and_display_test("\e[x",        "terminal parameters");
 run_and_display_test("\5",          "ENQ - enquiry character");
 
 
@@ -74,7 +78,7 @@ sub run_and_display_test {
 sub run_test {
     my ($sequence) = @_;
 
-    if ($sequence eq "\e[6n") {
+    if ($sequence eq "\e[6n" || $sequence eq "\e[?6n") {
         die "run_test() can't send a Cursor Position Report command, due to the way its internals work\n";
 
             # The reason for this is that we're looking for something to come back IN BETWEEN two CPR-replies.
