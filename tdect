@@ -35,6 +35,7 @@ if (!is_cursor_position_supported()) {
 print "\n-------- replies --------\n";
 
 run_and_display_test("\e[5n",       "DSR - device status report");
+#run_and_display_test("\x9B5n",      "C1 version DSR");
 run_and_display_test("\e[?15n",     "printer status report");
 run_and_display_test("\e[c",        "DA - device attributes");
 run_and_display_test("\eZ",         "DECID - identify terminal");

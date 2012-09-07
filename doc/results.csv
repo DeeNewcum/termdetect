@@ -13,3 +13,4 @@ ENQ (enquiry character)	X	X	X	PUTTY	X	X	X
 [dtterm] window state	N	Y	N	Y	N	N	Y
 							
 ? extended cursor position	Y	Y	N	N	N	N	N
+? supports C1 (not just C0)	N	N	N	Y	N	N	N
