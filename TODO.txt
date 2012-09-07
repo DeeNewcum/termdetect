@@ -1,7 +1,3 @@
-
-
-
-
 - add the Xterm reporting features listed in:
         vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
 
@@ -9,12 +5,22 @@
 - test the alternate-screen
 
 
-- change run_test() so that it only sends *one* CPR...   the first CPR should be changed to be
-  just a move-to-beginning-of-line
-
-
 - pick a better name for this...
 
         - "termdet" and "termdetect" both get very few ghits
 
+        - "vtdetect" is shorter than "termdetect"
 
+        - "vtdet" gets relatively few ghits, and almost all are SEO-spammy
+
+
+
+- figure out what the goal-line is here...   what are we heading for?
+
+        - output some identifier indicating what terminal we're on?
+
+        - try to match to the terminfo database
+
+
+
+- figure out how to actually do the terminal matching

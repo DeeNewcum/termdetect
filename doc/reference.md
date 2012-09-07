@@ -10,13 +10,7 @@
 
 * http://vt100.net/ — lots of original manuals
  * VT510, [ANSI control function](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6) section
+* [Xterm Control Sequences](http://www.xfree86.org/current/ctlseqs.html)
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), for the linux kernel VT console
 * GNU screen manual, [console sequences section](http://www.gnu.org/software/screen/manual/html_node/Control-Sequences.html)
-
-## Canonical sequence names
-
-Is there a list of canonical names for various ANSI sequences?
-
-* terminfo capability names — [terminfo(5) man page](http://www.manpages.info/linux/terminfo.5.html)
 * [ECMA-48](http://www.ecma-international.org/publications/standards/Ecma-048.htm)  (first adopted in 1976)
-* [mnemonic listed in the VT510 manual](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)

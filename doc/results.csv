@@ -1,16 +1,17 @@
-	xterm #271	libVTE v2.90	Linux VT console v3.2.0	Putty v0.62	SecureCRT v6.7.2	tmux v1.6	screen v4.0.3
-device status	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n
-printer status	\e[?15n	\e[?11n	X	X	\e[?10n	X	X
-device attributes	\e[?1;2c	\e[?62;9;c	\e[?6c	\e[?6c	\e[?1;2c	\e[?1;2c	\e[?1;2c
-secondary device attributes	\e[>0;271;0c	\e[>1;2600;0c	[+1]	\e[>0;136;0c	[+1]	X	\e[>83;40003;0c
-tertiary device attributes	X	X	[+1]	X	[+1]	X	X
-terminal parameters	\e[2;1;1;128;128;1;0x	[+3]	X	\e[2;1;1;112;112;1;0x	\e[2;1;1;120;120;1;0x	X	\e[2;1;1;112;112;1;0x
-ENQ (enquiry character)	X	X	X	PUTTY	X	X	X
-[dtterm] window title	N	always “Terminal”	N	always blank	N	N	Y
-[dtterm] window icon label	N	always “Terminal”	N	always blank	N	N	N
-[dtterm] window size in pixels	N	Y	N	Y	N	N	N
-[dtterm] screen size in chars	N	Y	N	N	N	N	N
-[dtterm] window state	N	Y	N	Y	N	N	Y
-							
-? extended cursor position	Y	Y	N	N	N	N	N
-? supports C1 (not just C0)	N	N	N	Y	N	N	N
+	xterm #271	rxvt v2.6.4	libVTE v2.90	Linux VT console v3.2.0	Putty v0.62	SecureCRT v6.7.2	tmux v1.6	screen v4.0.3	dtterm, Solaris 10
+device status	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n	\e[0n
+printer status	\e[?15n	X	\e[?11n	X	X	\e[?10n	X	X	\e[?13n
+device attributes	\e[?1;2c	\e[?1;2c	\e[?62;9;c	\e[?6c	\e[?6c	\e[?1;2c	\e[?1;2c	\e[?1;2c	\e[?62;1;2;6;7;8;9c
+secondary device attributes	\e[>0;271;0c	\e[?1;2c	\e[>1;2600;0c	[+1]	\e[>0;136;0c	[+1]	X	\e[>83;40003;0c	[+1]
+tertiary device attributes	X	\e[?1;2c	X	[+1]	X	[+1]	X	X	[+1]
+terminal parameters	\e[2;1;1;128;128;1;0x	X	[+3]	X	\e[2;1;1;112;112;1;0x	\e[2;1;1;120;120;1;0x	X	\e[2;1;1;112;112;1;0x	\e[2;1;1;112;112;1;0x
+ENQ (enquiry character)	X	\e[?1;2c	X	X	PUTTY	X	X	X	X
+[dtterm] window title	N	N	always “Terminal”	N	always blank	N	N	Y	Y
+[dtterm] window icon label	N	N	always “Terminal”	N	always blank	N	N	N	Y, same as title
+[dtterm] window size in pixels	N	Y	Y	N	Y	N	N	N	Y
+[dtterm] screen size in chars	N	Y	Y	N	N	N	N	N	N
+[dtterm] window state	N	Y	Y	N	Y	N	N	N	Y
+[dtterm] window position	N	Y	Y	N	Y	N	N	N	Y
+									
+? extended cursor position	Y	Y	Y	N	N	N	N	N	?
+? supports C1 (not just C0)	N	[+3]	N	N	Y	N	N	N	X
