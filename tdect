@@ -63,6 +63,7 @@ run_and_display_test("\e[=",        "application keypad mode");
 run_and_display_test("\e[>",        "numeric keypad mode");
 run_and_display_test("\e[7",        "save cursor and attributes");
 run_and_display_test("\eg",         "visual bell");
+run_and_display_test("\x9B0K",      "C1 version of erase to EOL");
 
 
 exit;
@@ -207,6 +208,7 @@ sub perl_string_encode {
 sub ansi_escape { map {(my $a = $_);
         $a =~ s/\e/\\e/g;
         $a =~ s/\x5/\\5/g;
+        $a =~ s/\x9B/\\x9B/g;
         $a} @_ }
 
 
