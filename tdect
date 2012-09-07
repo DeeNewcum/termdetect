@@ -51,7 +51,7 @@ exit;
 # Figure this out before we waste a lot of time.
 sub is_cursor_position_supported {
     output("\e[6n");
-    my $reply = get_ansi_reply(1.0, 'R');
+    my $reply = read_ansi_reply(1.0, 'R');
     #print perl_string_encode($reply), "\n";
     return 0 unless defined($reply);
     return ($reply =~ /\e\[\d+;\d+R/);
@@ -77,7 +77,7 @@ sub run_test {
 
     my $replies = '';
     while (1) {
-        my $reply = get_ansi_reply(0.0, 'R');
+        my $reply = read_ansi_reply(0.0, 'R');
         $replies .= $reply;
 
         if ($replies =~ /.*\e\[(\d+);(\d+)R(.*)\e\[(\d+);(\d+)R/s) {
@@ -98,7 +98,7 @@ sub run_test {
 
 
 
-sub get_ansi_reply {
+sub read_ansi_reply {
     my ($timeout,                           # seconds to wait for a reply;  use 0 for no alarm
         $response_end_character) = @_;      # if we see this character, we know the response is finished
 
@@ -151,7 +151,7 @@ sub output {
 
 sub debug_show_remaining_input {
     print "---- debug_show_remaining_input ----\n";
-    while (my $reply = get_ansi_reply(0.0, '')) {
+    while (my $reply = read_ansi_reply(0.0, '')) {
         print ansi_escape($reply), "\n";
     }
     exit;
