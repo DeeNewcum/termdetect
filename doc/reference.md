@@ -1,10 +1,15 @@
 ## Available request/response sequences
 
 * [MS-DOS Kermit 3.13 Terminal Emulator Technical Summary](http://www.columbia.edu/kermit/ftp/a/msvibm.vt), section "VT320 Report Requests and Responses"
+* there are various sections in [vttest](http://invisible-island.net/vttest/) that reference reporting codes:
+ * terminal reports
+ * non-VT100 terminals > XTerm > reporting functions
+ * non-VT100 terminals > XTerm > window report-operations
 
 ## Behavior in edge cases
 
 * [vttest](http://invisible-island.net/vttest/) — a script that tests conformance to the VT100 spec
+* "VT100 Magic", by Sami Tabih, Proceedings of the DEC Users Society, St. Louis, Missouri, May 1983  (referenced in vttest's "known bugs" section)
 
 ## General
 
