@@ -32,10 +32,10 @@ if (!is_cursor_position_supported()) {
 }
 
 
-run_and_display_test("\e[5n");      # DSR - device status report
-run_and_display_test("\e[x");       # terminal parameters
-run_and_display_test("\e[c");       # DA - device attributes
-run_and_display_test("\5");         # ENQ - enquiry character
+run_and_display_test("\e[5n",       "DSR - device status report");
+run_and_display_test("\e[x",        "terminal parameters");
+run_and_display_test("\e[c",        "DA - device attributes");
+run_and_display_test("\5",          "ENQ - enquiry character");
 
 
 exit;
@@ -59,13 +59,15 @@ sub is_cursor_position_supported {
 
 
 sub run_and_display_test {
-    my ($sequence) = @_;
+    my ($sequence, $description) = @_;
 
     my $response = run_test(@_);
 
-    printf  "%-20s   %-20s\n",
+    print "\r";     # jump back to beginning of line
+    printf  "%-10s   %-25s   %s\n",
             ansi_escape($sequence),
-            ansi_escape($response);
+            ansi_escape($response),
+            $description;
 }
 
 
