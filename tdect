@@ -72,6 +72,15 @@ sub run_and_display_test {
 sub run_test {
     my ($sequence) = @_;
 
+    if ($sequence eq "\e[6n") {
+        die "run_test() can't send a Cursor Position Report command, due to the way its internals work\n";
+
+            # The reason for this is that we're looking for something to come back IN BETWEEN two CPR-replies.
+            # Once we see the second CPR-reply, we stop reading.  If we had to wait for a third CPR-reply
+            # in some cases, our logic for pulling data out of the buffer would be much more complicated.
+            # Write another subroutine to do what you want, instead of using this.
+    }
+
     print "\e[6n", $sequence, "\e[6n";      # send a CPR (cursor position report) before and after
     #debug_show_remaining_input();
 
