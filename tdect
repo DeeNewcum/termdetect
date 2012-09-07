@@ -50,7 +50,7 @@ exit;
 # and take way too long.
 # Figure this out before we waste a lot of time.
 sub is_cursor_position_supported {
-    output("\e[6n");
+    print "\e[6n";
     my $reply = read_ansi_reply(1.0, 'R');
     #print perl_string_encode($reply), "\n";
     return 0 unless defined($reply);
@@ -72,7 +72,7 @@ sub run_and_display_test {
 sub run_test {
     my ($sequence) = @_;
 
-    output("\e[6n", $sequence, "\e[6n");      # send a CPR (cursor position report) before and after
+    print "\e[6n", $sequence, "\e[6n";      # send a CPR (cursor position report) before and after
     #debug_show_remaining_input();
 
     my $replies = '';
@@ -139,13 +139,6 @@ sub read_ansi_reply {
     return $reply;
 }
 
-
-sub output {
-    my $str = join("", @_);
-    print "  sending: ", ansi_escape($str), "\n"        if (DEBUG);
-    print $str;
-    $|++;
-}
 
 
 
