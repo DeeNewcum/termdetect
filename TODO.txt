@@ -1,0 +1,13 @@
+
+- don't do any parsing...   regular normal regexps are just fine
+
+
+- change run_test() so that it only sends *one* CPR...   the first CPR should be changed to be
+  just a move-to-beginning-of-line
+
+
+- line clearing:
+    - once all the tests are over, we should clear the line
+    - in run_and_display_test(), we should clear the line before we display the results
+
+
