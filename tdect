@@ -38,9 +38,10 @@ if (!is_cursor_position_supported()) {
 }
 
 
-run_and_display_test("\e[x", "\e");
-run_and_display_test("\e[c", "c");
-run_and_display_test("\5",   "\e");
+run_and_display_test("\e[5n");      # DSR - device status report
+run_and_display_test("\e[x");       # terminal parameters
+run_and_display_test("\e[c");       # DA - device attributes
+run_and_display_test("\5");         # ENQ - enquiry character
 
 
 exit;
@@ -66,7 +67,7 @@ sub is_cursor_position_supported {
 
 
 sub run_and_display_test {
-    my ($sequence, $response_end_character) = @_;
+    my ($sequence) = @_;
 
     my $response = run_test(@_);
 
@@ -77,9 +78,7 @@ sub run_and_display_test {
 
 
 sub run_test {
-    my ($sequence, $response_end_character) = @_;
-
-    defined($response_end_character) or die;
+    my ($sequence) = @_;
 
     output("\e[6n", $sequence, "\e[6n");      # send a CPR (cursor position report) before and after
     #debug_show_remaining_input();
@@ -87,7 +86,7 @@ sub run_test {
     my @replies;
     my $replies = '';
     while (1) {
-        my $reply = get_ansi_reply(0.0, qr/[R$response_end_character]/);
+        my $reply = get_ansi_reply(0.0, qr/[R\e]/);
         #print ansi_escape($reply), "\n"; sleep 5;exit;
 
 
