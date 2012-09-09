@@ -1,26 +1,24 @@
-- add the Xterm reporting features listed in:
-        vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
+- add request/reply sequences for:
 
+    - alternate-screen
 
-- test the alternate-screen
-
-
-- pick a better name for this...
-
-        - "termdet" and "termdetect" both get very few ghits
-
-        - "vtdetect" is shorter than "termdetect"
-
-        - "vtdet" gets relatively few ghits, and almost all are SEO-spammy
+    - the Xterm reporting features listed in:
+            vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
 
 
 
-- figure out what the goal-line is here...   what are we heading for?
+- figure out what the goal-line is here...   what is the output we want to generate when the program finishes running?
 
         - output some identifier indicating what terminal we're on?
 
-        - try to match to the terminfo database
+        - try to match to the current machine's terminfo database
+
+        - try to GENERATE a customized terminfo file, specifically for the current terminal?
 
 
 
-- figure out how to actually do the terminal matching
+- figure out how to actually do the terminal matching...   some of the replies are more variable...
+  do we want to do regexp matches for some of the fields?
+
+    - figure out what format to use for the database
+
