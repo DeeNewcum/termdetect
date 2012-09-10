@@ -231,6 +231,7 @@ sub perl_string_encode {
 }
 
 sub ansi_escape { map {(my $a = $_);
+        $a =~ s/\\/\\\\/g;
         $a =~ s/\e/\\e/g;
         $a =~ s/\x5/\\5/g;
         $a =~ s/\x9B/\\x9B/g;
