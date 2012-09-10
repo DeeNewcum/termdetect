@@ -14,7 +14,7 @@
     use Data::Dumper;
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
-    use constant PREPEND_CPR => 0;      # we definitely need to append a CPR (cursor position report),
+    use constant PREPEND_CPR => 1;      # we definitely need to append a CPR (cursor position report),
                                         # but should we prepend one too?
 
 
