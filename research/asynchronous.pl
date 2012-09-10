@@ -14,6 +14,10 @@
     use Data::Dumper;
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
+    use constant PREPEND_CPR => 0;      # we definitely need to append a CPR (cursor position report),
+                                        # but should we prepend one too?
+
+
 
 
 
@@ -83,6 +87,7 @@ sub output {
     # we don't handle CPR sequences in here
     die if ($sequence =~ /^(?:\e\[|\x9B)\??6n$/);
 
+    print "\e[6n" if PREPEND_CPR;
     print $sequence, "\e[6n";      # send a CPR (cursor position report) afterwards
 }
 
@@ -91,8 +96,10 @@ sub receive {
     my ($sequence, $description) = @_;
 
     my $response = read_ansi_reply(0, 'R');
+    $response .= read_ansi_reply(0, 'R')        if PREPEND_CPR;
 
     (my $just_response = $response) =~ s/\e\[\d+;\d+R$//s;
+    $just_response =~ s/^\e\[\d+;\d+R//s        if PREPEND_CPR;
 
     printf  "%-10s   %-25s   %s\n",
             ansi_escape($sequence),
