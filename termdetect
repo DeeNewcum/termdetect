@@ -11,8 +11,6 @@
 
     use Data::Dumper;
 
-    use constant DEBUG => 0;
-
 
 
 
@@ -82,7 +80,6 @@ exit;
 sub is_cursor_position_supported {
     print "\e[6n";
     my $reply = read_ansi_reply(1.0, 'R');
-    #print perl_string_encode($reply), "\n";
     return 0 unless defined($reply);
     return ($reply =~ /\e\[\d+;\d+R/);
 }
@@ -154,12 +151,17 @@ sub run_test {
 # Gets an ANSI response, reading only as many characters as necessary, and waiting only as long
 # as necessary.
 #
-# $timeout                  Seconds to wait for a reply.  Use 0 for no timeout.
+# $timeout
+#       Seconds to wait for a reply.  Use 0 for no timeout.
 #
-# $response_end_character   If we see this character, we know the response is finished.
-#                           Use the empty string to mean "read one buffer's worth of data".
-#                           Use undef to mean "there is no specific end-character...  don't stop
-#                                   reading until the timeout hits".
+# $response_end_character
+#       If we see this character, we know the response is finished.
+#
+#       Special values:
+#           - empty string -- means "read one buffer's worth of data".
+#           - undef -- means "there is no specific end-character...  read until timeout
+#           - regexp reference -- match several characters, not just one
+#                   (use the "qr" quote-like operator)
 sub read_ansi_reply {
     my ($timeout,
         $response_end_character) = @_;
@@ -174,7 +176,7 @@ sub read_ansi_reply {
         if (defined($response_end_character) && $response_end_character eq '') {
             # an empty-string means "read everything that's in the buffer"...  this assumes that
             # the response will be sent all-at-once, and that there will be a slight timegap in between
-            # the response and anything the human types
+            # the response and anything else the terminal sends to us
             my $numchars = sysread(STDIN, $reply, 1024);
             $reply = substr($reply, 0, $numchars);
         } else {
@@ -197,7 +199,6 @@ sub read_ansi_reply {
         return undef if ($@ eq "alarm\n");
         die $@;
     }
-    print "got reply: ", ansi_escape($reply), "\n"      if (DEBUG);
     return $reply;
 }
 
@@ -214,21 +215,6 @@ sub debug_show_remaining_input {
 
 
 
-
-# turn things like "\e" and "\033" into their single-character equivalents, using standard perl string-literal rules
-sub perl_string_decode {
-    my $encoded = shift;
-    my $decoded = eval "qq\000$encoded\000";
-}
-
-
-# turn things like chr(27) into '\e' -- into a visible presentation
-sub perl_string_encode {
-    my $decoded = shift;
-    my $encoded = Data::Dumper::qquote($decoded);
-    $encoded =~ s/^"(.*)"$/$1/s;
-    return $encoded;
-}
 
 sub ansi_escape { map {(my $a = $_);
         $a =~ s/\\/\\\\/g;
