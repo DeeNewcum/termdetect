@@ -1,9 +1,19 @@
 - add request/reply sequences for:
 
+    - save+restore cursor
+
+    - scrolling region
+
+    - horizontal tabs   (set, clear, etc)
+
     - alternate-screen
 
     - the Xterm reporting features listed in:
             vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
+
+    - double-width mode
+
+    - double-height mode
 
 
 

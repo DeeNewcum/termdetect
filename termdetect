@@ -42,40 +42,48 @@ ensure_cursor_position_supported();
 read_phase {
     print "\r-------- replies --------\n"; };
 
-run_and_display_test("\e[5n",       "DSR - device status report");
-#run_and_display_test("\x9B5n",      "C1 version DSR");
-run_and_display_test("\e[?15n",     "printer status report");
-run_and_display_test("\e[c",        "DA - device attributes");
-run_and_display_test("\eZ",         "DECID - identify terminal");
-run_and_display_test("\e[>c",       "secondary device attributes");
-run_and_display_test("\e[=c",       "tertiary device attributes");
-run_and_display_test("\e[x",        "terminal parameters");
-run_and_display_test("\5",          "ENQ - enquiry character");
+run_and_display_test("\e[5n",           "DSR - device status report");
+#run_and_display_test("\x9B5n",          "C1 version DSR");
+run_and_display_test("\e[?15n",         "printer status report");
+run_and_display_test("\e[c",            "DA - device attributes");
+run_and_display_test("\eZ",             "DECID - identify terminal");
+run_and_display_test("\e[>c",           "secondary device attributes");
+run_and_display_test("\e[=c",           "tertiary device attributes");
+run_and_display_test("\e[x",            "terminal parameters");
+run_and_display_test("\5",              "ENQ - enquiry character");
 
 read_phase {
     print "\n-------- replies, more obscure --------\n";};
 
-run_and_display_test("\e[?6n",      "extended cursor position report");
-run_and_display_test("\e[?50n",     "DSR - keyboard status");
-run_and_display_test("\e[?20n",     "DSR - user-defined key status");
-run_and_display_test("\e[21t",      "[dtterm] window title");
-run_and_display_test("\e[20t",      "[dtterm] window's icon label");
-run_and_display_test("\e[14t",      "[dtterm] window size, in pixels");
-run_and_display_test("\e[18t",      "[dtterm] window size, in characters");
-run_and_display_test("\e[11t",      "[dtterm] window state (iconified, etc)");
-run_and_display_test("\e[13t",      "[dtterm] window position (pixels)");
-run_and_display_test("\e[19t",      "[dtterm] screen size, in characters");
+run_and_display_test("\e[?6n",          "extended cursor position report");
+run_and_display_test("\e[?50n",         "DSR - keyboard status");
+run_and_display_test("\e[?20n",         "DSR - user-defined key status");
+run_and_display_test("\e[21t",          "[dtterm] window title");
+run_and_display_test("\e[20t",          "[dtterm] window's icon label");
+run_and_display_test("\ek-\e\\",        "set title");
+run_and_display_test("\ek-\e\\\e[21t",  "set + get title");
+run_and_display_test("\e[14t",          "[dtterm] window size, in pixels");
+run_and_display_test("\e[18t",          "[dtterm] window size, in characters");
+run_and_display_test("\e[11t",          "[dtterm] window state (iconified, etc)");
+run_and_display_test("\e[13t",          "[dtterm] window position (pixels)");
+run_and_display_test("\e[19t",          "[dtterm] screen size, in characters");
 
 read_phase {
     print "\n-------- no reply -- the only goal is to detect cursor movement --------\n";};
             # ie. the escape sequence gets displayed to the user
             # ie. the terminal's lexer doesn't know about this sequence
 
-run_and_display_test("\e[=",        "application keypad mode");
-run_and_display_test("\e[>",        "numeric keypad mode");
-run_and_display_test("\e[7",        "save cursor and attributes");
-run_and_display_test("\eg",         "visual bell");
-run_and_display_test("\x9B0K",      "C1 version of erase to EOL");
+run_and_display_test("\e[=",            "application keypad mode");
+run_and_display_test("\e[>",            "numeric keypad mode");
+run_and_display_test("\e|",             "visual bell");
+run_and_display_test("\e[7",            "save cursor and attributes");
+run_and_display_test("\eg",             "visual bell");
+run_and_display_test("\eP\e\\",         "DCS - device control string (blank)");
+run_and_display_test("\eP\e[0m\e\\",    "DCS - device control string (SGR reset); must be non-zero to pass");
+run_and_display_test("\e\%G",           "[ISO2022] select UTF8 character set");
+run_and_display_test("\e*C",            "[ISO2022] designate G2 character set");
+run_and_display_test("\e+C",            "[ISO2022] designate G3 character set");
+run_and_display_test("\x9B0K",          "C1 version of erase to EOL");
 
 
 do_queued_async_reads();
@@ -111,7 +119,7 @@ sub run_and_display_test {
     run_test($sequence, sub {
         my ($response) = @_;
         print "\r" unless $ASYNC;     # jump back to beginning of line
-        printf  "%-10s   %-25s   %s\n",
+        printf  "%-15s %-25s %s\n",
                 ansi_escape($sequence),
                 ansi_escape($response),
                 $description;

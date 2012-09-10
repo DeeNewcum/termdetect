@@ -8,6 +8,7 @@
 
 ## Behavior in edge cases
 
+* [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), section "Comparisons With Other Terminals > Escape Sequences"
 * [vttest](http://invisible-island.net/vttest/) — a script that tests conformance to the VT100 spec
 * "VT100 Magic", by Sami Tabih, Proceedings of the DEC Users Society, St. Louis, Missouri, May 1983  (referenced in vttest's "known bugs" section)
 
