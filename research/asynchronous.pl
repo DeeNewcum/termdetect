@@ -75,6 +75,7 @@ my @seqs = (
 foreach (@seqs) {
     output(@$_);
 }
+$|++;       # flush the buffers
 foreach (@seqs) {
     receive(@$_);
 }
@@ -87,6 +88,7 @@ sub output {
     # we don't handle CPR sequences in here
     die if ($sequence =~ /^(?:\e\[|\x9B)\??6n$/);
 
+    print "\r";
     print "\e[6n" if PREPEND_CPR;
     print $sequence, "\e[6n";      # send a CPR (cursor position report) afterwards
 }
