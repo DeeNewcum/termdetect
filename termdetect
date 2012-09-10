@@ -151,9 +151,18 @@ sub run_test {
 
 
 
+# Gets an ANSI response, reading only as many characters as necessary, and waiting only as long
+# as necessary.
+#
+# $timeout                  Seconds to wait for a reply.  Use 0 for no timeout.
+#
+# $response_end_character   If we see this character, we know the response is finished.
+#                           Use the empty string to mean "read one buffer's worth of data".
+#                           Use undef to mean "there is no specific end-character...  don't stop
+#                                   reading until the timeout hits".
 sub read_ansi_reply {
-    my ($timeout,                           # seconds to wait for a reply;  use 0 for no alarm
-        $response_end_character) = @_;      # if we see this character, we know the response is finished
+    my ($timeout,
+        $response_end_character) = @_;
 
     $timeout = 1.0 unless defined($timeout);
 
