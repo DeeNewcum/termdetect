@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+
+# Display the format of keystrokes, exactly as they're sent from the terminal.
+
+    use strict;
+    use warnings;
+
+    use Data::Dumper;
+
+
+
+
+## cooked mode, echo off
+#Term::ReadKey::ReadMode(2);
+system 'stty', '-icanon', '-echo', 'eol', "\001";
+$|++;
+
+END {
+    ## reset tty mode before exiting
+    #Term::ReadKey::ReadMode(0);         
+    system 'stty', 'icanon', 'echo', 'eol', chr(0);
+}
+
+
+while (1) {
+    if (0) {
+        print STDERR escape(getc());
+    } else {
+        my $reply = '';
+        my $numchars = sysread(STDIN, $reply, 1024);
+        if ($numchars) {
+            $reply = substr($reply, 0, $numchars);
+            print STDERR escape($reply), "\t";
+        }
+    }
+}
+
+
+
+sub escape {
+    my $str = join("", @_);
+    my $escaped = Data::Dumper::qquote($str);
+    $escaped =~ s/^"(.*)"$/$1/s;
+    return $escaped;
+}

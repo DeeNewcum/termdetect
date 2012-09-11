@@ -32,3 +32,11 @@
 
     - figure out what format to use for the database
 
+
+
+
+- once we get cmdline argument processing working, we need to add a --nose flag
+  (for "no side-effects").  This flag would disable tests that have any sort of side-effects.
+  Of the tests we've included so far, these include:
+        - visual bell  (\eg)
+        - changing the window title     (two tests do this)
