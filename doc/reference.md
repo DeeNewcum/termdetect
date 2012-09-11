@@ -20,6 +20,7 @@
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), for the linux kernel VT console
 * GNU screen manual, [console sequences section](http://www.gnu.org/software/screen/manual/html_node/Control-Sequences.html)
 * [ECMA-48](http://www.ecma-international.org/publications/standards/Ecma-048.htm)  (first adopted in 1976)
+* [Thomas E. Dickey's website: invisible-island.net](http://invisible-island.net/) — he maintains 'xterm', 'vttest', and 'ncurses' (which contains the most up-to-date package of terminfo entries)
 
 ## Canonical sequence names
 
