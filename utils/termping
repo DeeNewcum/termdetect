@@ -1,6 +1,17 @@
 #!/usr/bin/perl
 
-# estimate the round-trip time to get a response from the terminal
+# Estimate the round-trip time to get a response from the terminal.
+#
+# Caveats:  Latency != throughput.
+#           Also, note that this doesn't represent the latency to the end-user's terminal if you're
+#           running things like tmux/screen/mosh.  Each of those have their own VT translation
+#           layer, and they respond to pings on their own.  So if you have:
+#
+#               terminal  <==>    tmux  <==>  termping
+#                 (US)          (China)        (China)
+#           
+#           you're going to see 0ms time.  That can be deceiving unless you realize that you're
+#           really measuring the ping time to tmux.
 
     use strict;
     use warnings;
