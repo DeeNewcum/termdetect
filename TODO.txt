@@ -1,3 +1,12 @@
+- add "advanced tests" for:
+
+    - character encoding
+
+        - figure out what the current encoding is   (based on which byte sequences render as a
+          single character, versus which get interpretted as multiple characters)
+
+        - ask the terminal to change character encodings, and see if it complies
+
 - add request/reply sequences for:
 
     - save+restore cursor
@@ -40,3 +49,18 @@
   Of the tests we've included so far, these include:
         - visual bell  (\eg)
         - changing the window title     (two tests do this)
+
+
+
+
+=========================================================
+========================[ maybe ]========================
+=========================================================
+
+- add request/reply sequences for:
+
+    - ISO-2022 suport
+            apparently this is fairly rare, as even xterm itself doesn't support it:
+                    http://www.pps.univ-paris-diderot.fr/~jch/software/luit/
+                    http://www.cl.cam.ac.uk/~mgk25/unicode.html#term
+
