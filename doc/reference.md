@@ -20,3 +20,17 @@
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), for the linux kernel VT console
 * GNU screen manual, [console sequences section](http://www.gnu.org/software/screen/manual/html_node/Control-Sequences.html)
 * [ECMA-48](http://www.ecma-international.org/publications/standards/Ecma-048.htm)  (first adopted in 1976)
+
+## Canonical sequence names
+
+Is there a list of canonical names for various ANSI sequences?
+
+* terminfo capability names — [terminfo(5) man page](http://www.manpages.info/linux/terminfo.5.html)
+* [ECMA-48](http://www.ecma-international.org/publications/standards/Ecma-048.htm)  (first adopted in 1976)
+* [mnemonic listed in the VT510 manual](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)
+
+## Canonical terminal names
+
+Is there a list of canonical names for various terminals / terminal emulators?
+
+* [the most actively-maintained terminfo database](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).  Although some entries are generic, there are some terminal-specific entries, such as putty, linux console, DOS ansi.sys, rxvt, aterm, gnome (vte), etc.
