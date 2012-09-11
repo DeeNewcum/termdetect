@@ -234,6 +234,7 @@ sub read_ansi_reply {
         }
     };
     die $@ if ($@ && $@ ne "alarm\n");
+    alarm 0;
     print "read response:  ", ansi_escape($reply), "\n"     if ($DEBUG);
     return $reply;
 }
