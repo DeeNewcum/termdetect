@@ -34,6 +34,9 @@ END {
 }
 
 
+
+my @last20;
+my ($min, $max) = (9999999, -1);
 while (1) {
     my $start = time();
     print "\e[5n";
@@ -41,7 +44,13 @@ while (1) {
     my $end = time();
     if ($reply =~ /^\e\[[^\ea-z]*n/s) {
         my $rtt = int(($end - $start) * 1000);
-        printf "%4d ms\n", $rtt;
+        $min = min($min, $rtt);
+        $max = max($max, $rtt);
+        push(@last20, $rtt);
+        splice(@last20, 0, -20);
+        my $avg = @last20 ? sum(@last20) / scalar(@last20) : 0;
+        printf "%4d ms    (min %d,  max %d,   avg %.1f)\n",
+                $rtt, $min, $max, $avg;
     } else {
         print "  XX\n";
     }
@@ -101,3 +110,13 @@ sub read_ansi_reply {
     alarm 0;
     return $reply;
 }
+
+
+
+# List::Util
+{no strict; sub reduce(&@) {$s=shift;@_>1||return$_[0];$c=caller;local(*{$c."::a"})=\my$a;local(*{$c."::b"})=\my$b;$a=shift;for(@_){$b=$_;$a=&{$s}()}$a}}
+sub sum  { reduce { $a + $b } @_ }
+sub min  { reduce { $a < $b ? $a : $b } @_ }
+sub max  { reduce { $a > $b ? $a : $b } @_ }
+sub minstr  { reduce { $a lt $b ? $a : $b } @_ }
+sub maxstr  { reduce { $a gt $b ? $a : $b } @_ }
