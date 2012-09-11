@@ -16,7 +16,7 @@
     use strict;
     use warnings;
 
-    use Time::HiRes qw[time sleep];
+    use Time::HiRes qw[time sleep alarm];
 
     use Data::Dumper;
 
