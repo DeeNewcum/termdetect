@@ -53,7 +53,14 @@
 
     - in the documentation, note that some of the tests that are most useful to use with the
       "show me the results of a single test" mode are:
+
             - current character encoding
+
+            - current terminal size
+                    (use Term::ReadKey::GetTerminalSize())
+                    (or see "TIOCGWINSZ" in the source for IO::Tty)
+
+            - current font size   (only available if the terminal supports getting the terminal size in pixels)
 
 
 

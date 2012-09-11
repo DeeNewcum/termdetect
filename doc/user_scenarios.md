@@ -26,7 +26,7 @@ The user just wants to know whether the current terminal supports one capability
 
 ### Implementation
 
-If there's a specific test that termdetect has, we can just run that one test and return the results.  If there's NOT a test, then we'd have to do the complicated 1) run all termdetect tests, 2) find a matching terminfo entry, 3) look for that specific capability within that terminfo entry.  But that's much more complicated, so we'd like to provide the shortcut to the user if possible, because it's faster and more reliable.
+If there's a specific test that termdetect has, we can just run that one test and return the results.  If there's NOT a test, then we'd have to do the complicated 1) run all termdetect tests, 2) find a matching terminfo entry, 3) look for that specific capability within that terminfo entry.  Because that's much more complicated, we would like to provide the shortcut to the user if possible.
 
 
 ## Match a bundled terminfo database
@@ -45,10 +45,13 @@ We would probably use both options: The first when an individual terminal has it
 Termdetect would accomplish this by setting the [$TERMINFO environment variable](http://tldp.org/HOWTO/Text-Terminal-HOWTO-16.html).
 
 
-## Match an external terminfo database
+## Match the local terminfo database
 
-The user doesn't want to use the terminfo database that's bundled with our program, instead she wants to use her local OS's terminfo database.
+The user doesn't want to use the terminfo database that's bundled with our program, instead she wants to use her local OS's terminfo database.  (or any other terminfo database that she points to)
 
 ### Implementation
 
-???
+There are two ways to do this:
+
+1. The long way: A) run all termdetect tests, B) find the closest matching terminal-ID in termdetect's own database, C) find the corresponding entry in our bundled terminfo, D) compare terminfo entries in the bundled and local terminfos and find the closest match.
+2. If we know that the local terminfo uses the same nomenclature as the bundled terminfo (and thus, also of our termdetect's own database), then after step B, we can just look for that name in the local terminfo database.
