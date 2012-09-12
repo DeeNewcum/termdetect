@@ -3,6 +3,7 @@
 # Estimate the round-trip time to get a response from the terminal.
 #
 # Caveats:  Latency != throughput.
+#
 #           Also, note that this doesn't represent the latency to the end-user's terminal if you're
 #           running things like tmux/screen/mosh.  Each of those have their own VT translation
 #           layer, and they respond to pings on their own.  So if you have:
@@ -12,6 +13,10 @@
 #           
 #           you're going to see 0ms time.  That can be deceiving unless you realize that you're
 #           really measuring the ping time to tmux.
+#
+#           Also, this is a TCP-based ping, which means that some response times may be greatly
+#           inflated for several reasons including retransmission and congestion control
+#           (exponential backoff can CERTAINLY skew the results).
 
     use strict;
     use warnings;
@@ -33,6 +38,16 @@ END {
     system 'stty', 'icanon', 'echo', 'eol', chr(0);
 }
 
+
+if (1) {
+    my $began_pinging = time();
+    my $num_packets = 20;
+    my $latency = flood_ping_terminal($num_packets);
+    my $total_time  = time() - $began_pinging;
+    printf "flood pinging %d packets took   %d ms,   and measured   %d ms   average latency.\n",
+                $num_packets, $total_time *1000, $latency;
+    exit;
+}
 
 
 my @last20;
@@ -58,6 +73,37 @@ while (1) {
     }
     sleep(0.5);
     $sequence_number = ($sequence_number % 40) + 1;
+}
+
+
+
+# Ping the terminal as fast as possible.
+# Returns the average latency  (in milliseconds)
+sub flood_ping_terminal {
+    my ($num_packets) = @_;
+
+    my @rtts;
+    my $sequence_number = 1;
+    while ($num_packets-- > 0) {
+        my $start = time();
+        print "\e[${sequence_number}G\e[6n";
+        my $reply = read_ansi_reply(1.0, qr/\e\[\d+;${sequence_number}R/);
+        my $end = time();
+        my $rtt;
+        if ($reply =~ /^\e\[\d+;${sequence_number}R/s) {
+            $rtt = int(($end - $start) * 1000);
+            push(@rtts, $rtt);
+        } else {
+            #print "  XX\n";
+        }
+        $sequence_number = ($sequence_number % 40) + 1;
+        sleep(4 * $rtt / 1000);     # we actually have to delay slightly, or TCP seems to slow down after 3 or 4 packets
+    }
+    print "\r";
+    #print Dumper \@rtts;
+
+    # return the average of the ping times
+    return sum(@rtts) / scalar(@rtts);
 }
 
 
