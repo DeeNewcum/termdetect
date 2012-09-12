@@ -37,12 +37,14 @@ END {
 
 my @last20;
 my ($min, $max) = (9999999, -1);
+my $sequence_number = 1;
 while (1) {
     my $start = time();
-    print "\e[5n";
-    my $reply = read_ansi_reply(1.0, 'n');
+    print "\e[${sequence_number}G\e[6n";
+    my $reply = read_ansi_reply(1.0, qr/\e\[\d+;${sequence_number}R/);
     my $end = time();
-    if ($reply =~ /^\e\[[^\ea-z]*n/s) {
+    print "\r";
+    if ($reply =~ /^\e\[\d+;${sequence_number}R/s) {
         my $rtt = int(($end - $start) * 1000);
         $min = min($min, $rtt);
         $max = max($max, $rtt);
@@ -55,6 +57,7 @@ while (1) {
         print "  XX\n";
     }
     sleep(0.5);
+    $sequence_number = ($sequence_number % 40) + 1;
 }
 
 
