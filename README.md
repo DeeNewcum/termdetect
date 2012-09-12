@@ -4,10 +4,6 @@ What if don't just want things minimally working, but you want things to work *w
 
 Fortunately, there are some request/reply ANSI sequences that give us bits of information about the terminal.  This program interrogates the terminal, looks up the responses in a database of known terminals, and finds the closest match.  This allows your remote machine to know *exactly* what terminal it's talking to.
 
-To see how 'termdetect' works, run:
-
-    ./termdetect | cat -v | sed 's/\^M/\n/g'
-
 # Current status
 
 Completed:
