@@ -1,5 +1,3 @@
-The terminfo database that we bundle is the [one that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).
-
 ## Available request/response sequences
 
 * [MS-DOS Kermit 3.13 Terminal Emulator Technical Summary](http://www.columbia.edu/kermit/ftp/a/msvibm.vt), section "VT320 Report Requests and Responses"
@@ -38,3 +36,11 @@ Is there a list of canonical names for various ANSI sequences?
 Is there a list of canonical names for various terminals / terminal emulators?
 
 * [the most actively-maintained terminfo database](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).  Although some entries are generic, there are some terminal-specific entries, such as putty, linux console, DOS ansi.sys, rxvt, aterm, gnome (vte), etc.
+
+## Terminfo 
+
+The terminfo database that we bundle is the [one that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).
+
+To quickly survey the terminfo:
+
+    perl -nle 'print "" if /^####/; print if /^[^# \t]|^####/' terminfo.src

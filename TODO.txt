@@ -62,6 +62,13 @@
 
             - current font size   (only available if the terminal supports getting the terminal size in pixels)
 
+            - current screen size
+                    - this requires some estimation, based on the font size
+                    - note that most computer screens are either 4:3 or 16:9.
+                                (16:10 can go jump off a cliff)
+                      If you play around with the math a little, you realize you can just round
+                      the width to the nearest 20, and the height to the nearest 15, and you'll 
+                      probably be spot-on)
 
 
 =========================================================
