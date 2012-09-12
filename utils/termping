@@ -39,7 +39,7 @@ END {
 }
 
 
-if (1) {
+if (0) {
     my $began_pinging = time();
     my $num_packets = 20;
     my $latency = flood_ping_terminal($num_packets);
