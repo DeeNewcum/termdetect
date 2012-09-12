@@ -1,0 +1,13 @@
+Are there capability names that line up to the tests that we need to run?
+
+
+CPR - cursor position report            no (sometimes user7)
+DSR - device status report              no (mentioned ONCE as user8)
+DSR (printer port)                      no
+DA1 - primary device attributes         no (sometimes user9)
+DECID - identify terminal               no
+DA2 - secondary device attributes       no
+DA3 - tertiary device attributes        no
+DECREQTPARM - terminal parameters       no
+
+

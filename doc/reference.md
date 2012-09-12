@@ -1,3 +1,5 @@
+The terminfo database that we bundle is the [one that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).
+
 ## Available request/response sequences
 
 * [MS-DOS Kermit 3.13 Terminal Emulator Technical Summary](http://www.columbia.edu/kermit/ftp/a/msvibm.vt), section "VT320 Report Requests and Responses"
