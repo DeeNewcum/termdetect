@@ -44,3 +44,5 @@ The terminfo database that we bundle is the [one that comes with ncurses](http:/
 To quickly survey the terminfo:
 
     perl -nle 'print "" if /^####/; print if /^[^# \t]|^####/' terminfo.src
+
+Or use the enclosed script 'terminfo_summarize'.

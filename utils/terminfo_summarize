@@ -1,0 +1,46 @@
+#!/usr/bin/perl
+
+# display a summary of a terminfo file
+
+    use strict;
+    use warnings;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+my $filename = shift;
+defined($filename) && -f $filename      or die "please specify a terminfo file\n";
+
+
+open my $fh, '<', $filename     or die $!;
+my $all = do {local $/=undef; <$fh>};
+
+$all =~ s/(?:\n|^)#(?!###)[^\n]*//sg;      # remove comments
+
+$all =~ s/\n[ \t]+//sg;     # remove line-continuations, so that each entry occupies exactly one line
+
+# go line-by-line
+foreach (split /\n/, $all) {
+    next unless /\S/;
+    if (/^#/) {
+        print "\n$_\n";
+    } else {
+        s/,\s*$//;
+
+        s/^(.*?),//;
+        my $name = $1;
+
+        my $uses = s/\b(use=.*)// ? $1 : "";
+
+        my @other_rules = split /,/;
+
+        if (@other_rules) {
+            $uses = '';     # not just an alias...   forget about what it's based upon
+        } else {
+            $uses = " == " . join " + ",  map {s/^\s*use=//; $_} split /,/, $uses;
+        }
+
+        print "$name\t\t\t$uses\n";
+    }
+}
