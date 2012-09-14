@@ -1,4 +1,6 @@
 - add "advanced tests" for:
+    
+    - the boolean terminfo capabilities mentioned in 'cursor_movement.md"
 
     - character encoding
 
