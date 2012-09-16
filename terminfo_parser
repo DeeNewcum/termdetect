@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+# development testbed for creating a terminfo lexer/parser
+
+    use strict;
+    use warnings;
+
+    use Const::Fast;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+
+my $terminfo = slurp("terminfo.src");
+
+sub parse_terminfo  {
+    my ($file_contents) = @_;
+
+    while (1) {
+    }
+}
+
+
+# quickly read a whole file
+sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
