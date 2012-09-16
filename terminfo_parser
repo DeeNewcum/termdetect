@@ -13,14 +13,144 @@
 
 
 my $terminfo = slurp("terminfo.src");
+parse_terminfo($terminfo);
 
+# terminfo(5) says of terminfo's syntax:
+#
+#      Entries  in  terminfo  consist  of  a  sequence of `,' separated fields
+#      (embedded commas may be escaped with a backslash or notated  as  \054).
+#      White  space  after  the `,' separator is ignored.  The first entry for
+#      each terminal gives the names which are known for the  terminal,  sepa-
+#      rated  by  `|'  characters.   The  first  name given is the most common
+#      abbreviation for the terminal, the last name given  should  be  a  long
+#      name  fully  identifying the terminal, and all others are understood as
+#      synonyms for the terminal name.  All names but the last  should  be  in
+#      lower  case and contain no blanks; the last name may well contain upper
+#      case and blanks for readability.
+#
+#      A  number  of  escape  sequences   are  provided  in  the  string valued
+#      capabilities for easy encoding of characters there.  Both \E and \e map
+#      to  an  ESCAPE character, ^x maps to a control-x for any appropriate x,
+#      and the sequences \n \l \r \t \b  \f  \s  give  a  newline,  line-feed,
+#      return, tab, backspace, form-feed, and space.  Other escapes include \^
+#      for ^, \\ for \, \, for comma, \: for :, and \0  for  null.   (\0  will
+#      produce  \200,  which does not terminate a string but behaves as a null
+#      character on most terminals, providing CS7 is specified.  See stty(1).)
+#      Finally, characters may be given as three octal digits after a \.
+#
+#      Sometimes  individual  capabilities must be commented out.  To do this,
+#      put a period before the capability name.  For example, see  the  second
+#      ind in the example above.
+#
+# The Single UNIX Specification further says:
+#
+#      Each description consists of a header (beginning in column 1) and one
+#      or more lines that list the features for that particular device. Every
+#      line in a terminfo source file must end in a comma. Every line in a
+#      terminfo source file except the header must be indented with one or
+#      more white spaces (either spaces or tabs).
+#
+#      Entries in terminfo source files consist of a number of
+#      comma-separated fields. White space after each comma is ignored. 
+#
 sub parse_terminfo  {
     my ($file_contents) = @_;
 
-    while (1) {
+    my @lines = split /\x0d\x0a|\x0d|\x0a/, $file_contents;
+
+    my @accum;
+    for (my $lineno=0; $lineno<@lines; $lineno++) {
+        local $_ = $lines[$lineno];
+        next if /^$|^#/;        # ignore blank lines, and lines that are comments
+        if (s/^\s+//) {
+            push @accum, [$lineno+1, $_];        # this is a continuation line
+        } else {
+            parse_entry(@accum)    if @accum;
+            @accum = ([$lineno+1, $_]);
+        }
     }
+    parse_entry(@accum)    if @accum;
+}
+
+
+sub parse_entry {
+    my (@lines) = @_;
+
+    #print Dumper \@lines;
+    my @fields;
+    foreach my $line (@lines) {
+        my $lineno = $line->[0];
+        local $_ = $line->[1];
+
+        s/\s+$//;       # trim spaces from end of line
+        
+        #print "$_\n";
+        while (1) {
+            last if (/\G$/gc);
+            if (/\G(?!,)((?:[\\%^].|[^,\\%^])+),\s*/gc) {
+                push(@fields, [$lineno, $1]);
+                next;
+            }
+            print "$lineno: syntax error\n";
+        }
+    }
+
+    foreach my $field_ (@fields) {
+        my ($lineno, $field) = @$field_;
+        print "$field\n";
+    }
+    #exit;
+    print "\n\n";
+}
+
+    #less(xxd($file_contents)); exit;
+#    while (1) {
+#        if ($file_contents =~ /\G(?:\n|\A)(#\V*)/gc) {
+#            # lines that start with "#" are comments
+#            debug_lexer("comment", $1);
+#            next;
+#        }
+#        if ($file_contents =~ /\G\n(?=\n)/gc) {
+#            # ignore blank lines
+#            debug_lexer("blank line");
+#            next;
+#        }
+#        if ($file_contents =~ /\G(?:\n|\A)([a-z][^,\n]*),\h*/igc) {
+#                # TODO:  ^^ this entry doesn't properly handle backslash
+#                #           escape-chars, nor percent escape-chars
+#            debug_lexer("new entry", $1);
+#            next;
+#        }
+#
+#        # oops, we didn't match any of the above
+#        print "\nXXX  BROKE  XXX\n";
+#        #print "    at position: ", pos($file_contents), "\n\n";
+#        if (defined(pos($file_contents))) {
+#            print xxd(substr($file_contents, pos($file_contents), 100));
+#        }
+#        exit;
+#    }
+#}
+
+
+
+sub debug_lexer {
+    my $descr = shift;
+    printf "%-20s  %s\n", $descr, join(" ", @_);
 }
 
 
 # quickly read a whole file
 sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
+
+
+# run a scalar through an external filter, and capture the results
+# first arg is a list-ref that specifies the filter-command
+use autodie;
+sub filter_thru {my$pid=open my$fout,'-|'or do{my$pid=open my$fin,'|-',@{shift()};print$fin @_;close$fin;waitpid$pid,0;exit;};
+                 my@o=<$fout>;close$fout;waitpid$pid,0;wantarray?@o:join'',@o}
+
+sub xxd {filter_thru(['xxd'],@_)}
+
+# display a string to the user, via 'less'
+sub less {my$pid=open my$less,"|less";print$less @_;close$less;waitpid$pid,0}
