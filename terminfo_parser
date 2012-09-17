@@ -66,96 +66,54 @@ sub parse_terminfo  {
     #my ($lines) = @_;
     ($lines) = @_;      # it would be "my ($lines)" if it weren't for lexdebug()
 
-    my $lineno = 1;
-    my @fields;
-    while (1) {
-        $last_pos = pos($lines);
-
-        my $at_newline = $lines =~ /\G(?<=\n)/gc;
-        if ($lines =~ /\G\n/gc) {
-            #lexdebug("newline");
-            $lineno++;
-            next;
-        }
-        if ($lines =~ /\G(?:(?<=\n)|^)#\V*/gc) {
-            # comment
-            #lexdebug("comment");
-            next;
-        }
-        if ($lines =~ /\G(?<=\n)\h+/gc) {
-            # line continuation
-            #lexdebug("line continuation");
-            next;
-        }
-        if ($lines =~ /\G(?!,)(?!\s)((?:[\\%^][^\n]|[^,\\%^\n])+),\h*/gc) {
-            my $field = [$lineno, $1];
-            #lexdebug("field");
-            if ($at_newline) {
-                process_fields(@fields)     if @fields;
-                @fields = ($field);
+    my @lines = split /\n/, $lines;
+    our @process_fields;
+    for (our $lineno=0; $lineno<@lines; $lineno++) {
+        our %field = (lineno => $lineno);
+        our @fields = ();
+        our $is_continuation;
+        $lines[$lineno] =~ m{
+              ^ \# .*           # ignore comment lines
+            | ^ \h* $           # ignore blank lines
+            | ^( \h* )
+                                    (?{ $is_continuation = length $^N    })
+                (?:
+                    (?! \h )
+                    ((?:[\\%^][^\n]|[^,\\%^\n=\#])+)
+                                    (?{ local $field{capability} = $^N   })
+                    (?:     = ((?:[\\%^][^\n]|[^,\\%^\n])*)
+                                    (?{ local $field{assign} = $^N    })
+                         | \# (\d+)
+                                    (?{ local $field{num} = $^N    })
+                         )?
+                    , \h*  
+                                    (?{ push(@fields, {%field})   })
+                )+ $
+        }x
+            or die "syntax error on line " . ($lineno+1) . "\n";
+            #or do {
+            #    print "syntax error on line " . ($lineno+1) . "\n";
+            #    print xxd($lines[$lineno]), "\n";
+            #    exit;
+            #};
+        if (defined($is_continuation)) {
+            if ($is_continuation) {
+                push(@process_fields, @fields);
             } else {
-                push(@fields, $field);
+                process_fields(@process_fields) if (@process_fields);
+                @process_fields = (@fields);
             }
-            next;
-        }
-        last if (pos($lines) == length($lines));        # done parsing
-
-        print "$lineno: syntax error\n";
-        exit;
-
-        if (0) {
-            if (defined(pos($lines))) {
-                print xxd(substr($lines, pos($lines), 100));
-                print "\nat position ", pos($lines), " of possible ",
-                        length($lines), "\n";
-            }
-            exit;
         }
     }
-    process_fields(@fields)     if @fields;
+    process_fields(@process_fields) if (@process_fields);
 }
 
 
 sub process_fields {
-    my @fields = @_;
-
-    my $terminal = shift @fields;
-
-    my @termnames = grep {defined $_} $terminal->[1] =~ /^((?:[\\%^][^\n|]|[^,\\%^\n|])+)(?:\|((?:[\\%^][^\n|]|[^,\\%^\n|])+))*$/;
-    
-    print "================[ ", join(" --- ", @termnames), " ] ]================\n";
-
-    foreach my $f (@fields) {
-        my ($lineno, $field) = @$f;
-
-        if ($field =~ /^((?:[\\%^][^\n]|[^,\\%^\n])+)(?:=((?:[\\%^][^\n]|[^,\\%^\n])+)|#(\d+))$/) {
-            if ($2) {
-                printf "%-20s  =  %s\n", $1, $2;
-            } elsif ($3) {
-                printf "%-20s  #  %s\n", $1, $3;
-            }
-        } else {
-            print "$field\n";
-        }
-    }
+    print "--process--  ", Dumper \@_;
 }
 
-#sub unescape_terminfo {
-#    my ($field) = @_;
-#
-#    $field =~ s/
-#}
 
-
-sub lexdebug {
-    #return;                 # use for speed tests
-    my ($descr) = @_;
-
-    my $cur_pos = pos($lines);
-    0 && printf "%20s    %s\n",
-        $descr,
-        qquote(substr($lines, $last_pos, $cur_pos - $last_pos));
-}
 sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"//;$q=~s/"$//;$q}
 
 
