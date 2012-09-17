@@ -10,6 +10,8 @@
     use Data::Dumper;
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
+    our $last_pos;
+    our $lines;
 
 
 my $terminfo = slurp("terminfo.src");
@@ -17,11 +19,11 @@ parse_terminfo($terminfo);
 
 # terminfo(5) says of terminfo's syntax:
 #
-#      Entries  in  terminfo  consist  of  a  sequence of `,' separated fields
+#      Entries  in  terminfo  consist  of  a  sequence of "," separated fields
 #      (embedded commas may be escaped with a backslash or notated  as  \054).
-#      White  space  after  the `,' separator is ignored.  The first entry for
+#      White  space  after  the "," separator is ignored.  The first entry for
 #      each terminal gives the names which are known for the  terminal,  sepa-
-#      rated  by  `|'  characters.   The  first  name given is the most common
+#      rated  by  "|"  characters.   The  first  name given is the most common
 #      abbreviation for the terminal, the last name given  should  be  a  long
 #      name  fully  identifying the terminal, and all others are understood as
 #      synonyms for the terminal name.  All names but the last  should  be  in
@@ -54,90 +56,82 @@ parse_terminfo($terminfo);
 #      comma-separated fields. White space after each comma is ignored. 
 #
 sub parse_terminfo  {
-    my ($file_contents) = @_;
+    #my ($lines) = @_;
+    ($lines) = @_;      # it would be "my ($lines)" if it weren't for lexdebug()
 
-    my @lines = split /\x0d\x0a|\x0d|\x0a/, $file_contents;
-
-    my @accum;
-    for (my $lineno=0; $lineno<@lines; $lineno++) {
-        local $_ = $lines[$lineno];
-        next if /^$|^#/;        # ignore blank lines, and lines that are comments
-        if (s/^\s+//) {
-            push @accum, [$lineno+1, $_];        # this is a continuation line
-        } else {
-            parse_entry(@accum)    if @accum;
-            @accum = ([$lineno+1, $_]);
-        }
-    }
-    parse_entry(@accum)    if @accum;
-}
-
-
-sub parse_entry {
-    my (@lines) = @_;
-
-    #print Dumper \@lines;
+    my $lineno = 1;
     my @fields;
-    foreach my $line (@lines) {
-        my $lineno = $line->[0];
-        local $_ = $line->[1];
+    while (1) {
+        $last_pos = pos($lines);
 
-        s/\s+$//;       # trim spaces from end of line
-        
-        #print "$_\n";
-        while (1) {
-            last if (/\G$/gc);
-            if (/\G(?!,)((?:[\\%^].|[^,\\%^])+),\s*/gc) {
-                push(@fields, [$lineno, $1]);
-                next;
+        my $at_newline = $lines =~ /\G(?<=\n)/gc;
+        if ($lines =~ /\G\n/gc) {
+            lexdebug("newline");
+            $lineno++;
+            next;
+        }
+        if ($lines =~ /\G(?:(?<=\n)|^)#\V*/gc) {
+            # comment
+            lexdebug("comment");
+            next;
+        }
+        if ($lines =~ /\G(?<=\n)\h+/gc) {
+            # line continuation
+            lexdebug("line continuation");
+            next;
+        }
+        if ($lines =~ /\G(?!,)(?!\s)((?:[\\%^][^\n]|[^,\\%^\n])+),\h*/gc) {
+            my $field = [$lineno, $1];
+            lexdebug("field");
+            if ($at_newline) {
+                process_fields(@fields)     if @fields;
+                @fields = ($field);
+            } else {
+                push(@fields, $field);
             }
-            print "$lineno: syntax error\n";
+            next;
+        }
+        last if (pos($lines) == length($lines));        # done parsing
+
+        print "$lineno: syntax error\n";
+        exit;
+
+        if (0) {
+            if (defined(pos($lines))) {
+                print xxd(substr($lines, pos($lines), 100));
+                print "\nat position ", pos($lines), " of possible ",
+                        length($lines), "\n";
+            }
+            exit;
         }
     }
+    process_fields(@fields)     if @fields;
+}
 
-    foreach my $field_ (@fields) {
-        my ($lineno, $field) = @$field_;
-        print "$field\n";
+
+sub process_fields {
+    my @fields = @_;
+
+    #return;     # use for speed tests
+
+    print "\n==============================================\n";
+    foreach my $f (@fields) {
+        printf "%8d  %s\n", $f->[0], qquote($f->[1]);
     }
-    #exit;
-    print "\n\n";
+    #print Dumper $fields[0][0], [map {$_->[1]} @fields];
 }
 
-    #less(xxd($file_contents)); exit;
-#    while (1) {
-#        if ($file_contents =~ /\G(?:\n|\A)(#\V*)/gc) {
-#            # lines that start with "#" are comments
-#            debug_lexer("comment", $1);
-#            next;
-#        }
-#        if ($file_contents =~ /\G\n(?=\n)/gc) {
-#            # ignore blank lines
-#            debug_lexer("blank line");
-#            next;
-#        }
-#        if ($file_contents =~ /\G(?:\n|\A)([a-z][^,\n]*),\h*/igc) {
-#                # TODO:  ^^ this entry doesn't properly handle backslash
-#                #           escape-chars, nor percent escape-chars
-#            debug_lexer("new entry", $1);
-#            next;
-#        }
-#
-#        # oops, we didn't match any of the above
-#        print "\nXXX  BROKE  XXX\n";
-#        #print "    at position: ", pos($file_contents), "\n\n";
-#        if (defined(pos($file_contents))) {
-#            print xxd(substr($file_contents, pos($file_contents), 100));
-#        }
-#        exit;
-#    }
-#}
 
+sub lexdebug {
+    #return;                 # use for speed tests
+    my ($descr) = @_;
 
-
-sub debug_lexer {
-    my $descr = shift;
-    printf "%-20s  %s\n", $descr, join(" ", @_);
+    my $cur_pos = pos($lines);
+    0 && printf "%20s    %s\n",
+        $descr,
+        qquote(substr($lines, $last_pos, $cur_pos - $last_pos));
 }
+sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"//;$q=~s/"$//;$q}
 
 
 # quickly read a whole file
