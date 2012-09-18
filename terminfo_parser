@@ -110,7 +110,29 @@ sub parse_terminfo  {
 
 
 sub process_fields {
-    print "--process--  ", Dumper \@_;
+    #print "--process--  ", Dumper \@_;
+    
+    print "\n\n================[ ", " ]================\n";
+    foreach my $f (@_) {
+        #print Dumper $f;
+        printf "\t%-20s  ",  $f->{capability};
+        printf "%s", qquote(terminfo_unescape($f->{assign}))     if $f->{assign};
+        print "\n";
+    }
+}
+
+
+BEGIN {
+    our %escapes = (
+        "\\E" => "\e",
+    );
+    #print Dumper \%escapes; exit;
+sub terminfo_unescape {
+    local $_ = shift;
+
+    s#([\\^%].)#   $escapes{$1} || $1  #eg;
+    return $_;
+}
 }
 
 
