@@ -3,6 +3,10 @@
 # development testbed for creating a terminfo lexer/parser
 
 
+# for the verification stage of this, you need to first run
+# `tic` against the desired terminfo file, to populate your ~/.terminfo/ directory with the file under test
+
+
 # when comparing our parser to the official one, there are some baffling problems:
 #       - "\\" seems to be parsed in two different ways, unpredictably
 #                   (see $fuckthat and $fuckthat2 below)
@@ -13,7 +17,7 @@
     use warnings;
 
 
-    use Term::Terminfo;
+    use Term::Terminfo;     # required for verification only
 
     use Data::Dumper;
 
@@ -38,7 +42,8 @@ if (0) {
 }
 
 
-my $terminfo = slurp("terminfo.src");
+#my $terminfo = slurp("terminfo.src");
+my $terminfo = slurp("termtypes.ti");
 parse_terminfo($terminfo);
 
 # terminfo(5) says of terminfo's syntax:
