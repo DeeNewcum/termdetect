@@ -213,14 +213,16 @@ BEGIN {
         "\\t"  => "\t",     # horizontal tab
         "\\0"  => "\200",   # null   (see detailed info about this in terminfo(5)...   it's not clear to me why we use \200 instead of \x00)
 
+        "^]"   => "\x1d",
+        "^^"   => "\x1e",
+        "^_"   => "\x1f",
+
         # plain escapes
         "\\,"  => ",",
         "\\:"  => ":",
 
-        "\\\\" => "\\",
-        "^^"   => "^",
+        "\\\\" => "\x1c",
         "\\^"  => "^",
-        '%%'   => '%',
     );
     for ('a'..'z') {
         $escapes{"^$_"} = chr(ord($_) - 96);
@@ -229,15 +231,33 @@ BEGIN {
 sub terminfo_unescape {
     local $_ = shift;
 
-    s#\\(\d\d\d)|([\\^].|%%)|(%'[^']+'|%.)#
-            $3 ? $3
-                :   $1 ? chr(oct($1))
-                       : $escapes{lc $2} || substr($2, -1);
-        #eg;
+    s/
+        \\(\d\d\d)    |
+        (\%)(?=\\)    |         # i have no clue what the fuck this is...  but this is required to match the official parser's behavior
+        ([\\^].)      |
+        \%{(\d\d+)}   |
+        (%'[^']+'|%.)
+    /
+            $1 ? chr(oct($1))
+          : $2 ? $2
+          : $3 ? ($escapes{lc $3} || substr($3, -1))
+          : $4 ? unescape_percent_char($4)
+          : $5 ? $5 : "??"
+        /gex;
     return $_;
 }
 }
 
+
+    sub unescape_percent_char {
+        my $charnum = shift;
+        if ($charnum >= 32 && $charnum <= 126) {
+            return "\%'" . chr($charnum) . "'";
+        } else {
+            return "\%{$charnum}";
+        }
+    }
+    
 
 sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"(.*)"$/$1/s;$q}
 sub _quote {my$q=Data::Dumper::_quote($_[0]);$q=~s/^'(.*)'$/$1/s;$q}
