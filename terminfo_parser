@@ -5,6 +5,9 @@
     use strict;
     use warnings;
 
+
+    use Term::Terminfo;
+
     use Data::Dumper;
 
     our $last_pos;
@@ -137,6 +140,8 @@ sub parse_terminfo  {
 
 
 BEGIN {
+    my %hardcopies;
+
     sub process_fields {
         #print "--process--  ", Dumper \@_;
 
@@ -145,6 +150,27 @@ BEGIN {
         #my @termnames = grep {defined $_} $terminal->{capability} =~ /^((?:[\\%^][^\n|]|[^,\\%^\n|])+)(?:\|((?:[\\%^][^\n|]|[^,\\%^\n|])+))*$/;
         my @termnames = split /\|/, $terminal->{capability};
 
+        my %caps = map {$_->{capability} => 1} @_;
+        my @uses = map {$_->{assign}} grep {$_->{capability} eq 'use'} @_;
+        #print Dumper \%caps; exit;
+        #if (@uses) {print Dumper \@uses; exit}
+
+        if ($caps{hc}) {
+            $hardcopies{$termnames[0]}++;
+        } else {
+            foreach my $use (@uses) {
+                if ($hardcopies{$use}) {
+                    $hardcopies{$termnames[0]}++;
+                    last;
+                }
+            }
+        }
+
+        my $terminfo;
+        if (!$caps{gn} && !$hardcopies{$termnames[0]}) {
+            $terminfo = Term::Terminfo->new($termnames[0]);
+        }
+
         print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
         foreach my $f (@_) {
             #print Dumper $f;
@@ -152,6 +178,21 @@ BEGIN {
             if ($f->{assign}) {
                 my $unescape = terminfo_unescape($f->{assign});
                 printf "%s", qquote($unescape);
+
+                my $cap = $f->{capability};
+                #if ($terminfo && $cap !~ /^use$|^\.|\@$/ && $cap !~ /[A-Z]/) {
+                if ($terminfo && $cap !~ /^(?:use|E3|grbom|gsbom)$|^\.|\@$/) {
+                    $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
+                    my $actual = $terminfo->getstr($cap) || '';
+                    (my $fuckthat  = $unescape) =~ s/\\/\x1c/g;
+                    (my $fuckthat2 = $unescape) =~ s/\x1c/\\/g;
+                    if ($actual) {
+                        #if ($actual ne $unescape) {
+                        if (!($actual eq $unescape || $actual eq $fuckthat || $actual eq $fuckthat2)) {
+                            print "\t\tERROR\n\t", " "x22, qquote($actual);
+                        }
+                    }
+                }
             }
             print "\n";
         }
