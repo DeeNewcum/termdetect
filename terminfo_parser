@@ -2,6 +2,13 @@
 
 # development testbed for creating a terminfo lexer/parser
 
+
+# when comparing our parser to the official one, there are some baffling problems:
+#       - "\\" seems to be parsed in two different ways, unpredictably
+#                   (see $fuckthat and $fuckthat2 below)
+#       - while you would THINK "%," would be an escape code... they actually intend for that to be two separate characters
+#                   (see "baffling" below)
+
     use strict;
     use warnings;
 
@@ -110,8 +117,9 @@ sub parse_terminfo  {
                     ((?:  \\\d\d\d  |  %'[^']+'  |  [\\%^][^\n]  |  [^,\\%^\n=\#]  )+)
                        #  ^^^^^^^^     ^^^^^^^^     ^^^^^^^^^^^    various escape codes
                                     (?{ local $field{capability} = $^N   })
-                    (?:     = ((?:  \\\d\d\d  |  %'[^']+'  |  [\\%^][^\n]  |  [^,\\%^\n]  )*)
+                    (?:     = ((?:  \\\d\d\d  |  %'[^']+'  |  %(?=,)  |  [\\%^][^\n]  |  [^,\\%^\n]  )*)
                               ## same as above, but with [=\#] removed, and + changed to *
+                                                           #  ^^^^^^ this is baffling, but is required to match the official parser's behavior
                                     (?{ local $field{assign} = $^N    })
                          | \# (\d+)
                                     (?{ local $field{num} = $^N    })
@@ -184,6 +192,9 @@ BEGIN {
                 if ($terminfo && $cap !~ /^(?:use|E3|grbom|gsbom)$|^\.|\@$/) {
                     $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
                     my $actual = $terminfo->getstr($cap) || '';
+
+                    # The way that "\\" is interpretted by the official parser seems to be arbitrary and random.
+                    #       (I'm probably missing something here...)
                     (my $fuckthat  = $unescape) =~ s/\\/\x1c/g;
                     (my $fuckthat2 = $unescape) =~ s/\x1c/\\/g;
                     if ($actual) {
@@ -221,7 +232,9 @@ BEGIN {
         "\\,"  => ",",
         "\\:"  => ":",
 
-        "\\\\" => "\x1c",
+        "\\\\" => "\x1c",          # 168 errors this way...
+        #"\\\\" => "\\",             # and 93 DIFFERENT errors this way...
+
         "\\^"  => "^",
     );
     for ('a'..'z') {
@@ -236,13 +249,15 @@ sub terminfo_unescape {
         (\%)(?=\\)    |         # i have no clue what the fuck this is...  but this is required to match the official parser's behavior
         ([\\^].)      |
         \%{(\d\d+)}   |
+        \%'([^']+)'   |
         (%'[^']+'|%.)
     /
-            $1 ? chr(oct($1))
-          : $2 ? $2
-          : $3 ? ($escapes{lc $3} || substr($3, -1))
-          : $4 ? unescape_percent_char($4)
-          : $5 ? $5 : "??"
+            defined($1) ? chr(oct($1))
+          : defined($2) ? $2
+          : defined($3) ? ($escapes{lc $3} || substr($3, -1))
+          : defined($4) ? unescape_percent_char($4)
+          : defined($5) ? ("%'" . terminfo_unescape($5) . "'")
+          : defined($6) ? $6 : "YOUBROKEIT"
         /gex;
     return $_;
 }
@@ -251,7 +266,7 @@ sub terminfo_unescape {
 
     sub unescape_percent_char {
         my $charnum = shift;
-        if ($charnum >= 32 && $charnum <= 126) {
+        if ($charnum >= 32 && $charnum <= 126 && $charnum != 92) {
             return "\%'" . chr($charnum) . "'";
         } else {
             return "\%{$charnum}";
