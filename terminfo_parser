@@ -5,13 +5,27 @@
     use strict;
     use warnings;
 
-    use Const::Fast;
-
     use Data::Dumper;
-    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
     our $last_pos;
     our $lines;
+
+
+
+    sub test_unescape {
+        my $str = shift;
+        print "\n";
+        print xxd($str);
+        print xxd(terminfo_unescape($str));
+    }
+
+if (0) {
+    test_unescape("%'*'");
+    test_unescape("^a");
+    test_unescape("\\a");
+    test_unescape("\\031");
+    exit;
+}
 
 
 my $terminfo = slurp("terminfo.src");
@@ -39,17 +53,28 @@ parse_terminfo($terminfo);
 #      produce  \200,  which does not terminate a string but behaves as a null
 #      character on most terminals, providing CS7 is specified.  See stty(1).)
 #      Finally, characters may be given as three octal digits after a \.
+
+#      ...
 #
 #      Sometimes  individual  capabilities must be commented out.  To do this,
 #      put a period before the capability name.  For example, see  the  second
 #      ind in the example above.
+
+#      ...
 #
 #      Numeric  capabilities are followed by the character "#" and then a
 #      positive value.
+
+#      ...
 #
 #      String valued capabilities, such as el (clear to end of line sequence)
 #      are given by the two-character code, an "=", and then a string ending
 #      at the next following ",".
+#       
+#      ...
+#
+#      The % encodings have the following meanings:
+#               (read terminfo(5) for full info about % encodings)
 #
 # The Single UNIX Specification further says:
 #
@@ -79,9 +104,11 @@ sub parse_terminfo  {
                                     (?{ $is_continuation = length $^N    })
                 (?:
                     (?! \h )
-                    ((?:[\\%^][^\n]|[^,\\%^\n=\#])+)
+                    ((?:  \\\d\d\d  |  %'[^']+'  |  [\\%^][^\n]  |  [^,\\%^\n=\#]  )+)
+                       #  ^^^^^^^^     ^^^^^^^^     ^^^^^^^^^^^    various escape codes
                                     (?{ local $field{capability} = $^N   })
-                    (?:     = ((?:[\\%^][^\n]|[^,\\%^\n])*)
+                    (?:     = ((?:  \\\d\d\d  |  %'[^']+'  |  [\\%^][^\n]  |  [^,\\%^\n]  )*)
+                              ## same as above, but with [=\#] removed, and + changed to *
                                     (?{ local $field{assign} = $^N    })
                          | \# (\d+)
                                     (?{ local $field{num} = $^N    })
@@ -90,7 +117,7 @@ sub parse_terminfo  {
                                     (?{ push(@fields, {%field})   })
                 )+ $
         }x
-            or die "syntax error on line " . ($lineno+1) . "\n";
+            or die "syntax error on line " . ($lineno+1) . "\n\t$lines[$lineno]\n";
             #or do {
             #    print "syntax error on line " . ($lineno+1) . "\n";
             #    print xxd($lines[$lineno]), "\n";
@@ -109,34 +136,70 @@ sub parse_terminfo  {
 }
 
 
-sub process_fields {
-    #print "--process--  ", Dumper \@_;
-    
-    print "\n\n================[ ", " ]================\n";
-    foreach my $f (@_) {
-        #print Dumper $f;
-        printf "\t%-20s  ",  $f->{capability};
-        printf "%s", qquote(terminfo_unescape($f->{assign}))     if $f->{assign};
-        print "\n";
+BEGIN {
+    sub process_fields {
+        #print "--process--  ", Dumper \@_;
+
+        my $terminal = shift @_;
+
+        #my @termnames = grep {defined $_} $terminal->{capability} =~ /^((?:[\\%^][^\n|]|[^,\\%^\n|])+)(?:\|((?:[\\%^][^\n|]|[^,\\%^\n|])+))*$/;
+        my @termnames = split /\|/, $terminal->{capability};
+
+        print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
+        foreach my $f (@_) {
+            #print Dumper $f;
+            printf "\t%-20s  ",  $f->{capability};
+            if ($f->{assign}) {
+                my $unescape = terminfo_unescape($f->{assign});
+                printf "%s", qquote($unescape);
+            }
+            print "\n";
+        }
     }
 }
 
-
 BEGIN {
     our %escapes = (
-        "\\E" => "\e",
+
+        "\\a"  => "\x07",   # bell
+        "\\b"  => "\x08",   # backspace
+        "\\f"  => "\x0c",   # form feed
+        "\\e"  => "\e",     # escape
+        "\\l"  => "\x0a",   # line feed
+        "\\n"  => "\x0a",   # newline
+        "\\r"  => "\x0d",   # return
+        "\\s"  => " ",      # space
+        "\\t"  => "\t",     # horizontal tab
+        "\\0"  => "\200",   # null   (see detailed info about this in terminfo(5)...   it's not clear to me why we use \200 instead of \x00)
+
+        # plain escapes
+        "\\,"  => ",",
+        "\\:"  => ":",
+
+        "\\\\" => "\\",
+        "^^"   => "^",
+        "\\^"  => "^",
+        '%%'   => '%',
     );
+    for ('a'..'z') {
+        $escapes{"^$_"} = chr(ord($_) - 96);
+    }
     #print Dumper \%escapes; exit;
 sub terminfo_unescape {
     local $_ = shift;
 
-    s#([\\^%].)#   $escapes{$1} || $1  #eg;
+    s#\\(\d\d\d)|([\\^].|%%)|(%'[^']+'|%.)#
+            $3 ? $3
+                :   $1 ? chr(oct($1))
+                       : $escapes{lc $2} || substr($2, -1);
+        #eg;
     return $_;
 }
 }
 
 
-sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"//;$q=~s/"$//;$q}
+sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"(.*)"$/$1/s;$q}
+sub _quote {my$q=Data::Dumper::_quote($_[0]);$q=~s/^'(.*)'$/$1/s;$q}
 
 
 # quickly read a whole file

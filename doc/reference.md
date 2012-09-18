@@ -15,12 +15,19 @@
 
 ## General
 
+Terminals:
 * http://vt100.net/ — lots of original manuals
  * VT510, [ANSI control function](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6) section
 * [Xterm Control Sequences](http://www.xfree86.org/current/ctlseqs.html)
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), for the linux kernel VT console
 * GNU screen manual, [console sequences section](http://www.gnu.org/software/screen/manual/html_node/Control-Sequences.html)
 * [ECMA-48](http://www.ecma-international.org/publications/standards/Ecma-048.htm)  (first adopted in 1976)
+
+Terminfo:
+* [terminfo(5) man page](http://www.manpages.info/linux/terminfo.5.html)
+* to show a compiled terminfo entry: <tt>[infocmp](http://man.cx/infocmp) -l -1 $terminal</tt>
+
+Other good resources:
 * [Thomas E. Dickey's website: invisible-island.net](http://invisible-island.net/) — he maintains 'xterm', 'vttest', and 'ncurses' (which contains the most up-to-date package of terminfo entries)
 
 ## Canonical sequence names
