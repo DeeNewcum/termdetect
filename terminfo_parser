@@ -7,6 +7,12 @@
 # `tic` against the desired terminfo file, to populate your ~/.terminfo/ directory with the file under test
 
 
+
+# TODO:
+#       - this doesn't work on Perl 5.8...  figure out why it breaks...
+#               - I suspect it's partly because 5.8 doesn't support 
+#                 nested/re-entrant calls to the regexp engine
+
     use strict;
     use warnings;
 
