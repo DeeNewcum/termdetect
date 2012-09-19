@@ -16,8 +16,7 @@
     use strict;
     use warnings;
 
-
-    use Term::Terminfo;     # required for verification only
+    use constant VALIDATE => 1;     # set to true to validate our results with the official parser
 
     use Data::Dumper;
 
@@ -42,9 +41,15 @@ if (0) {
 }
 
 
-my $terminfo = slurp("terminfo.src");
-#my $terminfo = slurp("termtypes.ti");
-parse_terminfo($terminfo);
+my $terminfo = "terminfo.src";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
+#my $terminfo = "termtypes.ti";          # http://www.catb.org/~esr/terminfo/
+
+my $terminfo_contents = slurp($terminfo);
+my $parsed = parse_terminfo($terminfo_contents);
+#print Dumper $parsed; exit;
+validate__prepare_TERMINFO($terminfo)       if VALIDATE;
+validate_terminfo($parsed)      if VALIDATE;
+
 
 # terminfo(5) says of terminfo's syntax:
 #
@@ -106,6 +111,8 @@ sub parse_terminfo  {
     #my ($lines) = @_;
     ($lines) = @_;      # it would be "my ($lines)" if it weren't for lexdebug()
 
+    my @parsed;
+
     my @lines = split /\n/, $lines;
     our @process_fields;
     for (our $lineno=0; $lineno<@lines; $lineno++) {
@@ -142,70 +149,43 @@ sub parse_terminfo  {
             if ($is_continuation) {
                 push(@process_fields, @fields);
             } else {
-                process_fields(@process_fields) if (@process_fields);
+                push(@parsed, process_fields(@process_fields)) if (@process_fields);
                 @process_fields = (@fields);
             }
         }
     }
-    process_fields(@process_fields) if (@process_fields);
+    push(@parsed, process_fields(@process_fields)) if (@process_fields);
+
+    return \@parsed;
 }
 
 
-BEGIN {
-    my %hardcopies;
+sub process_fields {
+    my @fields = @_;
 
-    sub process_fields {
-        #print "--process--  ", Dumper \@_;
+    my $termfield = shift @fields;
 
-        my $terminal = shift @_;
+    my @termnames = split /\|/, $termfield->{capability};
+    my $descr = pop @termnames      if (@termnames >= 2);
+    my %parsed = (
+        termnames      => \@termnames,
+        term_descr     => $descr,
+        lineno_range   => [         # range of line numbers that this entry occupies
+                $termfield->{lineno},       # first line
+                $fields[-1]{lineno},        # last line
+            ],
+        );
 
-        #my @termnames = grep {defined $_} $terminal->{capability} =~ /^((?:[\\%^][^\n|]|[^,\\%^\n|])+)(?:\|((?:[\\%^][^\n|]|[^,\\%^\n|])+))*$/;
-        my @termnames = split /\|/, $terminal->{capability};
+    $parsed{fields} = [
+            map {
+                $_->{assign} = terminfo_unescape($_->{assign})      if $_->{assign};
+                $_
+            } @fields
+        ];
 
-        my %caps = map {$_->{capability} => 1} @_;
-        my @uses = map {$_->{assign}} grep {$_->{capability} eq 'use'} @_;
-        #print Dumper \%caps; exit;
-        #if (@uses) {print Dumper \@uses; exit}
-
-        if ($caps{hc}) {
-            $hardcopies{$termnames[0]}++;
-        } else {
-            foreach my $use (@uses) {
-                if ($hardcopies{$use}) {
-                    $hardcopies{$termnames[0]}++;
-                    last;
-                }
-            }
-        }
-
-        my $terminfo;
-        if (!$caps{gn} && !$hardcopies{$termnames[0]} && $termnames[0] !~ /^(?:tvi912-2p|bg300-rv)$/) {
-            $terminfo = Term::Terminfo->new($termnames[0]);
-        }
-
-        print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
-        foreach my $f (@_) {
-            #print Dumper $f;
-            printf "\t%-20s  ",  $f->{capability};
-            if ($f->{assign}) {
-                my $unescape = terminfo_unescape($f->{assign});
-                printf "%s", qquote($unescape);
-
-                my $cap = $f->{capability};
-                #if ($terminfo && $cap !~ /^use$|^\.|\@$/ && $cap !~ /[A-Z]/) {
-                if ($terminfo && $cap !~ /^(?:use|E3|grbom|gsbom)$|^\.|\@$/) {
-                    $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
-                    my $actual = $terminfo->getstr($cap) || '';
-
-                    if ($actual && $actual ne $unescape) {
-                        print "\t\tERROR\n\t", " "x22, qquote($actual);
-                    }
-                }
-            }
-            print "\n";
-        }
-    }
+    return \%parsed;
 }
+
 
 BEGIN {
     our %escapes = (
@@ -236,6 +216,11 @@ BEGIN {
         $escapes{"^$_"} = chr(ord($_) - 96);
     }
     #print Dumper \%escapes; exit;
+
+
+# The output of this should EXACTLY match tigetstr(3).
+# That is -- the percent parameters haven't been expanded (it doesn't do what tparm() does), but
+# all other escape-codes should be expanded.
 sub terminfo_unescape {
     local $_ = shift;
 
@@ -258,7 +243,6 @@ sub terminfo_unescape {
 }
 }
 
-
     sub unescape_percent_char {
         my $charnum = shift;
         if ($charnum >= 32 && $charnum <= 126 && $charnum != 92) {
@@ -268,6 +252,149 @@ sub terminfo_unescape {
         }
     }
     
+
+# point $ENV{TERMINFO} to the right place
+#       (and compile the terminfo file if necessary)
+sub validate__prepare_TERMINFO {
+    my ($terminfo_filename) = @_;
+
+    my $terminfo_dir = "$ENV{HOME}/.terminfo.$terminfo_filename/";
+    if (!-d $terminfo_dir) {
+        system "tic", "-o$terminfo_dir", $terminfo_filename;
+        $? == -1    and die "unable to run 'tic'\n";
+    }
+
+    $ENV{TERMINFO} = $terminfo_dir;
+}
+
+
+
+# a unit test to confirm our parser matches tic(1)'s parser
+sub validate_terminfo {
+    my ($parsed) = @_;
+
+    eval 'use Term::Terminfo';
+    $@ and die "the unit test requires Term::Terminfo to be installed\n\t";
+
+    ## gather up all aliases
+    my %canonical_name;     # mapping from   canonical_name => entry_structure
+    my %all_term_names;     # mapping from   alias => canonical_name
+    foreach my $entry (@$parsed) {
+        my $canonical = $entry->{termnames}[0];
+
+        $canonical_name{$canonical} = $entry;
+        foreach my $termname (@{$entry->{termnames}}) {
+            $all_term_names{$termname} = $canonical;
+        }
+    }
+
+    ## gather up all "use" entries
+    my %all_uses;
+    my %first_level_uses;
+    foreach my $entry (@$parsed) {
+        my $canonical = $entry->{termnames}[0];
+        foreach my $field (@{$entry->{fields}}) {
+            if ($field->{capability} eq 'use') {
+                push @{$first_level_uses{$canonical}}, $field->{assign};
+            }
+        }
+    }
+    # recursively explore the tree, find all nested "use"s
+    foreach my $entry (@$parsed) {
+        my $canonical = $entry->{termnames}[0];
+        my %seen;
+        my @all_uses;
+        my @queue = @{$first_level_uses{$canonical} || []};
+        while (@queue) {
+            my $use = pop @queue;
+            $use = $all_term_names{$use};       # get the canonical name
+            next if $seen{$use}++;
+            # according to terminfo(5):
+            #           "If there are multiple use capabilities, they are merged in reverse order.
+            #           That is, the rightmost use reference is processed first, then the one to its
+            #           left, and so forth."
+            push(@all_uses, $use);
+            # depth-first search, so that the items in @all_uses remain in proper order
+            #           (earlier = higher precedent)
+            push(@queue, @{$first_level_uses{$use} || []});
+        }
+        # in @all_uses, entry [0] has the highest precedent, and the last entry has the lowest
+        $all_uses{$canonical} = [@all_uses];
+    }
+    #print Dumper \%first_level_uses;  exit;
+    print Dumper \%all_uses;    exit;
+
+
+    ################################################################
+    ##################### STOPPING POINT ###########################
+    ################################################################
+            # ^^^ The above code mostly works.
+            #       Now, we need to split it off into a flatten_terminfo()
+            #       routine, because it's something that's generally useful...  it isn't something
+            #       that's specific to unit testing.
+            #
+            #       (after that, then come back here and continue...  the reason we need
+            #        flatten_terminfo() functionality is because we need to know the ultimate
+            #        value of the 'hc' capability for every terminal)
+            #
+            #       Also, we need to add tests to test ALL capabilities (ie. including the ones we
+            #       inherit from "use" entries), not just the first-level capabilities.
+            #       This will ensure that we test that our flatten_terminfo() code uses the same
+            #       precedence rules that tic(1) uses.
+
+
+
+    our %hardcopies;
+
+    foreach my $entry (@$parsed) {
+        my @termnames = @{$entry->[0]};
+        my @fields = @{$entry}[1..scalar(@$entry)-1];
+
+#        my %caps = map {$_->{capability} => 1} @fields;
+#        my @uses = map {$_->{assign}} grep {$_->{capability} eq 'use'} @fields;
+#        #print Dumper \%caps; exit;
+#        #if (@uses) {print Dumper \@uses; exit}
+#
+#        if ($caps{hc}) {
+#            $hardcopies{$termnames[0]}++;
+#        } else {
+#            foreach my $use (@uses) {
+#                if ($hardcopies{$use}) {
+#                    $hardcopies{$termnames[0]}++;
+#                    last;
+#                }
+#            }
+#        }
+#
+#        my $terminfo;
+#        if (!$caps{gn} && !$hardcopies{$termnames[0]} && $termnames[0] !~ /^(?:tvi912-2p|bg300-rv)$/) {
+#            $terminfo = Term::Terminfo->new($termnames[0]);
+#        }
+
+        print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
+        foreach my $field (@fields) {
+            printf "\t%-20s  ",  $field->{capability};
+            if ($field->{assign}) {
+                printf "%s", qquote($field->{assign});
+
+#                my $cap = $field->{capability};
+#                #if ($terminfo && $cap !~ /^use$|^\.|\@$/ && $cap !~ /[A-Z]/) {
+#                if ($terminfo && $cap !~ /^(?:use|E3|grbom|gsbom)$|^\.|\@$/) {
+#                    $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
+#                    my $actual = $terminfo->getstr($cap) || '';
+#
+#                    if ($actual && $actual ne $field->{assign}) {
+#                        print "\t\tERROR\n\t", " "x22, qquote($actual);
+#                    }
+#                }
+            } elsif ($field->{num}) {
+                printf "%s", $field->{num};
+            }
+            print "\n";
+        }
+    }
+}
+
 
 sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"(.*)"$/$1/s;$q}
 sub _quote {my$q=Data::Dumper::_quote($_[0]);$q=~s/^'(.*)'$/$1/s;$q}
