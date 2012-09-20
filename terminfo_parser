@@ -19,34 +19,26 @@
     use constant UNIT_TEST => 1;     # set to true to validate our results against the official parser
 
     use Data::Dumper;
+    #use Carp;
+
+    use autodie;
+    use Carp::Always;
 
 
 
-    sub test_unescape {
-        my $str = shift;
-        print "\n";
-        print xxd($str);
-        print xxd(terminfo_unescape($str));
-    }
-
-if (0) {
-    test_unescape("%'*'");
-    test_unescape("^a");
-    test_unescape("\\a");
-    test_unescape("\\031");
-    exit;
-}
 
 
-
-our %precedence;
+our %num_dependencies;
 
 my $terminfo = "terminfo.src";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
 #my $terminfo = "termtypes.ti";          # http://www.catb.org/~esr/terminfo/
 
 my $terminfo_contents = slurp($terminfo);
 my $parsed = parse_terminfo($terminfo_contents);
+#print dump_terminal(@$parsed); exit;
 $parsed = flatten_terminfo($parsed);
+#print Dumper $parsed; exit;
+#print dump_terminal(values %$parsed); exit;
 if (UNIT_TEST) {
     unittest__prepare_TERMINFO($terminfo);
     unittest_terminfo($parsed);
@@ -272,7 +264,6 @@ sub flatten_terminfo {
     }
 
     ## gather up all "use" entries
-    my %all_uses;
     my %first_level_uses;
     foreach my $entry (@$parsed) {
         my $canonical = $entry->{termnames}[0];
@@ -282,57 +273,39 @@ sub flatten_terminfo {
             }
         }
     }
-    ## recursively explore the tree, find all nested "use"s
-    foreach my $entry (@$parsed) {
-        my $canonical = $entry->{termnames}[0];
-        my %seen;
-        my @all_uses;
-        my @queue = @{$first_level_uses{$canonical} || []};
-        while (@queue) {
-            my $use = pop @queue;
-            $use = $all_term_names{$use};       # get the canonical name
-            next if $seen{$use}++;
-            # according to terminfo(5):
-            #           "If there are multiple use capabilities, they are merged in reverse order.
-            #           That is, the rightmost use reference is processed first, then the one to its
-            #           left, and so forth."
-            push(@all_uses, $use);
-            # depth-first search, so that the items in @all_uses remain in proper order
-            #           (earlier = higher precedent)
-            push(@queue, @{$first_level_uses{$use} || []});
-        }
-        # in @all_uses, entry [0] has the highest precedent, and the last entry has the lowest
-        $all_uses{$canonical} = [@all_uses];
-    }
-    %precedence = %all_uses;
-    #print Dumper \%first_level_uses;  exit;
-    #print Dumper \%all_uses;    exit;
 
-    ## now, combine all the capabilities, in the precedence order that's specified in %all_uses
+    #print Dumper $canonical_name{'vt220+keypad'};  exit;
+
+    ## now, merge all the capabilities in the proper precedence order
     my %flattened;
     foreach my $canonical (keys %canonical_name) {
-        my %flattened_fields;
-        my @precedence = reverse($canonical, @{$all_uses{$canonical}});
-        foreach my $layer (@precedence) {
-            foreach my $field (@{$canonical_name{$layer}{fields}}) {
-                my $cap = $field->{capability};
-                if ($cap eq 'use') {
-                    next;       # we already handled the hierarchy, above
-                } elsif ($cap =~ s/\@$//) {
-                    delete $flattened_fields{$cap};
-                } else {
-                    $flattened_fields{$cap} = $field;
-                }
-            }
+    #foreach my $canonical ('abm85e') {
+    #foreach my $canonical ('vt220+keypad') {
+    #foreach my $canonical ('screen.rxvt') {
+        # recursively explore the tree
+        my $merged = merge_tree($canonical,
+                                {},
+                                \%canonical_name,
+                                \%all_term_names,
+                                \%first_level_uses,
+                                $canonical);
+
+        # actually delete all entries that are explicitely marked "deleted"
+        while (my ($cap, $field) = each %$merged) {
+            delete $merged->{$cap} if (!defined($field));
         }
+
         $flattened{$canonical} = {
             %{$canonical_name{$canonical}},
-            fields => \%flattened_fields,
-        }
+            fields => $merged,
+        };
     }
-    #dump_terminal(values %flattened);  exit;
-
+    #exit;
+    #print dump_terminal($flattened{abm85e}); exit;
+    #print dump_terminal(values %flattened);  exit;
+                
     ## add aliases
+    #return \%flattened;
     while (my ($alias, $canonical) = each %all_term_names) {
         if (!exists $flattened{$alias}) {
             $flattened{$alias} = {
@@ -341,10 +314,86 @@ sub flatten_terminfo {
             };
         }
     }
-    #dump_terminal(values %flattened);  exit;
+    #print dump_terminal(values %flattened);  exit;
 
     return \%flattened;
 }
+
+
+
+# recursively explore the tree, merging the fields for a specific entry
+#       %$terms_seen gets built from top-down
+#       %$merged gets built from bottom-up
+sub merge_tree {
+    my ($term,                  # the specific terminal to return the list of merged fields for
+        $terms_seen,            # all terminals seen so far, when exploring the tree
+                                #           (note: this lists ONLY the parent nodes, in direct
+                                #           lineage...  it does NOT list siblings of parents)
+        @passthru) = @_;
+
+    my ($canonical_name,        # mapping from   canonical_name => entry_structure
+        $all_term_names,        # mapping from   alias => canonical_name
+        $first_level_uses,      # mapping from   canonical_name => ordered list of "use" entries for this level ONLY
+        $orig_term,             # the $term from the first-level call to this
+        ) = @passthru;
+
+    #my $rlevel = scalar(keys %$terms_seen);     # for debugging only -- current recursion level
+    #my $indent = "\t" x $rlevel;
+
+    $num_dependencies{$orig_term}++;
+
+    # according to terminfo(5):
+    #           "The capabilities given before use override those in the base type named by use.
+    #           If there are multiple use capabilities, they are merged in reverse order.
+    #           That is, the rightmost use reference is processed first, then the one to its
+    #           left, and so forth.  Capabilities given explicitly in the entry override
+    #           those brought in by use references."
+    my $merged = field__list_to_hash(  $canonical_name->{$term}{fields}  );
+    my %terms_seen = (%$terms_seen, $term => 1);
+    foreach my $use (reverse @{$first_level_uses->{$term} || []}) {
+        $use = $all_term_names->{$use};         # canonicalize
+        next if ($terms_seen{$use});            # avoid infinite loops
+        my $subtree = merge_tree($use, \%terms_seen, @passthru);          # recursion step -- call ourselves
+        $merged = merge_fields($merged, $subtree);
+    }
+
+    return $merged;
+}
+
+
+# merge two sets of fields, with the "$a" one taking precedent over "$b"
+sub merge_fields {
+    my $a = field__list_to_hash(shift);
+    my $b = field__list_to_hash(shift);
+
+    my %merged = %$a;
+
+    while (my ($cap, $field) = each %$b) {
+        next if defined($merged{$cap});     # if there's already a value here, we're not going
+                                            # to overwrite it
+        if ($cap eq 'use') {
+            next;       # we're handling the hierarchy elsewhere
+        } elsif ($cap =~ s/\@$//) {
+            # explicitely mark this as "deleted" -- we need a placeholder for these, since 
+            # we're going to be processing lower-down ones
+            $merged{$cap} = { capability => $cap, deleted => 1};
+        } else {
+            $merged{$cap} = $field;
+        }
+    }
+    return \%merged;
+}
+
+        # convert a list-ref of fields into a hash-ref of fields
+        #       (or, if already a hash-ref...  just return it untouched)
+        sub field__list_to_hash {
+            my ($field_list) = @_;
+            return $field_list  if ref($field_list) eq 'HASH';
+            return {
+                    map {$_->{capability} => $_}
+                        @$field_list
+                   };
+        }
 
 
 
@@ -384,8 +433,10 @@ sub unittest_terminfo {
         print "================[ ", join(" -- ", @{$entry->{termnames}}, $entry->{term_descr} || ''),
                     " ]================\n";
     
-        print "\t", join(", ", @{$precedence{$entry->{termnames}[0]}}), "\n";
-        next unless (@{$precedence{$entry->{termnames}[0]}} == 2);
+        print "dependencies:  $num_dependencies{$entry->{termnames}[0]}\n";
+        next if ($num_dependencies{$entry->{termnames}[0]} > 3);
+        #print "\t", join(", ", @{$precedence{$entry->{termnames}[0]}}), "\n";
+        #next unless (@{$precedence{$entry->{termnames}[0]}} == 2);
             # terminals that currently have parse errors, but have only two 'use=' entries TOTAL:
             #       abm85h
             #       avt-rv
@@ -397,19 +448,22 @@ sub unittest_terminfo {
         foreach my $field (@$fields) {
             my $cap = $field->{capability};
 
-            #dump_field($field);
+            do {        # modified version of dump_field($field)
                 printf "%20s", $field->{capability};
                 if ($field->{assign}) {
                     print " = ", qquote($field->{assign});
                 } elsif ($field->{num}) {
                     print " # ", qquote($field->{num});
                 }
+            };
 
-            $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
-            my $actual = $terminfo->getstr($cap) || '';
-            if ($actual && $actual ne $field->{assign}) {
-                print "\t\tERROR\n";
-                printf "%-20s   %s\n", "", qquote($actual);
+            if ($field->{assign}) {
+                $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
+                my $actual = $terminfo->getstr($cap) || '';
+                if ($actual && $actual ne $field->{assign}) {
+                    print "\t\tERROR\n";
+                    printf "%-20s   %s\n", "", qquote($actual);
+                }
             }
             print "\n";
         }
@@ -421,8 +475,9 @@ sub unittest_terminfo {
 
 sub dump_terminal {
     my @terms = sort {$a->{termnames}[0] cmp $b->{termnames}[0]} @_;
+    my $return = '';
     foreach my $terminal (@terms) {
-        print "================[ ", join(" -- ", @{$terminal->{termnames}}, $terminal->{term_descr} || ''),
+        $return .= "================[ " . join(" -- ", @{$terminal->{termnames}}, $terminal->{term_descr} || '') .
                     " ]================\n";
         if ($terminal->{alias}) {
             #printf "%20s   %s\n\n", "alias of", $terminal->{alias};
@@ -433,23 +488,34 @@ sub dump_terminal {
         if (ref($fields) eq 'HASH') {
             $fields = [ sort { dump_sort_fields() } values %$fields ];
         }
-        dump_field(@$fields);
-        print "\n";
+        $return .= dump_field(@$fields);
+        $return .= "\n";
     }
+    return $return;
 }
 
 
 sub dump_field {
+    my $return = '';
     foreach my $field (@_) {
-        printf "%20s", $field->{capability};
+        next if (!defined($field));
+        if (!exists $field->{capability}) {
+            #confess("broke on: " . Dumper(\@_) . "\t");
+            die;
+            exit;
+        }
+        $return .= sprintf "%20s", $field->{capability};
         if ($field->{assign}) {
-            print " = ", qquote($field->{assign}), "\n";
+            $return .= " = " . qquote($field->{assign}) . "\n";
         } elsif ($field->{num}) {
-            print " # ", qquote($field->{num}), "\n";
+            $return .= " # " . qquote($field->{num}) . "\n";
+        } elsif ($field->{deleted}) {
+            $return .= " XXXXXXXXXXX deleted\n";
         } else {
-            print "\n";
+            $return .= "\n";
         }
     }
+    return $return;
 }
 
 
@@ -470,6 +536,10 @@ sub field_type {
 sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"(.*)"$/$1/s;$q}
 sub _quote {my$q=Data::Dumper::_quote($_[0]);$q=~s/^'(.*)'$/$1/s;$q}
 
+
+# indent all lines with the same character sequence
+#           (even when there are multiple lines in the same scalar)
+sub indent {my$i=shift;map {(my$a=$_) =~ s/^/$i/m;$a} @_}
 
 # quickly read a whole file
 sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
