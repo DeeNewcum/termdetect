@@ -46,7 +46,7 @@ my $terminfo = "terminfo.src";          # http://invisible-island.net/ncurses/nc
 
 my $terminfo_contents = slurp($terminfo);
 my $parsed = parse_terminfo($terminfo_contents);
-#print Dumper $parsed; exit;
+$parsed = flatten_terminfo($parsed);
 validate__prepare_TERMINFO($terminfo)       if VALIDATE;
 validate_terminfo($parsed)      if VALIDATE;
 
@@ -269,8 +269,10 @@ sub validate__prepare_TERMINFO {
 
 
 
-# a unit test to confirm our parser matches tic(1)'s parser
-sub validate_terminfo {
+# The terminfo specification allows for use= clauses (and @ items to cancel things inside uses).
+# This takes the parsed fields that contain use= clauses, and flattens everything out so you don't
+# have to do a lot of work to find out what the final values for a given $TERM are.
+sub flatten_terminfo {
     my ($parsed) = @_;
 
     eval 'use Term::Terminfo';
@@ -299,7 +301,7 @@ sub validate_terminfo {
             }
         }
     }
-    # recursively explore the tree, find all nested "use"s
+    ## recursively explore the tree, find all nested "use"s
     foreach my $entry (@$parsed) {
         my $canonical = $entry->{termnames}[0];
         my %seen;
@@ -322,48 +324,91 @@ sub validate_terminfo {
         $all_uses{$canonical} = [@all_uses];
     }
     #print Dumper \%first_level_uses;  exit;
-    print Dumper \%all_uses;    exit;
+    #print Dumper \%all_uses;    exit;
+
+    ## now, combine all the capabilities, in the precedence order that's specified in %all_uses
+    my %flattened;
+    foreach my $canonical (keys %canonical_name) {
+        my %flattened_fields;
+        my @precedence = reverse($canonical, @{$all_uses{$canonical}});
+        foreach my $layer (@precedence) {
+            foreach my $field (@{$canonical_name{$layer}{fields}}) {
+                my $cap = $field->{capability};
+                if ($cap eq 'use') {
+                    next;       # we already handled the hierarchy, above
+                } elsif ($cap =~ s/\@$//) {
+                    delete $flattened_fields{$cap};
+                } else {
+                    $flattened_fields{$cap} = $field;
+                }
+            }
+        }
+        $flattened{$canonical} = {
+            %{$canonical_name{$canonical}},
+            fields => \%flattened_fields,
+        }
+    }
+    #dump_terminal(values %flattened);  exit;
+
+    ## add aliases
+    while (my ($alias, $canonical) = each %all_term_names) {
+        if (!exists $flattened{$alias}) {
+            $flattened{$alias} = {
+                alias => $canonical,
+                termnames => [$alias],      # $flattened{$canonical}{termnames},
+            };
+        }
+    }
+    #dump_terminal(values %flattened);  exit;
+
+    return \%flattened;
+}
 
 
-    ################################################################
-    ##################### STOPPING POINT ###########################
-    ################################################################
-            # ^^^ The above code mostly works.
-            #       Now, we need to split it off into a flatten_terminfo()
-            #       routine, because it's something that's generally useful...  it isn't something
-            #       that's specific to unit testing.
-            #
-            #       (after that, then come back here and continue...  the reason we need
-            #        flatten_terminfo() functionality is because we need to know the ultimate
-            #        value of the 'hc' capability for every terminal)
-            #
-            #       Also, we need to add tests to test ALL capabilities (ie. including the ones we
-            #       inherit from "use" entries), not just the first-level capabilities.
-            #       This will ensure that we test that our flatten_terminfo() code uses the same
-            #       precedence rules that tic(1) uses.
 
+# a unit test to confirm our parser matches tic(1)'s parser
+sub validate_terminfo {
+    my ($parsed) = @_;
 
-
-    our %hardcopies;
+    if (ref($parsed) eq 'HASH') {
+        $parsed = [ values %$parsed ];
+    }
 
     foreach my $entry (@$parsed) {
-        my @termnames = @{$entry->[0]};
-        my @fields = @{$entry}[1..scalar(@$entry)-1];
+        next if ($entry->{alias});
+        next if ($entry->{fields}{hc});      # Term::Terminfo doesn't like hardcopy entries
+        next if ($entry->{fields}{gn});
 
-#        my %caps = map {$_->{capability} => 1} @fields;
-#        my @uses = map {$_->{assign}} grep {$_->{capability} eq 'use'} @fields;
-#        #print Dumper \%caps; exit;
-#        #if (@uses) {print Dumper \@uses; exit}
-#
-#        if ($caps{hc}) {
-#            $hardcopies{$termnames[0]}++;
-#        } else {
-#            foreach my $use (@uses) {
-#                if ($hardcopies{$use}) {
-#                    $hardcopies{$termnames[0]}++;
-#                    last;
-#                }
-#            }
+
+        print "================[ ", join(" -- ", @{$entry->{termnames}}, $entry->{term_descr} || ''),
+                    " ]================\n";
+
+        my $terminfo = Term::Terminfo->new($entry->{termnames}[0]);
+        my $fields = [ sort { dump_sort_fields() } values %{$entry->{fields}} ];
+        #while (my ($cap, $field) = each %{$entry->{fields}}) {
+        foreach my $field (@$fields) {
+            my $cap = $field->{capability};
+
+            #dump_field($field);
+                printf "%20s", $field->{capability};
+                if ($field->{assign}) {
+                    print " = ", qquote($field->{assign});
+                } elsif ($field->{num}) {
+                    print " # ", qquote($field->{num});
+                }
+
+            $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
+            my $actual = $terminfo->getstr($cap) || '';
+            if ($actual && $actual ne $field->{assign}) {
+                print "\t\tERROR\n";
+                printf "%-20s   %s\n", "", qquote($actual);
+            }
+            print "\n";
+        }
+
+        print "\n";
+    }
+
 #        }
 #
 #        my $terminfo;
@@ -371,11 +416,11 @@ sub validate_terminfo {
 #            $terminfo = Term::Terminfo->new($termnames[0]);
 #        }
 
-        print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
-        foreach my $field (@fields) {
-            printf "\t%-20s  ",  $field->{capability};
-            if ($field->{assign}) {
-                printf "%s", qquote($field->{assign});
+#        print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
+#        foreach my $field (@fields) {
+#            printf "\t%-20s  ",  $field->{capability};
+#            if ($field->{assign}) {
+#                printf "%s", qquote($field->{assign});
 
 #                my $cap = $field->{capability};
 #                #if ($terminfo && $cap !~ /^use$|^\.|\@$/ && $cap !~ /[A-Z]/) {
@@ -387,12 +432,60 @@ sub validate_terminfo {
 #                        print "\t\tERROR\n\t", " "x22, qquote($actual);
 #                    }
 #                }
-            } elsif ($field->{num}) {
-                printf "%s", $field->{num};
-            }
+#            } elsif ($field->{num}) {
+#                printf "%s", $field->{num};
+#            }
+#            print "\n";
+#        }
+#    }
+}
+
+
+
+sub dump_terminal {
+    my @terms = sort {$a->{termnames}[0] cmp $b->{termnames}[0]} @_;
+    foreach my $terminal (@terms) {
+        print "================[ ", join(" -- ", @{$terminal->{termnames}}, $terminal->{term_descr} || ''),
+                    " ]================\n";
+        if ($terminal->{alias}) {
+            #printf "%20s   %s\n\n", "alias of", $terminal->{alias};
+            next;
+        }
+
+        my $fields = $terminal->{fields};
+        if (ref($fields) eq 'HASH') {
+            $fields = [ sort { dump_sort_fields() } values %$fields ];
+        }
+        dump_field(@$fields);
+        print "\n";
+    }
+}
+
+
+sub dump_field {
+    foreach my $field (@_) {
+        printf "%20s", $field->{capability};
+        if ($field->{assign}) {
+            print " = ", qquote($field->{assign}), "\n";
+        } elsif ($field->{num}) {
+            print " # ", qquote($field->{num}), "\n";
+        } else {
             print "\n";
         }
     }
+}
+
+
+sub dump_sort_fields {
+                        field_type($a) cmp field_type($b) ||
+                        $a->{capability} cmp $b->{capability}
+}
+
+sub field_type {
+    my ($field) = @_;
+    return "3assign" if ($field->{assign});
+    return "2num" if ($field->{num});
+    return "1bool";
 }
 
 
