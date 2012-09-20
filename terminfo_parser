@@ -16,12 +16,9 @@
     use strict;
     use warnings;
 
-    use constant VALIDATE => 1;     # set to true to validate our results with the official parser
+    use constant UNIT_TEST => 1;     # set to true to validate our results against the official parser
 
     use Data::Dumper;
-
-    our $last_pos;
-    our $lines;
 
 
 
@@ -41,14 +38,17 @@ if (0) {
 }
 
 
+
 my $terminfo = "terminfo.src";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
 #my $terminfo = "termtypes.ti";          # http://www.catb.org/~esr/terminfo/
 
 my $terminfo_contents = slurp($terminfo);
 my $parsed = parse_terminfo($terminfo_contents);
 $parsed = flatten_terminfo($parsed);
-validate__prepare_TERMINFO($terminfo)       if VALIDATE;
-validate_terminfo($parsed)      if VALIDATE;
+if (UNIT_TEST) {
+    unittest__prepare_TERMINFO($terminfo);
+    unittest_terminfo($parsed);
+}
 
 
 # terminfo(5) says of terminfo's syntax:
@@ -108,8 +108,7 @@ validate_terminfo($parsed)      if VALIDATE;
 #      comma-separated fields. White space after each comma is ignored. 
 #
 sub parse_terminfo  {
-    #my ($lines) = @_;
-    ($lines) = @_;      # it would be "my ($lines)" if it weren't for lexdebug()
+    my ($lines) = @_;
 
     my @parsed;
 
@@ -140,11 +139,7 @@ sub parse_terminfo  {
                 )+ $
         }x
             or die "syntax error on line " . ($lineno+1) . "\n\t$lines[$lineno]\n";
-            #or do {
-            #    print "syntax error on line " . ($lineno+1) . "\n";
-            #    print xxd($lines[$lineno]), "\n";
-            #    exit;
-            #};
+
         if (defined($is_continuation)) {
             if ($is_continuation) {
                 push(@process_fields, @fields);
@@ -251,22 +246,6 @@ sub terminfo_unescape {
             return "\%{$charnum}";
         }
     }
-    
-
-# point $ENV{TERMINFO} to the right place
-#       (and compile the terminfo file if necessary)
-sub validate__prepare_TERMINFO {
-    my ($terminfo_filename) = @_;
-
-    my $terminfo_dir = "$ENV{HOME}/.terminfo.$terminfo_filename/";
-    if (!-d $terminfo_dir) {
-        system "tic", "-o$terminfo_dir", $terminfo_filename;
-        $? == -1    and die "unable to run 'tic'\n";
-    }
-
-    $ENV{TERMINFO} = $terminfo_dir;
-}
-
 
 
 # The terminfo specification allows for use= clauses (and @ items to cancel things inside uses).
@@ -366,8 +345,27 @@ sub flatten_terminfo {
 
 
 
+
+
+    
+
+# point $ENV{TERMINFO} to the right place
+#       (and compile the terminfo file if necessary)
+sub unittest__prepare_TERMINFO {
+    my ($terminfo_filename) = @_;
+
+    my $terminfo_dir = "$ENV{HOME}/.terminfo.$terminfo_filename/";
+    if (!-d $terminfo_dir) {
+        system "tic", "-o$terminfo_dir", $terminfo_filename;
+        $? == -1    and die "unable to run 'tic'\n";
+    }
+
+    $ENV{TERMINFO} = $terminfo_dir;
+}
+
+
 # a unit test to confirm our parser matches tic(1)'s parser
-sub validate_terminfo {
+sub unittest_terminfo {
     my ($parsed) = @_;
 
     if (ref($parsed) eq 'HASH') {
@@ -376,8 +374,8 @@ sub validate_terminfo {
 
     foreach my $entry (@$parsed) {
         next if ($entry->{alias});
-        next if ($entry->{fields}{hc});      # Term::Terminfo doesn't like hardcopy entries
-        next if ($entry->{fields}{gn});
+        next if ($entry->{fields}{hc});     # Term::Terminfo doesn't like hardcopy entries
+        next if ($entry->{fields}{gn});     # Term::Terminfo doesn't like generic entries
 
 
         print "================[ ", join(" -- ", @{$entry->{termnames}}, $entry->{term_descr} || ''),
@@ -408,38 +406,7 @@ sub validate_terminfo {
 
         print "\n";
     }
-
-#        }
-#
-#        my $terminfo;
-#        if (!$caps{gn} && !$hardcopies{$termnames[0]} && $termnames[0] !~ /^(?:tvi912-2p|bg300-rv)$/) {
-#            $terminfo = Term::Terminfo->new($termnames[0]);
-#        }
-
-#        print "\n\n================[ ", join(" --- ", @termnames), " ]================\n";
-#        foreach my $field (@fields) {
-#            printf "\t%-20s  ",  $field->{capability};
-#            if ($field->{assign}) {
-#                printf "%s", qquote($field->{assign});
-
-#                my $cap = $field->{capability};
-#                #if ($terminfo && $cap !~ /^use$|^\.|\@$/ && $cap !~ /[A-Z]/) {
-#                if ($terminfo && $cap !~ /^(?:use|E3|grbom|gsbom)$|^\.|\@$/) {
-#                    $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
-#                    my $actual = $terminfo->getstr($cap) || '';
-#
-#                    if ($actual && $actual ne $field->{assign}) {
-#                        print "\t\tERROR\n\t", " "x22, qquote($actual);
-#                    }
-#                }
-#            } elsif ($field->{num}) {
-#                printf "%s", $field->{num};
-#            }
-#            print "\n";
-#        }
-#    }
 }
-
 
 
 sub dump_terminal {
@@ -480,6 +447,7 @@ sub dump_sort_fields {
                         field_type($a) cmp field_type($b) ||
                         $a->{capability} cmp $b->{capability}
 }
+
 
 sub field_type {
     my ($field) = @_;
