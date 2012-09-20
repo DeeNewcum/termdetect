@@ -348,7 +348,7 @@ sub merge_tree {
     #           That is, the rightmost use reference is processed first, then the one to its
     #           left, and so forth.  Capabilities given explicitly in the entry override
     #           those brought in by use references."
-    my $merged = field__list_to_hash(  $canonical_name->{$term}{fields}  );
+    my $merged = {};
     my %terms_seen = (%$terms_seen, $term => 1);
     foreach my $use (reverse @{$first_level_uses->{$term} || []}) {
         $use = $all_term_names->{$use};         # canonicalize
@@ -356,6 +356,8 @@ sub merge_tree {
         my $subtree = merge_tree($use, \%terms_seen, @passthru);          # recursion step -- call ourselves
         $merged = merge_fields($merged, $subtree);
     }
+    $merged = merge_fields($merged, 
+                     field__list_to_hash(  $canonical_name->{$term}{fields}  ));
 
     return $merged;
 }
@@ -369,14 +371,15 @@ sub merge_fields {
     my %merged = %$a;
 
     while (my ($cap, $field) = each %$b) {
-        next if defined($merged{$cap});     # if there's already a value here, we're not going
+        #next if defined($merged{$cap});     # if there's already a value here, we're not going
                                             # to overwrite it
         if ($cap eq 'use') {
             next;       # we're handling the hierarchy elsewhere
         } elsif ($cap =~ s/\@$//) {
             # explicitely mark this as "deleted" -- we need a placeholder for these, since 
             # we're going to be processing lower-down ones
-            $merged{$cap} = { capability => $cap, deleted => 1};
+            #$merged{$cap} = { capability => $cap, deleted => 1};
+            delete $merged{$cap};
         } else {
             $merged{$cap} = $field;
         }
@@ -434,7 +437,7 @@ sub unittest_terminfo {
                     " ]================\n";
     
         print "dependencies:  $num_dependencies{$entry->{termnames}[0]}\n";
-        next if ($num_dependencies{$entry->{termnames}[0]} > 3);
+        #next if ($num_dependencies{$entry->{termnames}[0]} > 3);
         #print "\t", join(", ", @{$precedence{$entry->{termnames}[0]}}), "\n";
         #next unless (@{$precedence{$entry->{termnames}[0]}} == 2);
             # terminals that currently have parse errors, but have only two 'use=' entries TOTAL:
