@@ -248,9 +248,6 @@ sub terminfo_unescape {
 sub flatten_terminfo {
     my ($parsed) = @_;
 
-    eval 'use Term::Terminfo';
-    $@ and die "the unit test requires Term::Terminfo to be installed\n\t";
-
     ## gather up all aliases
     my %canonical_name;     # mapping from   canonical_name => entry_structure
     my %all_term_names;     # mapping from   alias => canonical_name
@@ -427,6 +424,12 @@ sub unittest_terminfo {
         $parsed = [ values %$parsed ];
     }
 
+    eval 'use Term::Terminfo';
+    $@ and die "the unit test requires Term::Terminfo to be installed\n\t";
+
+    #my $ti = Term::Terminfo->new("vt100");
+    #print Dumper [sort keys %supported_caps]; exit;
+
     foreach my $entry (sort {$a->{termnames}[0] cmp $b->{termnames}[0]} @$parsed) {
         next if ($entry->{alias});
         next if ($entry->{fields}{hc});     # Term::Terminfo doesn't like hardcopy entries
@@ -446,6 +449,12 @@ sub unittest_terminfo {
             #       avt-w
 
         my $terminfo = Term::Terminfo->new($entry->{termnames}[0]);
+
+        my %supported_caps = map {$_ => 1}
+                $terminfo->flag_capnames(),
+                $terminfo->num_capnames(),
+                $terminfo->str_capnames();
+
         my $fields = [ sort { dump_sort_fields() } values %{$entry->{fields}} ];
         #while (my ($cap, $field) = each %{$entry->{fields}}) {
         foreach my $field (@$fields) {
@@ -460,15 +469,49 @@ sub unittest_terminfo {
                 }
             };
 
-            if ($field->{assign}) {
-                $cap =~ s/^OT//;        # see "obsolete" in the terminfo.src
+            if (!exists $supported_caps{$cap}) {
+                print " "x40, "unsupported\n";
+                next;
+            } elsif ($field->{assign}) {
                 my $actual = $terminfo->getstr($cap) || '';
-                if ($actual && $actual ne $field->{assign}) {
+                if ($actual ne $field->{assign}) {
+                    print "\t\tERROR\n";
+                    printf "%-20s   %s\n", "", qquote($actual);
+                }
+            } elsif ($field->{num}) {
+                if ($cap eq 'lines' || $cap eq 'cols') {
+                    print "\n";
+                    next;
+                }
+                my $actual = $terminfo->getnum($cap) || '';
+                if ($actual <=> $field->{num}) {
                     print "\t\tERROR\n";
                     printf "%-20s   %s\n", "", qquote($actual);
                 }
             }
             print "\n";
+        }
+
+        foreach my $nothere ($terminfo->flag_capnames()) {
+            next if ($entry->{fields}{$nothere});
+            if ($terminfo->getflag($nothere)) {
+                printf "%20s   false       ERROR -- tic(1) reports true\n", $nothere;
+            }
+        }
+        foreach my $nothere ($terminfo->num_capnames()) {
+            next if ($entry->{fields}{$nothere});
+            next if ($nothere eq 'cols' || $nothere eq 'lines');
+            if (defined(my $actual = $terminfo->getnum($nothere))) {
+                printf "%20s # undef       ERROR -- tic(1) reports $actual\n", $nothere;
+            }
+        }
+        foreach my $nothere ($terminfo->str_capnames()) {
+            next if ($entry->{fields}{$nothere});
+            if (defined(my $actual = $terminfo->getstr($nothere))) {
+                printf "%20s = undef       ERROR -- tic(1) reports %s\n",
+                        $nothere,
+                        qquote($actual);
+            }
         }
 
         print "\n";
