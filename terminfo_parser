@@ -39,6 +39,8 @@ if (0) {
 
 
 
+our %precedence;
+
 my $terminfo = "terminfo.src";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
 #my $terminfo = "termtypes.ti";          # http://www.catb.org/~esr/terminfo/
 
@@ -302,6 +304,7 @@ sub flatten_terminfo {
         # in @all_uses, entry [0] has the highest precedent, and the last entry has the lowest
         $all_uses{$canonical} = [@all_uses];
     }
+    %precedence = %all_uses;
     #print Dumper \%first_level_uses;  exit;
     #print Dumper \%all_uses;    exit;
 
@@ -372,7 +375,7 @@ sub unittest_terminfo {
         $parsed = [ values %$parsed ];
     }
 
-    foreach my $entry (@$parsed) {
+    foreach my $entry (sort {$a->{termnames}[0] cmp $b->{termnames}[0]} @$parsed) {
         next if ($entry->{alias});
         next if ($entry->{fields}{hc});     # Term::Terminfo doesn't like hardcopy entries
         next if ($entry->{fields}{gn});     # Term::Terminfo doesn't like generic entries
@@ -380,6 +383,13 @@ sub unittest_terminfo {
 
         print "================[ ", join(" -- ", @{$entry->{termnames}}, $entry->{term_descr} || ''),
                     " ]================\n";
+    
+        print "\t", join(", ", @{$precedence{$entry->{termnames}[0]}}), "\n";
+        next unless (@{$precedence{$entry->{termnames}[0]}} == 2);
+            # terminals that currently have parse errors, but have only two 'use=' entries TOTAL:
+            #       abm85h
+            #       avt-rv
+            #       avt-w
 
         my $terminfo = Term::Terminfo->new($entry->{termnames}[0]);
         my $fields = [ sort { dump_sort_fields() } values %{$entry->{fields}} ];
