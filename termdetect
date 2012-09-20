@@ -89,6 +89,15 @@ run_and_display_test("\e+C",            "[ISO2022] designate G3 character set");
 run_and_display_test("\x9B0K",          "C1 version of erase to EOL");
 
 
+read_phase {
+    print "\n-------- unsure if these show any variance across terminals --------\n";};
+
+run_and_display_test("\x00",            "character NULL -- padding... shouldn't display");
+run_and_display_test("\e\\",            qq{"do nothing" sequence});
+run_and_display_test("\x18",            "character CAN (cancel) -- shouldn't display");
+run_and_display_test("\x1A",            "character SUB (substitute) -- maybe display...  varies");
+
+
 do_queued_async_reads();
 
 exit;
@@ -289,6 +298,7 @@ sub ansi_escape { map {(my $a = $_);
         $a =~ s/\e/\\e/g;
         $a =~ s/\x5/\\5/g;
         $a =~ s/\x9B/\\x9B/g;
+        $a =~ s/([\x00-\x1f])/"\\x" . sprintf "%02X", ord($1)/ge;
         $a} @_ }
 
 
