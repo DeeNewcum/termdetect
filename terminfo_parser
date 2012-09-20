@@ -3,11 +3,6 @@
 # development testbed for creating a terminfo lexer/parser
 
 
-# for the verification stage of this, you need to first run
-# `tic` against the desired terminfo file, to populate your ~/.terminfo/ directory with the file under test
-
-
-
 # TODO:
 #       - this doesn't work on Perl 5.8...  figure out why it breaks...
 #               - I suspect it's partly because 5.8 doesn't support 
@@ -19,10 +14,6 @@
     use constant UNIT_TEST => 1;     # set to true to validate our results against the official parser
 
     use Data::Dumper;
-    #use Carp;
-
-    use autodie;
-    use Carp::Always;
 
 
 
@@ -43,6 +34,7 @@ if (UNIT_TEST) {
     unittest__prepare_TERMINFO($terminfo);
     unittest_terminfo($parsed);
 }
+
 
 
 # terminfo(5) says of terminfo's syntax:
@@ -271,14 +263,9 @@ sub flatten_terminfo {
         }
     }
 
-    #print Dumper $canonical_name{'vt220+keypad'};  exit;
-
     ## now, merge all the capabilities in the proper precedence order
     my %flattened;
     foreach my $canonical (keys %canonical_name) {
-    #foreach my $canonical ('abm85e') {
-    #foreach my $canonical ('vt220+keypad') {
-    #foreach my $canonical ('screen.rxvt') {
         # recursively explore the tree
         my $merged = merge_tree($canonical,
                                 {},
@@ -297,12 +284,9 @@ sub flatten_terminfo {
             fields => $merged,
         };
     }
-    #exit;
-    #print dump_terminal($flattened{abm85e}); exit;
-    #print dump_terminal(values %flattened);  exit;
+    #return \%flattened;
                 
     ## add aliases
-    #return \%flattened;
     while (my ($alias, $canonical) = each %all_term_names) {
         if (!exists $flattened{$alias}) {
             $flattened{$alias} = {
@@ -311,7 +295,6 @@ sub flatten_terminfo {
             };
         }
     }
-    #print dump_terminal(values %flattened);  exit;
 
     return \%flattened;
 }
@@ -333,9 +316,6 @@ sub merge_tree {
         $first_level_uses,      # mapping from   canonical_name => ordered list of "use" entries for this level ONLY
         $orig_term,             # the $term from the first-level call to this
         ) = @passthru;
-
-    #my $rlevel = scalar(keys %$terms_seen);     # for debugging only -- current recursion level
-    #my $indent = "\t" x $rlevel;
 
     $num_dependencies{$orig_term}++;
 
@@ -368,14 +348,9 @@ sub merge_fields {
     my %merged = %$a;
 
     while (my ($cap, $field) = each %$b) {
-        #next if defined($merged{$cap});     # if there's already a value here, we're not going
-                                            # to overwrite it
         if ($cap eq 'use') {
             next;       # we're handling the hierarchy elsewhere
         } elsif ($cap =~ s/\@$//) {
-            # explicitely mark this as "deleted" -- we need a placeholder for these, since 
-            # we're going to be processing lower-down ones
-            #$merged{$cap} = { capability => $cap, deleted => 1};
             delete $merged{$cap};
         } else {
             $merged{$cap} = $field;
@@ -427,9 +402,6 @@ sub unittest_terminfo {
     eval 'use Term::Terminfo';
     $@ and die "the unit test requires Term::Terminfo to be installed\n\t";
 
-    #my $ti = Term::Terminfo->new("vt100");
-    #print Dumper [sort keys %supported_caps]; exit;
-
     foreach my $entry (sort {$a->{termnames}[0] cmp $b->{termnames}[0]} @$parsed) {
         next if ($entry->{alias});
         next if ($entry->{fields}{hc});     # Term::Terminfo doesn't like hardcopy entries
@@ -441,12 +413,6 @@ sub unittest_terminfo {
     
         print "dependencies:  $num_dependencies{$entry->{termnames}[0]}\n";
         #next if ($num_dependencies{$entry->{termnames}[0]} > 3);
-        #print "\t", join(", ", @{$precedence{$entry->{termnames}[0]}}), "\n";
-        #next unless (@{$precedence{$entry->{termnames}[0]}} == 2);
-            # terminals that currently have parse errors, but have only two 'use=' entries TOTAL:
-            #       abm85h
-            #       avt-rv
-            #       avt-w
 
         my $terminfo = Term::Terminfo->new($entry->{termnames}[0]);
 
@@ -456,7 +422,6 @@ sub unittest_terminfo {
                 $terminfo->str_capnames();
 
         my $fields = [ sort { dump_sort_fields() } values %{$entry->{fields}} ];
-        #while (my ($cap, $field) = each %{$entry->{fields}}) {
         foreach my $field (@$fields) {
             my $cap = $field->{capability};
 
@@ -545,11 +510,6 @@ sub dump_field {
     my $return = '';
     foreach my $field (@_) {
         next if (!defined($field));
-        if (!exists $field->{capability}) {
-            #confess("broke on: " . Dumper(\@_) . "\t");
-            die;
-            exit;
-        }
         $return .= sprintf "%20s", $field->{capability};
         if ($field->{assign}) {
             $return .= " = " . qquote($field->{assign}) . "\n";
