@@ -95,7 +95,9 @@ read_phase {
 run_and_display_test("\x00",            "character NULL -- padding... shouldn't display");
 run_and_display_test("\e\\",            qq{"do nothing" sequence});
 run_and_display_test("\x18",            "character CAN (cancel) -- shouldn't display");
+run_and_display_test("\e[\x18",         "CAN (cancel), test #2");
 run_and_display_test("\x1A",            "character SUB (substitute) -- maybe display...  varies");
+run_and_display_test("\e[\x1A",         "SUB (substitute), test #2");
 
 
 do_queued_async_reads();
