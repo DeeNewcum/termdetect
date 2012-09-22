@@ -22,6 +22,9 @@
     - the Xterm reporting features listed in:
             vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
 
+    - DECRQM  (request mode)...  may be present in dtterm?
+            http://www.vt100.net/docs/vt510-rm/DECRQM
+
     - double-width mode
 
     - double-height mode
