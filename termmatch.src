@@ -1,0 +1,6 @@
+# See termmatch.md for syntax of this file.
+
+vte|libVTE which is used in GNOME Terminal etc,
+    device_status=\E[0n,  printer_status=\E?11n,  device_attr3=%!,  term_param=%x3,
+    enquiry=%!,  window_size_px=%*,  window_size_chr=%*,  screen_size=%*,  window_state=%*,
+    window_pos=%*,  ext_cursor_pos=%*,  c1=%!
