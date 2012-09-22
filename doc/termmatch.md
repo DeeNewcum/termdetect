@@ -160,7 +160,7 @@ The escape sequences below are sequences that some terminal emulators choose to 
 
 <tr><td><tt>m_cancel
     <td>CAN, cancel character
-    <td><tt>\e\[\x18
+    <td><tt>\e[\x18
     <td>vt510
 
 <tr><td><tt>m_sub
