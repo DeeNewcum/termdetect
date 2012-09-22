@@ -3,7 +3,7 @@ Termmatch files have the *exact* same syntax as terminfo files, with only a few 
 * capability names are different  (and often longer)
 * percent syntax is entirely different
 
-Terminal names in termmatch files are intended to match the terminal names in terminfo files.  The built-in termmatch files are intended to match the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date.
+Terminal names in termmatch files are intended to align with the terminal names in terminfo files.  The built-in termmatch files are intended to align with the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date.
 
 ## Percent codes
 
