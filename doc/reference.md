@@ -10,6 +10,7 @@
 
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), section "Comparisons With Other Terminals > Escape Sequences"
 * [vttest](http://invisible-island.net/vttest/) — a script that tests conformance to the VT100 spec
+* ["Illegal and ambiguous sequences in use" on Wikipedia](http://en.wikipedia.org/wiki/ECMA-48#Illegal_and_ambiguous_sequences_in_use)
 * "VT100 Magic", by Sami Tabih, Proceedings of the DEC Users Society, St. Louis, Missouri, May 1983  (referenced in vttest's "known bugs" section)
 * [Mosh discussion of UTF-8, and UTF8 + ISO2022 interactions](http://mosh.mit.edu/#techinfo)
 
