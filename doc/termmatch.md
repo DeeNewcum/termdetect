@@ -109,7 +109,7 @@ Unfortunately, there is very little possible overlap between terminfo capabiliti
     <td>xterm
 
 <tr><td><tt>c1
-    <td>is the C1 character set supported?
+    <td>is the C1 character set supported?, C1 version of erase to EOL
     <td><tt>\x9b0k
     <td>c0_c1
 
