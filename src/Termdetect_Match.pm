@@ -98,7 +98,7 @@ sub match_one_field {
         } elsif ($entry_cap->{assign} =~ /^\%x\+(\d)$/) {
             return (exists $test_result->{x_delta} && $test_result->{x_delta} == $1);
         } else {
-            my @f = split /(\%[\*\+\%])/, $entry_cap->{assign};
+            my @f = split /(\%.)/, $entry_cap->{assign};
             my $pat = '';
             foreach my $f (@f) {
                 if ($f eq '%*') {
@@ -106,7 +106,9 @@ sub match_one_field {
                 } elsif ($f eq '%+') {
                     $pat .= ".+";
                 } elsif ($f eq '%%') {
-                    $pat .= '%';            # just the character '%'
+                    $pat .= '%';                # just the character '%'
+                } elsif ($f =~ /^\%(.)/) {
+                    $pat .= quotemeta($1);      # an unsupported percent-char
                 } else {
                     $pat .= quotemeta($f);
                 }
