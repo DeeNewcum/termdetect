@@ -91,6 +91,7 @@ teraterm,
                   m_sub=,
           r_device_attr=\E[?1;2c,
          r_device_attr2=\E[>32;%+;2c,
+# TeraTerm has a curious response to DA3:    http://ttssh2.sourceforge.jp/manual/en/setup/teraterm-term.html#TerminalUID
          r_device_attr3=\EP!|FFFFFFFF\E\\,
         r_device_status=\E[0n,
               r_enquiry=,
