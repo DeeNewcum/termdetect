@@ -8,9 +8,12 @@
 
 ## Behavior in edge cases
 
+* [What X3.64 Doesn’t Say](http://www.vt100.net/emu/dec_ansi_parser#GAPS), part of the excellent vt100.net state machine
+* [tack](http://invisible-island.net/ncurses/tack/tack.html) — a tool that helps to build or verify a terminfo entry
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), section "Comparisons With Other Terminals > Escape Sequences"
+* [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html#BUGS), section "Bugs"
 * [vttest](http://invisible-island.net/vttest/) — a script that tests conformance to the VT100 spec
-* ["Illegal and ambiguous sequences in use" on Wikipedia](http://en.wikipedia.org/wiki/ECMA-48#Illegal_and_ambiguous_sequences_in_use)
+* ["Illegal and ambiguous sequences in use" on Wikipedia](http://en.wikipedia.org/wiki/ANSI_escape_code#Illegal_and_ambiguous_sequences_in_use)
 * "VT100 Magic", by Sami Tabih, Proceedings of the DEC Users Society, St. Louis, Missouri, May 1983  (referenced in vttest's "known bugs" section)
 * [Mosh discussion of UTF-8, and UTF8 + ISO2022 interactions](http://mosh.mit.edu/#techinfo)
 
@@ -44,6 +47,16 @@ Is there a list of canonical names for various ANSI sequences?
 Is there a list of canonical names for various terminals / terminal emulators?
 
 * [the most actively-maintained terminfo database](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).  Although some entries are generic, there are some terminal-specific entries, such as putty, linux console, DOS ansi.sys, rxvt, aterm, gnome (vte), etc.
+
+## Scope of all possible escape codes, from a lexer standpoint
+
+Is there any sort of standard-ish document that suggests the total possible scope?
+
+* http://www.vt100.net/emu/dec_ansi_parser — very complete, I think
+* ["The Ecma-35 / ISO/IEC 2200 standard defines an escape sequence to be a sequence of characters beginning with esc, with a final byte in the range x30–x7E, and any number (including zero) of intermediate bytes in the range x20-x2F."](http://www.gnu.org/software/teseq/manual/html_node/Escape-Sequence-Recognition.html)
+* http://en.wikipedia.org/wiki/ANSI_escape_code#Sequence_elements
+* http://bjh21.me.uk/all-escapes/all-escapes.txt section "Description: Escape".  It says: "in summary, m# \e [\x20 - /]*  [0 - ~]  #x"
+* http://www.vt100.net/emu/fingers/  though they're a little difficult to decipher
 
 ## Terminfo 
 

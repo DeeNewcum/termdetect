@@ -1,63 +1,31 @@
-- add "advanced tests" for:
-    
-    - the boolean terminfo capabilities mentioned in 'cursor_movement.md"
-
-    - character encoding
-
-        - figure out what the current encoding is   (based on which byte sequences render as a
-          single character, versus which get interpretted as multiple characters)
-
-        - ask the terminal to change character encodings, and see if it complies
-
-- add request/reply sequences for:
-
-    - save+restore cursor
-
-    - scrolling region
-
-    - horizontal tabs   (set, clear, etc)
-
-    - alternate-screen
-
-    - the Xterm reporting features listed in:
-            vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
-
-    - DECRQM  (request mode)...  may be present in dtterm?
-            http://www.vt100.net/docs/vt510-rm/DECRQM
-
-    - double-width mode
-
-    - double-height mode
-
-
-
-- figure out what the goal-line is here...   what is the output we want to generate when the program finishes running?
-
-        - output some identifier indicating what terminal we're on?
-
-        - try to match to the current machine's terminfo database
-
-        - try to GENERATE a customized terminfo file, specifically for the current terminal?
-
-
-
-- figure out how to actually do the terminal matching...   some of the replies are more variable...
-  do we want to do regexp matches for some of the fields?
-
-    - figure out what format to use for the database
-
-
+- integrate the working version of the parser (Terminfo_Parser.pm) back into the parser-unit-tests,
+  so thatwe can run the unit tests on the live version of the parser
 
 
 - once we get cmdline argument processing working:
+
+    - add a -t flag that ONLY outputs the terminal name
+
+    - by default (when the -t flag isn't used, etc), display more information:
+            - the matching $TERM
+            - the version  (if available)
+            - the stuff listed below:
+                - current character encoding
+                - current font size
+                - current screen size
+                - current window title
 
     - add a --nose flag (for "no side-effects").  This flag would disable tests that have any sort
       of side-effects.  Of the tests we've included so far, these include:
             - visual bell  (\eg)
             - changing the window title     (two tests do this)
 
-    - in the documentation, note that some of the tests that are most useful to use with the
-      "show me the results of a single test" mode are:
+
+
+- create a flag that enables "show methe results of a single test" mode, where it doesn't try
+  to do term-matching, but rather gives the output of a single test.
+
+  In the documentation, note that useful tests to use this with are:
 
             - current character encoding
 
@@ -75,15 +43,4 @@
                       the width to the nearest 20, and the height to the nearest 15, and you'll 
                       probably be spot-on)
 
-
-=========================================================
-========================[ maybe ]========================
-=========================================================
-
-- add request/reply sequences for:
-
-    - ISO-2022 suport
-            apparently this is fairly rare, as even xterm itself doesn't support it:
-                    http://www.pps.univ-paris-diderot.fr/~jch/software/luit/
-                    http://www.cl.cam.ac.uk/~mgk25/unicode.html#term
 

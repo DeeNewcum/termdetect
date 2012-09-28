@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+# auto-detect which terminal emulator we're talking to
+#
+# https://github.com/DeeNewcum/termdetect
+
+    use strict;
+    use warnings;
+
+    use FindBin;
+    use lib $FindBin::Bin;
+    use Terminfo_Parser;
+    use Termdetect_Tests;
+    use Termdetect_Match;
+
+    use Data::Dumper;
+
+
+## read in the termmatch database
+my $termmatch_db = parse_terminfo(scalar(slurp("$FindBin::Bin/termmatch.src")));
+    #print ti_dump_terminal(values %$termmatch_db);      exit;
+
+
+## read in the test results from the current terminal
+my $test_results = perform_all_tests();
+    #print ansi_escape_no_nl(Dumper $test_results);      exit;
+
+
+## ... and match them together
+my $term = match_results($test_results, $termmatch_db);
+if (defined($term)) {
+    print "$term\n";
+} else {
+    print STDERR "No \$TERM matched.\n";
+}
+
+
+
+
+# quickly read a whole file         see also: File::Slurp and IO::All->slurp()
+sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
+
+
+
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/
+#
+# You may redistribute this program and/or modify it under the terms of the GNU
+# General Public License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.

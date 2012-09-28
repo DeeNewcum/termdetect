@@ -4,16 +4,27 @@ What if don't just want things minimally working, but you want things to work *w
 
 Fortunately, there are some request/reply ANSI sequences that give us bits of information about the terminal.  This program interrogates the terminal, looks up the responses in a database of known terminals, and finds the closest match.  This allows your remote machine to know *exactly* what terminal it's talking to.
 
-# Current status
+    $ termdetect
+    teraterm4.59
+    
+    $ TERM=$(termdetect -t)
 
-Completed:
+    $ termping 
+       1 ms    (min 1,  max 1,   avg 1.0)
+       1 ms    (min 1,  max 1,   avg 1.0)
+       1 ms    (min 1,  max 1,   avg 1.0)
+       1 ms    (min 1,  max 1,   avg 1.0)
+       1 ms    (min 1,  max 1,   avg 1.0)
 
-* Some good routines have been written to perform individual ANSI sequence queries on the terminal.
-* Quite a few request/reply ANSI sequences have been identified.  (there is still more work to do for more obscure ones, but the broadly-supported ones are identified)
-* Responses from 9 terminals have been collected in an ad-hoc database.  (see "results.csv")
+    # from this, we can surmise that the end-user's terminal is located on the same machine, or in close physical proximity to it
 
-Not completed:
 
-* The ad-hoc database needs to be converted into a standardized machine-readable database.
-* We need to nail down exactly how we'll match the query responses to the machine-readable database.
-* We need to figure out exactly what sort of output would be most useful to the end user.
+## Frequently Asked Questions
+
+Q: Does it work over SSH?
+
+A: Yes.  It uses *only* ANSI sequences to probe the terminal, so it work with terminal emulators that are on another machine, and it will work with physical terminals too.
+
+Q: How does it work?
+
+A: See [the termmatch database documentation](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md) for a better idea of what we query for.

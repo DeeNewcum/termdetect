@@ -1,9 +1,13 @@
+The 'termmatch.src' file is the database of known terminals that termdetect uses to determine what the current terminal is.
+
+## Syntax
+
 Termmatch files have the *exact* same syntax as terminfo files, with only a few differences:
 
 * capability names are different  (and often longer)
 * percent syntax is entirely different
 
-Terminal names in termmatch files should be the same as in terminfo files.  The $TERM names in the built-in termmatch files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date.
+The terminal names used in termmatch files should be the exact same as is used in terminfo files.  The $TERM names in the built-in termmatch files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
 
 ## Percent codes
 
@@ -14,11 +18,17 @@ Percent codes may sometimes look like termcap entries, but they have completely 
 <tr><td><tt>%!
     <td>The terminal sent no text in response.
 
-<tr><td><tt>%x[0-9]
+<tr><td><tt>%x+[0-9]
     <td>The terminal responded by moving the cursor right N positions. (often because it printed some characters)
 
 <tr><td><tt>%*
-    <td>The terminal responded with SOME text.  This is the opposite of <tt>%!</tt>.
+    <td>Matches zero or more of *any* character.   (it's not a regexp, so you don't have to put anything like a "%." in front)
+
+<tr><td><tt>%+
+    <td>Matches one or more of *any* character.  (it's not a regexp, so you don't have to put anything like a "%." in front)
+
+<tr><td><tt>%%
+    <td>a way to specify just the "%" character
 
 </table>
 
@@ -26,9 +36,9 @@ Percent codes may sometimes look like termcap entries, but they have completely 
 
 Unfortunately, there is very little overlap between terminfo capabilities and termmatch capabilities, so these names are unique to termmatch files.
 
-Within termmatch files, "capabilities" can also called "tests" — each refers to a specific test performed on the terminal.
+Within termmatch files, "capabilities" can also be called "tests" — each refers to a specific test performed on the terminal.
 
-### r_* capabilities — [R]equest/[R]eply tests
+### r_* capabilities — Request/Reply tests
 
 <table>
 
@@ -46,27 +56,33 @@ Within termmatch files, "capabilities" can also called "tests" — each refers t
 
 <tr><td><tt>r_printer_status
     <td>printer variant of DSR
-    <td><tt>\e?15n
+    <td><tt>\e[?15n
     <td><tt>\e[?10n
     <td>
+
+<tr><td><tt>r_term_id
+    <td>DCID, identify terminal
+    <td><tt>\eZ
+    <td>
+    <td>vt510
 
 <tr><td><tt>r_device_attr
     <td>DA, primary device attributes
     <td><tt>\e[c
     <td><tt>\e[?62;9;c
-    <td>
+    <td>xterm
 
 <tr><td><tt>r_device_attr2
     <td>DA2, secondary device attributes
     <td><tt>\e[>c
     <td><tt>\e[>1;2600;0c
-    <td>
+    <td>xterm
 
 <tr><td><tt>r_device_attr3
     <td>DA3, tertiary device attributes
     <td><tt>\e[=c
     <td>?
-    <td>
+    <td>vt510
 
 <tr><td><tt>r_term_param
     <td>DECREQTPARM, request terminal parameters
@@ -81,7 +97,7 @@ Within termmatch files, "capabilities" can also called "tests" — each refers t
     <td>c0_c1
 
 <tr><td><tt>r_ext_cursor_pos
-    <td>extended cursor position report
+    <td>DECXCPR, extended cursor position report
     <td><tt>\e[?6n
     <td><tt>\e[25;80;2R
     <td>vt510
@@ -116,7 +132,7 @@ Within termmatch files, "capabilities" can also called "tests" — each refers t
     <td><tt>\e[4;681;1005t
     <td>xterm
 
-<tr><td><tt>r_window_size_chr
+<tr><td><tt>r_window_size_char
     <td>window size in characters
     <td><tt>\e[18t
     <td><tt>\e[8;25;77t
@@ -130,11 +146,17 @@ Within termmatch files, "capabilities" can also called "tests" — each refers t
 
 </table>
 
-### m_* capabilities — tests whose only goal is to detect cursor [M]ovement
+### m_* capabilities — tests whose only goal is to detect cursor Movement
 
-For most tests we run, we do a CPR (cursor position report) just before the test, and just after.  This allows us to detect any time the cursor moves.  For many of these, the cursor moves because something (ie. the escape code itself) has been printed to the screen.
+There are three main ways that a terminal emulator chooses to respond to an ANSI code:
 
-The escape sequences below are sequences that some terminal emulators choose to display, while others choose to hide.
+1. SUPPORTED.  The code is minimally supported — the terminal changes a setting or moves the cursor, or does something in response.
+2. HIDDEN.  The code isn't supported at all, but the terminal recognizes it as ANSI code that another terminal would support, so it hides it from the user, but does nothing else with the code.
+3. DISPLAYED.  The code isn't supported.  Further, the terminal doesn't even recognize it as a legitimate ANSI code, and it displays some or all of the sequences's characters to the user.
+
+We can detect group #3 by watching for cursor movement, using the CPR (cursor position report) sequence.
+
+Group #3 happens because there is no standard or agreement on the format of all possible ANSI sequences.  Terminal programmers want to be conservative and not hide anything that was intended to be displayed.  (okay, there is [this carefully-researched document describing the DEC VT500 behavior](http://www.vt100.net/emu/dec_ansi_parser), but it isn't very well-known.  Also, VT500-compatibility may not be the highest priority)
 
 <table>
 
@@ -144,7 +166,7 @@ The escape sequences below are sequences that some terminal emulators choose to 
     <th>reference
 
 <tr><td><tt>m_c1
-    <td>is the C1 character set supported?<br>C1 version of erase to EOL
+    <td>is the C1 character set supported?<br>C1-CSI version of erase to EOL
     <td><tt>\x9b0k
     <td>c0_c1
 
@@ -153,27 +175,48 @@ The escape sequences below are sequences that some terminal emulators choose to 
     <td><tt>\x00
     <td>terminfo
 
-<tr><td><tt>m_pad_200
-    <td>padding
+<tr><td><tt>m_pad_c1
+    <td>padding, C1 version
     <td><tt>\0200
-    <td>terminfo
+    <td>terminfo<br>c0_c1
+
+<tr><td><tt>m_null_inside
+    <td>
+    <td><tt>\e\x00K
+    <td>
 
 <tr><td><tt>m_cancel
     <td>CAN, cancel character
-    <td><tt>\e[\x18
+    <td><tt>\e[?\x18
     <td>vt510
 
 <tr><td><tt>m_sub
     <td>SUB, substitute character
-    <td><tt>\e[\x1A
+    <td><tt>\e[?\x1A
     <td>vt510
+
+<tr><td><tt>m_esc
+    <td>ESC, escape character in the middle of a sequence
+    <td><tt>\e[?\eK
+    <td>
 
 </table>
 
+### s\_\* capabilities — Synthetic tests, tests that are more complicated than r\_\* or m\_\*
+
+Some tests have custom code written for each test.  Their behavior may be more complicated, so each is described in more detail below.
+
+* ...
+* ...
+
+### References
+
 Documents referenced:
 
+* vt102 — [VT102 User Guide, Appendix C](http://vt100.net/docs/vt102-ug/appendixc.html)
 * vt510 — [VT510 Video Terminal Programmer Information](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)
 * xterm — [Xterm Control Sequences](http://www.xfree86.org/current/ctlseqs.html)
+* all — [all-escapes.txt from bjh21 (Ben Harris)](http://bjh21.me.uk/all-escapes/all-escapes.txt)
 * c0_c1 — [wikipedia's article on "C0 and C1 control codes"](http://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29)
 * terminfo — [terminfo(5) man page](http://invisible-island.net/ncurses/man/terminfo.5.html)
 

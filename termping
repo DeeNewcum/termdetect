@@ -2,9 +2,9 @@
 
 # Estimate the round-trip time to get a response from the terminal.
 #
-# Caveats:  Latency != throughput.
+# Caveat:   Latency != throughput.
 #
-#           Also, note that this doesn't represent the latency to the end-user's terminal if you're
+# Caveat:   Also, note that this doesn't represent the latency to the end-user's terminal if you're
 #           running things like tmux/screen/mosh.  Each of those have their own VT translation
 #           layer, and they respond to pings on their own.  So if you have:
 #
@@ -17,6 +17,14 @@
 #           Also, this is a TCP-based ping, which means that some response times may be greatly
 #           inflated for several reasons including retransmission and congestion control
 #           (exponential backoff can CERTAINLY skew the results).
+#
+# Caveat:   Some specific terminals add a lot of latency, just in ANSI-sequence handling.
+#           Specific ones that seem to do this:
+#                   vte     --  actually varies a lot, but an average of 10ms
+#
+# Caveat:   Any user input while termping is running causes missed pings.
+#           The reason for this is unclear.  It needs to be investigated and fixed if possible.
+
 
     use strict;
     use warnings;

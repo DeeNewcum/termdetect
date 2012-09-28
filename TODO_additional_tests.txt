@@ -1,0 +1,97 @@
+################################################################################
+################################################################################
+####  There are a large nunmber of additional tests that could be added.    ####
+####  The items below are POTENTIAL tests that could be added.  They        ####
+####  really haven't been explored fully, and may turn out to be unviable.  ####
+################################################################################
+################################################################################
+
+
+- add a "K" on to the end of MOST m_* tests, and then subtract one from the final result....
+    this allows us to detect cases where an escape code is "dangling"...  that the terminal is still
+    processing the preceding characters as an escape sequence.  A "dangling escape sequence" would
+    be detected by having a final %x-1.  The "-1" deserves some explanation in the manual, but it's
+    reasonable, I think.
+
+- test support for VT52 mode...    the way that parameters are suffixes seems really odd
+        http://www.vt100.net/docs/vt102-ug/chapter5.html#S5.5.2.2
+        http://www.xfree86.org/current/ctlseqs.html#VT52%20Mode
+        http://toshyp.atari.org/en/VT_52_terminal.html
+
+
+- add "advanced tests" for:
+    
+    - the boolean terminfo capabilities mentioned in 'cursor_movement.md"
+
+    - character encoding
+
+        - figure out what the current encoding is   (based on which byte sequences render as a
+          single character, versus which get interpretted as multiple characters)
+            
+            To see Perl's list of available encodings:
+                    perl -MData::Dumper -MEncode -le 'print Dumper [Encode->encodings(":all")]'
+                    https://metacpan.org/module/Encode::Supported
+
+        - ask the terminal to change character encodings, and see if it complies
+
+- add request/reply sequences for:
+
+    - save+restore cursor
+
+    - scrolling region
+
+    - horizontal tabs   (set, clear, etc)
+
+    - alternate-screen
+
+    - the Xterm reporting features listed in:
+            vttest:     11 non-VT100,  8 XTERM,  2 test reporting functions,  2 DECRQM/DECRPM
+
+    - DECRQM  (request mode)...  may be present in dtterm?
+            http://www.vt100.net/docs/vt510-rm/DECRQM
+
+    - double-width mode
+
+    - double-height mode
+
+
+
+- [control code]  \n
+        http://en.wikipedia.org/wiki/C0_and_C1_control_codes says that on "some terminal emulator",
+        this "moves the cursor down one row without affecting its column position"
+
+
+- [lexer] test "embedded control characters". These seem RIPE for compliance testing.
+    - VT102 manual says "If a control character is received within a sequence, the terminal performs
+      the function of the control character, followed by the function of the sequence."
+                        http://vt100.net/docs/vt102-ug/chapter5.html
+    - VT100 manual says "Embedded control characters are executed as soon as they are encountered by
+      the VT100. The processing of the control sequence then continues with the next character
+      received."
+                        http://vt100.net/docs/vt100-ug/chapter3.html#S3.3
+
+
+- [lexer] test the DLE (data link escape) character...  it should allow characters to be passed
+  through, until an EOT is received?
+
+
+- test the "set mode" and "reset mode"
+        http://www.vt100.net/docs/vt102-ug/appendixc.html
+        http://www.vt100.net/docs/vt510-rm/DECRQM#T5-8
+
+
+
+
+
+
+=========================================================
+========================[ maybe ]========================
+=========================================================
+
+- add request/reply sequences for:
+
+    - ISO-2022 suport
+            apparently this is fairly rare, as even xterm itself doesn't support it:
+                    http://www.pps.univ-paris-diderot.fr/~jch/software/luit/
+                    http://www.cl.cam.ac.uk/~mgk25/unicode.html#term
+

@@ -15,4 +15,4 @@
 "[dtterm] window position","N","Y","Y","N","Y","N","N","N","Y","X"
 "? extended cursor position","Y","Y","Y","N","N","N","N","N","?","N"
 ,,,,,,,,,,
-"? C1 version of EL (erase in line)","N","[+3]","N","N","Y","N","N","N","X","[+3]"
+"? C1 version of EL (erase in line)","[+3]","[+3]","N","N","[+3]","N","N","N","X","[+3]"
