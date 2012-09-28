@@ -50,31 +50,37 @@ sub calculate_match_statistics {
 
     foreach my $termmatch_entry (values %$termmatch_db) {
         my $termname = $termmatch_entry->{termnames}[0];
-        print "========[ $termname ]========\n"         if (DEBUG_MATCHES);
+
+        my $check_this = (exists $::ARGV{check} &&
+                ($::ARGV{check} eq '1' || $::ARGV{check} eq $termname));
+
+        print "========[ $termname ]========\n"         if $check_this;
         #while (my ($cap, $test_result) = each %$test_results) {
         foreach my $cap (sort keys %$test_results) {
             my $test_result = $test_results->{$cap};
 
-            printf "\t%-20s  ", $cap            if (DEBUG_MATCHES);
+            next if ($cap =~ /^c_/);
+
+            printf "\t%-20s  ", $cap            if $check_this;
             $pass_fail_count{$termname}{total}++;
             if (exists $termmatch_entry->{fields}{$cap}) {
                 my $yn = match_one_field($test_result, $termmatch_entry->{fields}{$cap});
                 if ($yn) {
-                    print "match\n"         if (DEBUG_MATCHES);
+                    print "match\n"         if $check_this;
                 } else {
                     printf "MISMATCH -- got: %-25s  wanted: %s\n",
                             quote(summarize_result($test_result)), 
                             quote(ansi_escape($termmatch_entry->{fields}{$cap}{assign}))
-                                if (DEBUG_MATCHES);
+                                if $check_this;
                 }
                 $pass_fail_count{$termname}{$yn ? 'y' : 'n'} ++;
             } else {
                 print "NOT PRESENT -- got: ", quote(summarize_result($test_result)), "\n"
-                        if (DEBUG_MATCHES);
+                        if $check_this;
                 $pass_fail_count{$termname}{u} ++;      # "U" = unspecified
             }
         }
-        print "\n"          if (DEBUG_MATCHES);
+        print "\n"          if $check_this;
     }
     return \%pass_fail_count;
 }

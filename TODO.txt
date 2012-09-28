@@ -1,9 +1,9 @@
 - the parser doesn't work in Perl v5.8, possibly due to small differences in how the regexp engine works
 
 
-- once we get cmdline argument processing working:
 
-    - add a -t flag that ONLY outputs the terminal name
+
+==== command-line argument processing ====
 
     - by default (when the -t flag isn't used, etc), display more information:
             - the matching $TERM
@@ -21,7 +21,7 @@
 
 
 
-- create a flag that enables "show methe results of a single test" mode, where it doesn't try
+- create a flag that enables "show me the results of a single test" mode, where it doesn't try
   to do term-matching, but rather gives the output of a single test.
 
   In the documentation, note that useful tests to use this with are:

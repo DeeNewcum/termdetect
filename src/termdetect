@@ -4,6 +4,14 @@
 #
 # https://github.com/DeeNewcum/termdetect
 
+
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/
+#       You may redistribute this program and/or modify it under the terms of the GNU General Public
+#       License as published by the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+
+
     use strict;
     use warnings;
 
@@ -13,7 +21,12 @@
     use Termdetect_Tests;
     use Termdetect_Match;
 
+    use Getopt::Long;
     use Data::Dumper;
+
+
+our %ARGV;
+process_cmdline();
 
 
 ## read in the termmatch database
@@ -31,10 +44,28 @@ my $term = match_results($test_results, $termmatch_db);
 if (defined($term)) {
     print "$term\n";
 } else {
-    print STDERR "No \$TERM matched.\n";
+    print STDERR "No \$TERM matched.  Run again with --check for more information.\n";
+    print "$ENV{TERM}\n"        if ($ARGV{t});      # pass through the existing terminal
 }
 
 
+
+
+
+sub process_cmdline {
+    GetOptions( \%ARGV,
+                    map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
+        "help|h|?",
+        "check",
+        "nose",
+        "t",
+    ) or usage();
+    %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
+    $ARGV{help} and usage();
+}
+
+
+sub usage { print STDERR <DATA>; exit; }
 
 
 # quickly read a whole file         see also: File::Slurp and IO::All->slurp()
@@ -42,9 +73,35 @@ sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wanta
 
 
 
-# Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#
-# You may redistribute this program and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.
+
+__END__
+termdetect
+
+    -t      only display the matched $TERM
+
+    --check=<term>
+            Used to debug termmatch.src.  Displays extra information about how the current terminal
+            matches up to the specified entry in termmatch.src.
+
+    --check
+            Displays extra information about EVERY entry in termmatch.src.
+
+    --nose
+            "No Side Effects".  Doesn't run tests that may have side-effects.
+            Gibberish may still be displays on your screen, but they will be (mostly) erased
+            before exiting.  Side effects includes:  visual bell, and changing the terminal title.
+            Currently, most tests don't have side-effects, so this option shouldn't greatly reduce
+            the chances of correctly identifying your terminal.
+
+    --snapshot
+            Outputs the current tests results in a form that's suitable for pasting into
+            termmatch.src.
+
+    --result=<test_id>
+            Display the result of a single test.  Some test that are more useful for this are:
+                    s_term_version
+                    s_char_encoding
+                    s_font_size
+                    s_screen_size
+                    s_window_title
+

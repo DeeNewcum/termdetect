@@ -203,8 +203,39 @@ Group #3 happens because there is no standard or agreement on the format of all 
 
 Some tests have custom code written for each test.  Their behavior may be more complicated, so each is described in more detail below.
 
-* ...
-* ...
+<table>
+<tr><th>capability name
+    <th>description
+
+<tr><td><tt>s_term_version
+    <td>The specific version number of the terminal.  See also <tt>c_version_decimalplaces</tt>.
+
+<tr><td><tt>s_window_title
+    <td>Only available on terminals that support <tt>r_window_title</tt>.
+
+<tr><td><tt>s_char_encoding
+    <td>The current character-encoding setting.
+
+<tr><td><tt>s_font_size
+    <td>Useful mainly for <tt>--results</tt>.  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt>.
+
+<tr><td><tt>s_font_size
+    <td>Useful mainly for <tt>--results</tt>.  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt> and <tt>r_screen_size</tt>.
+
+</table>
+
+### c_* capabilities — These arne't tests, these are more like actual capabilities.
+
+These aren't the results of tests, and these don't get matched to anything. These are actually parameters that change the way code reacts in specific places.
+
+<table>
+<tr><th>capability name
+    <th>description
+
+<tr><td><tt>c_version_decimalplaces
+    <td>Specifies how the second parameter of <tt>r_device_attr2</tt> is turned into an actual version number.  If <tt>c_version_decimalplaces</tt> is 2, then the decimal is placed two positions from the right.
+
+</table>
 
 ### References
 
