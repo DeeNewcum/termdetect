@@ -105,6 +105,8 @@ sub perform_all_tests {
     do_queued_async_reads();
     output("\r\e[K");     # erase the line that we just sprayed gibberish over
 
+    calculate_derived_values(\%all_results);
+
     return \%all_results;
 }
 
@@ -245,6 +247,75 @@ sub do_queued_async_reads {
     }
 }
 
+
+##########################################################################################
+##################################[ derived values ]######################################
+##########################################################################################
+
+# some values are purely derived from others...  these don't require any I/O, and can be done after
+# the last call to do_queued_async_reads()
+sub calculate_derived_values {
+    my ($all_results) = @_;
+
+    my ($fontsize_x, $fontsize_y);
+    if ($all_results->{r_window_size_px}{received} && $all_results->{r_window_size_char}{received}) {
+        my (undef, $px_y, $px_x) = ansi_params($all_results->{r_window_size_px}{received});
+        my (undef, $ch_y, $ch_x) = ansi_params($all_results->{r_window_size_char}{received});
+        #print Dumper [$ch_x, $ch_y];
+        $fontsize_x = int($px_x / $ch_x);
+        $fontsize_y = int($px_y / $ch_y);
+        $all_results->{s_font_size}{received} = "${fontsize_x}x${fontsize_y}";
+    }
+    if ($all_results->{r_window_size_px}{received} && $all_results->{r_window_size_char}{received} &&
+            $all_results->{r_screen_size}{received}) {
+        my (undef, $s_y, $s_x) = ansi_params($all_results->{r_screen_size}{received});
+        $s_x *= $fontsize_x;
+        $s_y *= $fontsize_y;
+        # We have a quandary here -- the screen-size we derived isn't EXACTLY right.
+        # It could be off by as much as +/- $fontsize_x and $fontsize_y.
+        #
+        # One solution is just to round to the nearest N, where N is:
+        #       8 for X         
+        #       4 for Y
+        # based on the greatest-common-factor for resolution widths and heights.
+        $s_x = round_up($s_x, 8);
+        $s_y = round_up($s_y, 4);
+        $all_results->{s_screen_size}{received} = "${s_x}x${s_y}";
+    }
+    if ($all_results->{r_window_pos}{received}) {
+        my (undef, $p_x, $p_y) = ansi_params($all_results->{r_window_pos}{received});
+                    # ^^^^^^ is this backwards?  This is what libVTE uses, but it seems backwards.
+        $all_results->{s_window_pos}{received} = "${p_x}x${p_y}";
+    }
+    if (($all_results->{r_window_title}{received} || '') =~ /^\e\]l(.*)\e\\$/) {
+        $all_results->{s_window_title}{received} = $1;
+    }
+    if (($all_results->{r_window_icon_label}{received} || '') =~ /^\e\]L(.*)\e\\$/) {
+        $all_results->{s_window_icon_label}{received} = $1;
+    }
+}
+
+    sub round_up {
+        my ($n, $modulo) = @_;
+        if ($n % $modulo) {
+            $n += ($modulo - $n % $modulo);
+        }
+        return $n;
+    }
+
+
+# given the {received} field, return the numeric parameters, as an array
+sub ansi_params {
+    my ($received) = @_;
+    return () unless defined($received);
+    my @params = ($received =~ /(\d+)/g);
+    return @params;
+}
+
+
+##########################################################################################
+############################[ debugging and human-readable ]##############################
+##########################################################################################
 
 sub summarize_result {
     my ($test_result) = @_;

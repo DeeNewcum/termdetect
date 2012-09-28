@@ -41,13 +41,26 @@ my $test_results = perform_all_tests();
 
 ## ... and match them together
 my $term = match_results($test_results, $termmatch_db);
-if (defined($term)) {
-    print "$term\n";
-} else {
-    print STDERR "No \$TERM matched.  Run again with --check for more information.\n";
-    print "$ENV{TERM}\n"        if ($ARGV{t});      # pass through the existing terminal
-}
 
+
+## generate the desired output
+if ($ARGV{dump}) {
+    # Does this overlap with --snapshot too much?  If so, then we'll get rid of this.
+    foreach my $cap (sort keys %$test_results) {
+        printf "%25s  %s\n", $cap, summarize_result($test_results->{$cap});
+    }
+} elsif ($ARGV{result}) {
+    if (exists $test_results->{$ARGV{result}}) {
+        print summarize_result($test_results->{$ARGV{result}}), "\n";
+    }
+} else {
+    if (defined($term)) {
+        print "$term\n";
+    } else {
+        print STDERR "No \$TERM matched.  Run again with --check for more information.\n";
+        print "$ENV{TERM}\n"        if ($ARGV{t});      # pass through the existing terminal
+    }
+}
 
 
 
@@ -56,9 +69,7 @@ sub process_cmdline {
     GetOptions( \%ARGV,
                     map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
         "help|h|?",
-        "check",
-        "nose",
-        "t",
+        qw( check nose t snapshot result dump ),
     ) or usage();
     %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
     $ARGV{help} and usage();
@@ -97,6 +108,9 @@ termdetect
             Outputs the current tests results in a form that's suitable for pasting into
             termmatch.src.
 
+    --dump
+            Dumps the result of all tests run.
+
     --result=<test_id>
             Display the result of a single test.  Some test that are more useful for this are:
                     s_term_version
@@ -104,4 +118,6 @@ termdetect
                     s_font_size
                     s_screen_size
                     s_window_title
+                    s_window_icon_label
+                    r_enquiry
 

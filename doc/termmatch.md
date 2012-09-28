@@ -217,10 +217,10 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <td>The current character-encoding setting.
 
 <tr><td><tt>s_font_size
-    <td>Useful mainly for <tt>--results</tt>.  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt>.
+    <td>Useful mainly for <tt>--results</tt>.  The size of each character, in pixels.  The format is "width x height".  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt>.
 
-<tr><td><tt>s_font_size
-    <td>Useful mainly for <tt>--results</tt>.  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt> and <tt>r_screen_size</tt>.
+<tr><td><tt>s_screen_size
+    <td>Useful mainly for <tt>--results</tt>.  The size of the screen, in pixels.  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt> and <tt>r_screen_size</tt>.
 
 </table>
 
