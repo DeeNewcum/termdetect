@@ -92,10 +92,8 @@ sub match_one_field {
 
     #print ansi_escape_no_nl(Dumper $entry_cap); exit;
 
-    if ($entry_cap->{assign}) {
-        if ($entry_cap->{assign} eq '%!') {
-            return !length($test_result->{received});
-        } elsif ($entry_cap->{assign} !~ /\%/) {
+    if (exists $entry_cap->{assign}) {
+        if ($entry_cap->{assign} !~ /\%/) {
             return ($test_result->{received} eq $entry_cap->{assign});
         } elsif ($entry_cap->{assign} =~ /^\%x\+(\d)$/) {
             return (exists $test_result->{x_delta} && $test_result->{x_delta} == $1);

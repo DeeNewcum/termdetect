@@ -15,9 +15,6 @@ Percent codes may sometimes look like termcap entries, but they have completely 
 
 <table>
 
-<tr><td><tt>%!
-    <td>The terminal sent no text in response.
-
 <tr><td><tt>%x+[0-9]
     <td>The terminal responded by moving the cursor right N positions. (often because it printed some characters)
 
