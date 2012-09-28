@@ -226,7 +226,7 @@ Some tests have custom code written for each test.  Their behavior may be more c
 
 </table>
 
-### c_* capabilities — These arne't tests, these are more like actual capabilities.
+### c_* capabilities — These aren't tests, these are more like actual capabilities.
 
 These aren't the results of tests, and these don't get matched to anything. These are actually parameters that change the way code reacts in specific places.
 
