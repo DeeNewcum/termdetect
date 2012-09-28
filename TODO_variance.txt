@@ -10,3 +10,9 @@ it isn't 100% correct because:
 On the standard Ubuntu 12.04 install, it gives "%x+3".  
 
 Both versions show as v0.62, so it *might* be a settings problem...?
+
+
+==== xterm ====
+
+Xterm on Ubuntu 12.04 compared to Solaris 10 seems fairly different.  Are these completely different
+codebases?  I can't seem to get any sort of version number from the Solaris xterm...
