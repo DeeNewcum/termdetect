@@ -323,7 +323,7 @@ sub summarize_result {
     if (exists $test_result->{x_delta}) {
         return "%x+$test_result->{x_delta}";
     } else {
-        return ansi_escape($test_result->{received});
+        return (ansi_escape($test_result->{received}))[0];
     }
 }
 
@@ -340,7 +340,7 @@ sub debug_show_remaining_input {
 
 sub ansi_escape { map {(my $a = $_);
         $a =~ s/\\/\\\\/g;
-        $a =~ s/\e/\\e/g;
+        $a =~ s/\e/\\E/g;
         $a =~ s/\x5/\\5/g;
         $a =~ s/\x9B/\\x9B/g;
         $a =~ s/([\x00-\x1f])/"\\x" . sprintf "%02X", ord($1)/ge;

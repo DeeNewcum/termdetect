@@ -44,7 +44,17 @@ my $term = match_results($test_results, $termmatch_db);
 
 
 ## generate the desired output
-if ($ARGV{dump}) {
+if ($ARGV{snapshot}) {
+    foreach my $cap (sort keys %$test_results) {
+        next if ($cap =~ /^s_/);
+        my $r = summarize_result($test_results->{$cap});
+        if ($cap eq 'r_window_pos' || $cap eq 'r_window_size_char' || $cap eq 'r_window_size_px'
+            || $cap eq 'r_ext_cursor_pos') {
+            $r = length($r) ? '%+' : '';
+        }
+        printf "    %s=%s,\n", $cap, $r;
+    }
+} elsif ($ARGV{dump}) {
     # Does this overlap with --snapshot too much?  If so, then we'll get rid of this.
     foreach my $cap (sort keys %$test_results) {
         printf "%25s  %s\n", $cap, summarize_result($test_results->{$cap});
@@ -110,6 +120,7 @@ termdetect
 
     --dump
             Dumps the result of all tests run.
+            Similar to --snapshot, but tends to give a little more data.
 
     --result=<test_id>
             Display the result of a single test.  Some test that are more useful for this are:
