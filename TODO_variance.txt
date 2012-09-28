@@ -1,0 +1,12 @@
+These are issues where we have an existing termmatch.src entry for a terminal, but we later discover
+it isn't 100% correct because:
+        1) testing on a different version of the terminal shows different results
+                (that prevent matching), or:
+        2) merely using different settings shows different results (that prevent matching)
+
+
+==== putty, m_c1 ====
+    
+On the standard Ubuntu 12.04 install, it gives "%x+3".  
+
+Both versions show as v0.62, so it *might* be a settings problem...?

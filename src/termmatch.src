@@ -1,4 +1,4 @@
-# termmatch data
+# The database that termdetect is built around.
 #
 # This file's syntax is exactly the same as terminfo's in most places, with a few slight changes.
 #
@@ -47,3 +47,63 @@ rxvt,
     r_printer_status=,      r_screen_size=,     r_term_id=\E[?1;2c,     r_term_param=,
     r_window_icon_label=,       r_window_pos=%+,        r_window_size_char=%+,
     r_window_size_px=%+,        r_window_state=\E[1t,       r_window_title=,
+
+screen,
+    m_c1=%x+3,  m_cancel=,  m_esc=,     m_null_inside=%x+1,     m_pad_null=,        m_sub=,
+    r_device_attr=\E[?1;2c,     r_device_attr2=\E[>83;%+;0c,    r_device_attr3=,
+    r_device_status=\E[0n,      r_enquiry=,     r_ext_cursor_pos=,      r_printer_status=,
+    r_screen_size=,     r_term_id=\E[?1;2c,     r_term_param=\E[2;1;1;112;112;1;0x,
+    r_window_icon_label=,       r_window_pos=,      r_window_size_char=,
+    r_window_size_px=,      r_window_state=\E[1t,       r_window_title=\E]l%+\E\\,
+
+aterm,
+    m_c1=%x+3,  m_cancel=%x+1,  m_esc=,     m_null_inside=%x+1,     m_pad_null=,
+    m_sub=%x+1,     r_device_attr=\E[?1;2c,     r_device_attr2=\E[?1;2c,    r_device_attr3=\E[?1;2c,
+    r_device_status=\E[0n,      r_enquiry=\E[?1;2c,     r_ext_cursor_pos=%+,
+    r_printer_status=,      r_screen_size=,     r_term_id=\E[?1;2c,     r_term_param=,
+    r_window_icon_label=,       r_window_pos=,      r_window_size_char=,        r_window_size_px=,
+    r_window_state=,    r_window_title=%+,
+
+# the terminfo.src from invisible-island.net doesn't have a "securecrt" entry...
+securecrt,
+    m_c1=%x+3,  m_cancel=,  m_esc=,     m_null_inside=,     m_pad_null=,        m_sub=,
+    r_device_attr=\E[?1;2c,     r_device_attr2=%x+1,        r_device_attr3=%x+1,
+    r_device_status=\E[0n,      r_enquiry=,     r_ext_cursor_pos=,
+    r_printer_status=\E[?10n,       r_screen_size=,     r_term_id=\E[?1;2c,
+    r_term_param=\E[2;1;1;120;120;1;0x,     r_window_icon_label=,       r_window_pos=,
+    r_window_size_char=,        r_window_size_px=,      r_window_state=,
+    r_window_title=,
+
+tmux,
+    m_c1=%x+3,      m_cancel=,      m_esc=,     m_null_inside=,     m_pad_null=,    m_sub=,
+    r_device_attr=\E[?1;2c,     r_device_attr2=,        r_device_attr3=,    r_device_status=\E[0n,
+    r_enquiry=,     r_ext_cursor_pos=,      r_printer_status=,      r_screen_size=,
+    r_term_id=,     r_term_param=,      r_window_icon_label=,       r_window_pos=,
+    r_window_size_char=,    r_window_size_px=,      r_window_state=,
+    r_window_title=,
+
+teraterm,
+                   m_c1=%x+3,
+               m_cancel=,
+                  m_esc=,
+          m_null_inside=,
+             m_pad_null=,
+                  m_sub=,
+          r_device_attr=\E[?1;2c,
+         r_device_attr2=\E[>32;%+;2c,
+         r_device_attr3=\EP!|FFFFFFFF\E\\,
+        r_device_status=\E[0n,
+              r_enquiry=,
+       r_ext_cursor_pos=,
+       r_printer_status=,
+          r_screen_size=\E[9;32;103t,
+              r_term_id=\E[?1;2c,
+           r_term_param=,
+    r_window_icon_label=%+,
+           r_window_pos=%+,
+     r_window_size_char=%+,
+       r_window_size_px=%+,
+         r_window_state=\E[1t,
+         r_window_title=%+,
+
+

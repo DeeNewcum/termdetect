@@ -1,3 +1,7 @@
+- add code to detect if more than one terminal matches...  if this happens, I want people to email
+  me!           (better yet, that I notice it before shipping!)
+
+
 - the parser doesn't work in Perl v5.8, possibly due to small differences in how the regexp engine works
 
 
