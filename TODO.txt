@@ -1,5 +1,4 @@
-- integrate the working version of the parser (Terminfo_Parser.pm) back into the parser-unit-tests,
-  so thatwe can run the unit tests on the live version of the parser
+- the parser doesn't work in Perl v5.8, possibly due to small differences in how the regexp engine works
 
 
 - once we get cmdline argument processing working:

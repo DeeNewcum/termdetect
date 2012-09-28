@@ -4,6 +4,12 @@
 # tic parser.
 
 
+# TODO:
+#       - this doesn't work on Perl 5.8...  figure out why it breaks...
+#               - I suspect it's partly because 5.8 doesn't support 
+#                 nested/re-entrant calls to the regexp engine
+
+
 package Terminfo_Parser;
 
     use strict;
