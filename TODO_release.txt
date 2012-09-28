@@ -18,4 +18,5 @@ The goal of this is to get some possible feedback about the use-cases.
 
 - use App:FatPacker on it
 
+- add a BUNCH more terminals to the termmatch database
 

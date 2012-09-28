@@ -29,6 +29,8 @@ Percent codes may sometimes look like termcap entries, but they have completely 
 
 </table>
 
+The empty string means that nothing happened — no characters were received, and no cursor movement occurred.
+
 ## Capability names (tests)
 
 Unfortunately, there is very little overlap between terminfo capabilities and termmatch capabilities, so these names are unique to termmatch files.
@@ -108,7 +110,7 @@ Within termmatch files, "capabilities" can also be called "tests" — each refer
 <tr><td><tt>r_window_icon_label
     <td>report window icon label
     <td><tt>\e[20t
-    <td>?
+    <td><tt>\e]L</tt>...<tt>\e\\
     <td>xterm
 
 <tr><td><tt>r_window_state

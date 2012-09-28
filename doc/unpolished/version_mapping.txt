@@ -1,0 +1,6 @@
+I'm trying to figure out how to "decode" version numbers...  to break them up into dot syntax of
+some form.
+
+
+Screen v4.0.3   == 40003
+xterm v271      == 271
