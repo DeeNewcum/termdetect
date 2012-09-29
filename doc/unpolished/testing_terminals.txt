@@ -1,0 +1,24 @@
+Terminals I test on.........
+
+
+==== Windows ====
+
+- Putty
+- SecureCRT
+- TeraTerm
+
+==== Linux ====
+
+- Gnome-Terminal
+- Xterm
+- Konsole
+- Putty
+- Rxvt
+    - Urxvt
+    - Mrxvt
+- Aterm
+
+==== Solaris 10 ====
+
+- dtterm
+- xterm

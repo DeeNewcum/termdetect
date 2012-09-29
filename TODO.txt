@@ -1,5 +1,5 @@
-- on Ubuntu 10.04, when running termdetect on rxvt-unicode, there is uningested data that gets
-    dumped out at the command-line afterwards...  we need to figure out what's going on here
+- with rxvt-unicode, there is uningested data that gets dumped out at the command-line afterwards...
+  we need to figure out what's going on here
 
         - Add a $CHECK_SYNC flag (similar to $ASYNC) that takes some extra time to see if there is
           any input remaining, and if so, alerts the developer that things have gotten out of sync.

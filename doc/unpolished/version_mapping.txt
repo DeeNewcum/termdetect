@@ -2,5 +2,27 @@ I'm trying to figure out how to "decode" version numbers...  to break them up in
 some form.
 
 
-Screen v4.0.3   == 40003
-xterm v271      == 271
+Screen v4.0.3       == 40003
+
+xterm v271          == 271
+
+
+=========================================== don't make sense to me
+
+Konsole v2.8.5              == 115
+
+Urxvt v9.14-1               == 95
+
+Gnome-Terminal v3.4.1.1
+    and libvte v2.90-9      == 3201
+
+Putty (Linux) v0.62-6       == 136
+
+
+
+
+=========================================== TODO: get basic info
+
+xterm (Solaris 10)
+
+

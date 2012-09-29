@@ -6,6 +6,12 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
+    - things to finish before shipping:
+
+        - version number
+        
+        - character encoding
+
     - distribute it somewhat widely:
             - post it on Facebook
             - email Eads
