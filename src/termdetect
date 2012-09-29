@@ -45,19 +45,7 @@ my $term = match_results($test_results, $termmatch_db);
 
 ## generate the desired output
 if ($ARGV{snapshot}) {
-    foreach my $cap (sort keys %$test_results) {
-        next if ($cap =~ /^s_/);
-        my $r = summarize_result($test_results->{$cap});
-        if ($cap eq 'r_window_pos' || $cap eq 'r_window_size_char' || $cap eq 'r_window_size_px'
-            || $cap eq 'r_screen_size' || $cap eq 'r_ext_cursor_pos' || $cap eq 'r_window_title'
-            || $cap eq 'r_window_icon_label') {
-            $r = length($r) ? '%+' : '';
-        }
-        if ($cap eq 'r_device_attr2' && $test_results->{$cap}{received} =~ /^\e(\[>[^;]*;)[^;]*(;.*c)$/) {
-            $r = "\\E$1\%+$2";
-        }
-        printf "    %s=%s,\n", $cap, $r;
-    }
+    show_snapshot($test_results);
 
 } elsif ($ARGV{dump}) {
     # Does this overlap with --snapshot too much?  If so, then we'll get rid of this.
@@ -94,6 +82,42 @@ sub process_cmdline {
 
 
 sub usage { print STDERR <DATA>; exit; }
+
+
+sub show_snapshot {
+    my ($test_results) = @_;
+
+    # Patterns that may potentionally match the current results.
+    # If one of these patterns matches, then that's really good, because it increases the 
+    # chances that we'll match other results.
+    my %generalizations = (
+        r_ext_cursor_pos    => ["\e\%+R"],
+        r_window_pos        => ["\e[3;\%+t"],
+        r_window_size_px    => ["\e[4;\%+t"],
+        r_window_size_char  => ["\e[8;\%+t"],
+        r_screen_size       => ["\e[9;\%+t"],
+        r_window_title      => ["\e]l\%+\e\\"],
+        r_window_icon_label => ["\e]L\%+\e\\"],
+    );
+    foreach my $list (values %generalizations) {
+        unshift @$list, '';         # highest priority:  match an empty string
+        push @$list, '%+',          # lowest priority:  match a non-empty string
+    }
+    foreach my $cap (sort keys %$test_results) {
+        next if ($cap =~ /^s_/);
+        my $r = summarize_result($test_results->{$cap});
+        foreach my $gen (@{ $generalizations{$cap} }) {
+            if (Termdetect_Match::match_one_field($test_results->{$cap}, {assign => $gen})) {
+                ($r) = ansi_escape($gen);
+                last;
+            }
+        }
+        if ($cap eq 'r_device_attr2' && $test_results->{$cap}{received} =~ /^\e(\[>[^;]*;)[^;]*(;.*c)$/) {
+            $r = "\\E$1\%+$2";
+        }
+        printf "    %s=%s,\n", $cap, $r;
+    }
+}
 
 
 # quickly read a whole file         see also: File::Slurp and IO::All->slurp()
