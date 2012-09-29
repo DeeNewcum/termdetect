@@ -1,3 +1,7 @@
+- on Ubuntu 10.04, when running termdetect on rxvt-unicode, there is uningested data that gets
+    dumped out at the command-line afterwards...  we need to figure out what's going on here
+
+
 - add code to detect if more than one terminal matches...  if this happens, I want people to email
   me!           (better yet, that I notice it before shipping!)
 
