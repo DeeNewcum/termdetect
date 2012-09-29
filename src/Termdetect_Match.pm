@@ -101,11 +101,10 @@ sub match_one_field {
     if (exists $entry_cap->{assign}) {
         if ($entry_cap->{assign} !~ /\%/) {
             return ($test_result->{received} eq $entry_cap->{assign});
-        } elsif ($entry_cap->{assign} =~ /^\%x\+(\d)$/) {
-            return (exists $test_result->{x_delta} && $test_result->{x_delta} == $1);
         } else {
-            my @f = split /(\%.)/, $entry_cap->{assign};
+            my @f = split /(\%[xy][-+]\d|\%[^xy])/, $entry_cap->{assign};
             my $pat = '';
+            my ($pat_x_delta, $pat_y_delta);
             foreach my $f (@f) {
                 if ($f eq '%*') {
                     $pat .= ".*";
@@ -113,17 +112,21 @@ sub match_one_field {
                     $pat .= ".+";
                 } elsif ($f eq '%%') {
                     $pat .= '%';                # just the character '%'
-                } elsif ($f =~ /^\%(.)/) {
+                } elsif ($f =~ /^\%([xy])([-+]\d)$/) {
+                    if ($1 eq 'x') {
+                        $pat_x_delta = int($2);
+                    } elsif ($1 eq 'y') {
+                        $pat_y_delta = int($2);
+                    }
+                } elsif ($f =~ /^\%(.)$/) {
                     $pat .= quotemeta($1);      # an unsupported percent-char
                 } else {
                     $pat .= quotemeta($f);
                 }
             }
-            if ($pat =~ /\%/) {
-                print "oops\n";
-                print ansi_escape_no_nl(Dumper $entry_cap);
-                exit;
-            }
+            # both the delta-x and delta-y MUST be acknowledged, or it isn't a match
+            return 0     unless (($pat_x_delta || 0) == ($test_result->{x_delta} || 0)
+                             &&  ($pat_y_delta || 0) == ($test_result->{y_delta} || 0));
             return ($test_result->{received} =~ /^$pat$/);
         }
     }

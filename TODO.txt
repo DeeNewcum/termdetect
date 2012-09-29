@@ -5,11 +5,6 @@
 - the parser doesn't work in Perl v5.8, possibly due to small differences in how the regexp engine works
 
 
-- the empty string shouldn't match if there was cursor movement
-            (basically, nothing should match unless both the delta_x and delta_y are ACKNOWLEDGED)
-            (this might take a small bit of work)
-
-
 ==== command-line argument processing ====
 
     - by default (when the -t flag isn't used, etc), display more information:
