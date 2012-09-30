@@ -32,3 +32,6 @@ Putty (linux)
             - terminal.c, search for "report xterm version"
             - it ALWAYS reports 136
 
+LibVTE
+            - src/vteseq.c, search for "vte_sequence_handler_send_secondary_device_attributes"
+            .....?  where does 'VERSION' come from?
