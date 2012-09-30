@@ -9,6 +9,7 @@
 ## Behavior in edge cases
 
 * [What X3.64 Doesn’t Say](http://www.vt100.net/emu/dec_ansi_parser#GAPS), part of the excellent vt100.net state machine
+* [Mosh: An Interactive Remote Shell for Mobile Clients](http://mosh.mit.edu/mosh-paper-draft.pdf), section 3.3 "The Challenge of Unicode"
 * [tack](http://invisible-island.net/ncurses/tack/tack.html) — a tool that helps to build or verify a terminfo entry
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), section "Comparisons With Other Terminals > Escape Sequences"
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html#BUGS), section "Bugs"

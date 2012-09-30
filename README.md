@@ -17,3 +17,7 @@ Fortunately, there are [some request/reply ANSI sequences](https://github.com/De
        1 ms    (min 1,  max 1,   avg 1.0)
 
     # ^^ from this, we can surmise that the end-user's terminal is located on the same machine, or in close physical proximity to it
+
+## Documentation
+
+Documentation is minimal at this point, but you can run <tt>termdetect --help</tt>.

@@ -19,6 +19,11 @@
         http://toshyp.atari.org/en/VT_52_terminal.html
 
 
+- test the "ISO 2022 locking escapes"
+        http://www.cl.cam.ac.uk/~mgk25/unicode.html#term
+        http://en.wikipedia.org/wiki/ISO/IEC_2022#Code_structure
+
+
 - add "advanced tests" for:
     
     - the boolean terminfo capabilities mentioned in 'cursor_movement.md"

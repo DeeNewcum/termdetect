@@ -3,3 +3,42 @@
 There are a LOT of them.  Do we want to limit the list in any way?
 
 
+
+A LOT of encodings are single-byte.  This sucks.  When there's a 1-to-1 mapping between number of
+characters sent, and the number of positions the cursor moves, that means it's hard/impossible for
+us to detect that encoding via cursor movement detection.
+
+
+==== variable-width encodings ====
+
+There are a few of these.
+http://en.wikipedia.org/wiki/Variable-width_encoding
+
+    http://en.wikipedia.org/wiki/ISO/IEC_2022
+
+
+==== multi-byte encodings ====
+
+http://en.wikipedia.org/wiki/DBCS
+http://msdn.microsoft.com/en-us/library/5z097dxa%28v=vs.71%29.aspx
+
+
+        http://en.wikipedia.org/wiki/Shift_JIS
+
+
+==== other things that could affect the input-bytes/cursor-movement ratio ====
+
+
+    ---- character that are double-wide ----
+    http://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms
+
+    ---- characters that don't move the cursor at all ----
+    http://en.wikipedia.org/wiki/Combining_character
+    http://en.wikipedia.org/wiki/Zero-width_non-joiner
+    http://en.wikipedia.org/wiki/Zero-width_non-joiner
+    http://en.wikipedia.org/wiki/Zero-width_space
+
+                I don't know if there are any of these outside of unicode??
+
+                Does this exist outside of Unicode??
+

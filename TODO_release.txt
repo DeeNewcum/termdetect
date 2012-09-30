@@ -8,9 +8,12 @@ The goal of this is to get some possible feedback about the use-cases.
 
     - things to finish before shipping:
 
-        - version number
+        - detect whether UTF8 is in use or not
+                (the rest of the character encoding is too complicated for now)
+
+        - version number ...?
+
         
-        - character encoding
 
     - distribute it somewhat widely:
             - post it on Facebook
@@ -26,3 +29,4 @@ The goal of this is to get some possible feedback about the use-cases.
 
 - add a BUNCH more terminals to the termmatch database
 
+- implement more character encoding detection?
