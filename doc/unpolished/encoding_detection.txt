@@ -1,0 +1,5 @@
+==== possible encodings ====
+
+There are a LOT of them.  Do we want to limit the list in any way?
+
+
