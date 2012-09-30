@@ -16,8 +16,6 @@ Urxvt v9.14-1               == 95
 Gnome-Terminal v3.4.1.1
     and libvte v2.90-9      == 3201
 
-Putty (Linux) v0.62-6       == 136
-
 
 
 
@@ -25,4 +23,12 @@ Putty (Linux) v0.62-6       == 136
 
 xterm (Solaris 10)
 
+
+
+
+=========================================== source code locations
+
+Putty (linux)
+            - terminal.c, search for "report xterm version"
+            - it ALWAYS reports 136
 
