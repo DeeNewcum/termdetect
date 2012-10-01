@@ -6,6 +6,10 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
+    - move the version-number-formatting into Perl-code only...  remove the c_*
+      capabilities, and instead have some custom bit of code for each terminal, that
+      converts the DA2-number into a formatted version number
+
     - things to finish before shipping:
 
         - detect whether UTF8 is in use or not

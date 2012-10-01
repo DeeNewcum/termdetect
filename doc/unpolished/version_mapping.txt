@@ -14,10 +14,10 @@ Putty (linux)               == 136
 
 TeraTerm v4.75              == 100
 
+Konsole v2.8.5              == 115
+
 
 =========================================== don't make sense to me
-
-Konsole v2.8.5              == 115
 
 Urxvt v9.14-1               == 95
 
@@ -45,3 +45,7 @@ LibVTE
 TeraTerm  (http://en.sourceforge.jp/projects/ttssh2/)
             - teraterm/teraterm/vtterm.c, search for "void CSGT"
             - it ALWAYS reports 100
+
+Konsole   (https://projects.kde.org/projects/kde/kde-baseapps/konsole/repository/)
+            - src/Vt102Emulation.cpp, search for "Vt102Emulation::reportSecondaryAttributes"
+            - always reports 115

@@ -1,0 +1,7 @@
+"Variance" means any test that the terminal responds to differently, based on its internal settings.
+To use, it naively looks like it's multiple unique terminals.
+
+
+==== Konsole ====
+
+- it DOES support VT52 mode
