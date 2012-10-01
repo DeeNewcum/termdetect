@@ -24,10 +24,12 @@ TeraTerm v4.75              == 100
 
 Konsole v2.8.5              == 115
 
+Urxvt v9.14-1               == 95
+
 
 =========================================== don't make sense to me
 
-Urxvt v9.14-1               == 95
+(yay, all done!)
 
 
 =========================================== r_device_attr2 is unsupported or nonstandard
@@ -52,3 +54,7 @@ TeraTerm  (http://en.sourceforge.jp/projects/ttssh2/)
 Konsole   (https://projects.kde.org/projects/kde/kde-baseapps/konsole/repository/)
             - src/Vt102Emulation.cpp, search for "Vt102Emulation::reportSecondaryAttributes"
             - always reports 115
+
+Urxvt
+            - src/command.C, search for "secondary device attributes"
+            - always reports 95
