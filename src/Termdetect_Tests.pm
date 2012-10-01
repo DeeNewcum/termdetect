@@ -24,6 +24,15 @@ package Termdetect_Tests;
                         # In theory, both modes should act exactly the same (except synchronous
                         # takes longer).  However, async won't work correctly if the reads get
                         # misaligned.
+
+    our $CHECK_ALIGNMENT = 0;
+                        # Do some extra work to check that reads/writes are aligned properly.
+                        # This makes the tests go *much* slower, but it's worth it to 
+                        # find out where misalignment is happening.
+                        #
+                        # While testing, do NOT press any keys on the keyboard.
+
+
     our $DEBUG = 0;
 
     # prototypes
@@ -230,12 +239,23 @@ sub run_test {
 # asynchronously), then the whole process goes much faster.  We minimize latency by doing this.
 sub read_phase(&) {
     my ($callback) = @_;
-    if ($ASYNC) {
+    if ($ASYNC && ! $CHECK_ALIGNMENT) {
         # run the callback asynchronously
         push(@read_queue, $callback);
     } else {
         # run the callback immediately, in-line
         $callback->();
+
+        if ($CHECK_ALIGNMENT) {
+            my $any_more_reads = read_ansi_reply(0.1);      # the fractional number here can range from 0.1 to 2.0, depending on how slow the link between them is
+            if (length($any_more_reads)) {
+                eval 'use Carp';
+                Carp::confess("out of alignment\n");
+                #my (undef, $filename, $line, $function) = caller(1);
+                #print "\n\n\r";
+                #die "Out of alignment at $filename:$line, in $function()\n\n\n";
+            }
+        }
     }
     return undef;
 }
