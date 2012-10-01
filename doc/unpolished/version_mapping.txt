@@ -7,6 +7,14 @@ Screen v4.0.3       == 40003
 
 xterm v271          == 271
 
+mrxvt v0.5.4        == 0.5.4            (totally violates the spec)
+
+Gnome-Terminal v3.4.1.1     == 3201
+    and libvte v0.32.1
+
+Xfce4-terminal v0.4.        == 2802
+    and libvte v0.28.2
+
 
 =========================================== number refers to xterm version compatibility, and is HARD CODED
 
@@ -21,15 +29,10 @@ Konsole v2.8.5              == 115
 
 Urxvt v9.14-1               == 95
 
-Gnome-Terminal v3.4.1.1
-    and libvte v2.90-9      == 3201
-
 
 =========================================== r_device_attr2 is unsupported or nonstandard
 
 xterm (Solaris 10)
-
-
 
 
 =========================================== source code locations

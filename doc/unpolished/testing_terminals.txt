@@ -10,13 +10,14 @@ Terminals I test on.........
 ==== Linux ====
 
 - Gnome-Terminal
-- Xterm
 - Konsole
+- Xfce4-terminal
 - Putty
+- Xterm
 - Rxvt
     - Urxvt
     - Mrxvt
-- Aterm
+    - Aterm
 
 ==== Solaris 10 ====
 
