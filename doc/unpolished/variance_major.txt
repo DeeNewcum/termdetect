@@ -5,3 +5,12 @@ To use, it naively looks like it's multiple unique terminals.
 ==== Konsole ====
 
 - it DOES support VT52 mode
+
+
+
+==== Putty ====
+
+- Putty responds to the DECSCL sequence, and it looks like it *greatly* changes how it responds to
+  other sequences based on that
+
+        - in its source code, see terminal.c, and search for "compatibility"

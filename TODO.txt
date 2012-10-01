@@ -51,3 +51,12 @@
                       probably be spot-on)
 
 
+
+==== random stuff ====
+
+- could we test against DOS's ANSI.SYS?  This is mostly for homorous value, it's not really useful
+  at all.  But ANSI.SYS *does* support the \e[6n (Device Status Report -- Cursor), so this code
+  *should* mostly work.     http://helppc.netcore2k.net/misc/ansi-codes
+        http://sshwindows.webheat.co.uk/display/sshwindows/OpenSSH+for+Windows
+
+

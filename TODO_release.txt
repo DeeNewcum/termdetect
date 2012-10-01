@@ -10,6 +10,9 @@ The goal of this is to get some possible feedback about the use-cases.
       capabilities, and instead have some custom bit of code for each terminal, that
       converts the DA2-number into a formatted version number
 
+    - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
+        and have it include a setting for $LANG  (but only if the character coding was detected)
+
     - things to finish before shipping:
 
         - detect whether UTF8 is in use or not
