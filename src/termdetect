@@ -93,14 +93,19 @@ sub show_snapshot {
     #
     # Left-most are tried first, right-most tried last.
     my %generalizations = (
-        r_ext_cursor_pos    => ["",  "\e[%+R",      "%+"],
-        r_window_pos        => ["",  "\e[3;%+t",    "%+"],
-        r_window_size_px    => ["",  "\e[4;%+t",    "%+"],
-        r_window_size_char  => ["",  "\e[8;%+t",    "%+"],
-        r_screen_size       => ["",  "\e[9;%+t",    "%+"],
-        r_window_title      => ["",  "\e]l%*\e\\",  "%+"],
-        r_window_icon_label => ["",  "\e]L%*\e\\",  "%+"],
+        r_ext_cursor_pos    => ["\e[%+R"],
+        r_window_pos        => ["\e[3;%+t"],
+        r_window_size_px    => ["\e[4;%+t"],
+        r_window_size_char  => ["\e[8;%+t"],
+        r_screen_size       => ["\e[9;%+t"],
+        r_window_title      => ["\e]l%*\e\\"],
+        r_window_icon_label => ["\e]L%*\e\\"],
     );
+    foreach my $list (values %generalizations) {
+        unshift @$list, '';         # highest priority:  match an empty string
+        push @$list, '%+',          # lowest priority:  match a non-empty string
+    }
+    print Dumper \%generalizations; exit;
     foreach my $cap (sort keys %$test_results) {
         next if ($cap =~ /^s_/);
         my $r = summarize_result($test_results->{$cap});
