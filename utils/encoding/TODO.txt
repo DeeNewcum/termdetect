@@ -1,0 +1,6 @@
+
+- look through the ICU data, see if they'll help me identify which encodings are double-byte and
+  which are variable-byte
+        http://en.wikipedia.org/wiki/International_Components_for_Unicode
+
+        (the ICU data is used by Perl itself, see: http://perldoc.perl.org/enc2xs.html )

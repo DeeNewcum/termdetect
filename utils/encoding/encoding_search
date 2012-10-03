@@ -17,103 +17,143 @@
     use Data::Dumper;
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
-my $encoding = 'utf8';
 
+open STDERR, '>', '/dev/null';
 
-my $generator;
-my $encoder;
-
-if ($encoding eq 'utf8') {
-    $generator = utf8_generator();
-    $encoder = sub {my $char = shift; utf8::encode($char); return $char; };
-} else {
-    die;
-}
-
+binmode(STDOUT, ':encoding(utf8)');
 
 my $ctr = 0;
-while (defined(my $char = $generator->())) {
-    my $encoded = $encoder->($char);
 
-    next unless ($encoded =~ /\x9b/);
+my $rot_encoding = rotator();
+my $rot_char = slow_rotator(1000);
 
-    my @encoded = unpack("C*", $encoded);
-    print join(" ", map {sprintf "%02X", $_} @encoded), "\n";
+foreach my $encoding (Encode->encodings(":all")) {
+    next if ($encoding eq 'null' || $encoding eq 'ascii-ctrl');     # these are special
 
+    #next if ($encoding eq '7bit-jis');     # skip the first one, for development, because it's so slow
+    #print "======== $encoding ========\n";
+    display_encoding("======== $encoding ========");
+    #print "\r\e[4C", $rot_encoding->(), "\r";
+    my ($min, $max) = (99, 0);
+    my $total_chars = 0;
+    my $generator = utf8_generator();
+    while (defined(my $char = $generator->())) {
+        next if (ord($char) < 256);
 
-    #print "\n";
-    #exit;
-    exit if (++$ctr > 129);
-    #exit if (++$ctr > 5);
+        my $octets = eval { encode($encoding, my $c = $char, Encode::FB_QUIET) };
+
+        next if (defined($octets) && bytes::length($octets) == 0);      # there's no equivalent for this utf8 character
+
+        $total_chars++;
+
+        $rot_char->();
+
+        my $l = bytes::length($octets);
+        if (defined $l) {
+            $max = $l if($l > $max);
+            $min = $l if($l < $min);
+        }
+    }
+
+    #print "======== $encoding ========\n";
+    #print "total chars:  $total_chars\n";
+
+    if ($total_chars) {
+        if ($min == $max) {
+            #print "FIXED encoding: $min byte(s)\n";
+            #print "==== $encoding ==== is fixed multibyte: $min bytes\n"    if ($min > 1);
+            print "==== $encoding ==== is single byte\n"    if ($min == 1);
+        } else {
+            #print "VARIABLE encoding: $min - $max bytes\n";
+            #print "==== $encoding ==== is variable: $min - $max bytes\n";
+        }
+    }
 }
 
 
-# generates all possible UTF8 encodings
-# see "Higher-Order Perl" chapter 4 for more info about generators
-sub utf8_generator {
-    # In Perl, all strings are natively UTF-8.  So we don't need to do anything!
-    return unicode_generator();
+sub no_utf {
+    Encode::_utf8_off(my $char = shift);
+    return $char;
 }
+
+
+sub display_encoding {
+    my ($encoding) = @_;
+
+    print "\e[s",           # save cursor
+          "\e[1;1f",        # move cursor to top-left
+          "\e[K",           # erase to end of line
+          $encoding,
+          "\e[u";           # restore cursor
+}
+
+
+exit;
+
 
 
 # generates all possible Unicode characters
 # see "Higher-Order Perl" chapter 4 for more info about generators
-sub unicode_generator {
+sub utf8_generator {
+                use Unicode::UCD;
     my $cur_char = -1;
-    my @ranges = (          # valid unicode ranges, per http://en.wikipedia.org/wiki/Unicode_plane#Overview
-        [0x0000, 0x0FFF],
-        [0x1000, 0x1FFF],
-        [0x2000, 0x2FFF],
-        [0x3000, 0x3FFF],
-        [0x4000, 0x4FFF],
-        [0x5000, 0x5FFF],
-        [0x6000, 0x6FFF],
-        [0x7000, 0x7FFF],
-        [0x8000, 0x8FFF],
-        [0x9000, 0x9FFF],
-        [0xA000, 0xAFFF],
-        [0xB000, 0xBFFF],
-        [0xC000, 0xCFFF],
-        [0xD000, 0xDFFF],
-        [0xE000, 0xEFFF],
-        [0xF000, 0xFFFF],
-        [0x10000, 0x10FFF],
-        [0x11000, 0x11FFF],
-        [0x12000, 0x12FFF],
-        [0x13000, 0x13FFF],
-        [0x16000, 0x16FFF],
-        [0x1B000, 0x1BFFF],
-        [0x1D000, 0x1DFFF],
-        [0x1E000, 0x1EFFF],
-        [0x1F000, 0x1FFFF],
-        [0x20000, 0x20FFF],
-        [0x21000, 0x21FFF],
-        [0x22000, 0x22FFF],
-        [0x23000, 0x23FFF],
-        [0x24000, 0x24FFF],
-        [0x25000, 0x25FFF],
-        [0x26000, 0x26FFF],
-        [0x27000, 0x27FFF],
-        [0x28000, 0x28FFF],
-        [0x29000, 0x29FFF],
-        [0x2A000, 0x2AFFF],
-        [0x2B000, 0x2BFFF],
-        [0x2F000, 0x2FFFF],
-        [0xE0000, 0xE0FFF],
-        [0xF0000, 0xFFFFF],
-        [0x100000, 0x10FFFF],
-    );
+    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
     my $cur_range_end = -2;
     return sub {
         if ($cur_char > $cur_range_end) {
-            return undef unless @ranges;        # we're all done!
-            ($cur_char, $cur_range_end) = @{ shift @ranges };
+            return undef unless @blocks;        # we're all done!
+            ($cur_char, $cur_range_end) = @{ shift @blocks };
         }
         return chr($cur_char++);
     }
 }
 
+sub utf8_special_generator {
+    my @special_chars = map {chr $_} (
+        0xFFF9 .. 0xFFFB,       # interlinear annotation            http://en.wikipedia.org/wiki/Specials_%28Unicode_block%29
+        0xFFFC,                 # object replacement character      http://en.wikipedia.org/wiki/Specials_%28Unicode_block%29
+        0x200E, 0x200F, 0x202A..0x202E,     # bidirectional text control        http://en.wikipedia.org/wiki/Unicode_control_characters
+        0xFE00 .. 0xFE0F,       # variation selectors               http://en.wikipedia.org/wiki/Unicode_control_characters
+        0xFEFF,                 # byte-order mark                   http://en.wikipedia.org/wiki/Byte_order_mark
+        0x2060,                 # word joiner
+        0x200B,                 # zero-width space
+        0x200C,                 # zero-width non-joiner
+        0x200D,                 # zero-width joiner
+        0x2061 .. 0x2064,       # mathematical invisibles           http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Mathematical_invisibles
+        0x2044,                 # fraction slash
+
+
+        # ones that haven't been included yet:
+        #       http://en.wikipedia.org/wiki/Unicode_control_characters#Language_tags
+    );
+}
+
+
+# returns a generator
+sub rotator {
+    my $state = -1;
+    my @chars = qw( / - \ | );
+    $| = 1;
+    return sub {
+        $state = ($state + 1) % 4;
+        return $chars[$state];
+    };
+}
+sub slow_rotator {
+    my $num_per_rot = shift || 1;
+    my $state = -1;
+    my $until_next_rot = $num_per_rot;
+    my @chars = qw( / - \ | );
+    $| = 1;
+    return sub {
+        if (--$until_next_rot < 0) {
+            $state = ($state + 1) % 4;
+            print "$chars[$state]\r";
+            $until_next_rot = $num_per_rot;
+        }
+    };
+}
 
 
 # display a string to the user, via `xxd`
-sub xxd_utf8 {utf8::encode(my$str=shift);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}
+sub xxd {my$str=shift;Encode::_utf8_off($str);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}    

@@ -1,0 +1,122 @@
+
+==== 7bit-jis ==== is variable: 7 - 9 bytes
+==== cp932 ==== is variable: 1 - 2 bytes
+==== cp936 ==== is variable: 1 - 2 bytes
+==== cp949 ==== is variable: 1 - 2 bytes
+==== cp950 ==== is variable: 1 - 2 bytes
+==== euc-jp ==== is variable: 2 - 3 bytes
+==== gsm0338 ==== is variable: 1 - 2 bytes
+==== iso-2022-jp ==== is variable: 8 - 9 bytes
+==== iso-2022-jp-1 ==== is variable: 8 - 9 bytes
+==== iso-2022-kr ==== is variable: 8 - 14 bytes
+==== MacChineseSimp ==== is variable: 1 - 2 bytes
+==== MacChineseTrad ==== is variable: 1 - 2 bytes
+==== MacJapanese ==== is variable: 1 - 2 bytes
+==== MacKorean ==== is variable: 1 - 2 bytes
+==== MIME-B ==== is variable: 16 - 20 bytes
+==== MIME-Header ==== is variable: 16 - 20 bytes
+==== MIME-Header-ISO_2022_JP ==== is variable: 1 - 30 bytes
+==== MIME-Q ==== is variable: 18 - 24 bytes
+==== shiftjis ==== is variable: 1 - 2 bytes
+==== UTF-16 ==== is variable: 4 - 6 bytes
+==== UTF-16BE ==== is variable: 2 - 4 bytes
+==== UTF-16LE ==== is variable: 2 - 4 bytes
+==== UTF-7 ==== is variable: 5 - 8 bytes
+==== utf-8-strict ==== is variable: 2 - 4 bytes
+==== utf8 ==== is variable: 2 - 4 bytes
+
+
+
+==== big5-eten ==== is fixed multibyte: 2 bytes
+==== big5-hkscs ==== is fixed multibyte: 2 bytes
+==== euc-cn ==== is fixed multibyte: 2 bytes
+==== euc-kr ==== is fixed multibyte: 2 bytes
+==== gb12345-raw ==== is fixed multibyte: 2 bytes
+==== gb2312-raw ==== is fixed multibyte: 2 bytes
+==== hz ==== is fixed multibyte: 6 bytes
+==== iso-ir-165 ==== is fixed multibyte: 2 bytes
+==== jis0208-raw ==== is fixed multibyte: 2 bytes
+==== jis0212-raw ==== is fixed multibyte: 2 bytes
+==== johab ==== is fixed multibyte: 2 bytes
+==== ksc5601-raw ==== is fixed multibyte: 2 bytes
+==== UCS-2BE ==== is fixed multibyte: 2 bytes
+==== UCS-2LE ==== is fixed multibyte: 2 bytes
+==== UTF-32 ==== is fixed multibyte: 8 bytes
+==== UTF-32BE ==== is fixed multibyte: 4 bytes
+==== UTF-32LE ==== is fixed multibyte: 4 bytes
+
+
+
+==== AdobeStandardEncoding ==== is single byte
+==== AdobeSymbol ==== is single byte
+==== AdobeZdingbat ==== is single byte
+==== cp1006 ==== is single byte
+==== cp1026 ==== is single byte
+==== cp1250 ==== is single byte
+==== cp1251 ==== is single byte
+==== cp1252 ==== is single byte
+==== cp1253 ==== is single byte
+==== cp1254 ==== is single byte
+==== cp1255 ==== is single byte
+==== cp1256 ==== is single byte
+==== cp1257 ==== is single byte
+==== cp1258 ==== is single byte
+==== cp424 ==== is single byte
+==== cp437 ==== is single byte
+==== cp737 ==== is single byte
+==== cp775 ==== is single byte
+==== cp850 ==== is single byte
+==== cp852 ==== is single byte
+==== cp855 ==== is single byte
+==== cp856 ==== is single byte
+==== cp857 ==== is single byte
+==== cp858 ==== is single byte
+==== cp860 ==== is single byte
+==== cp861 ==== is single byte
+==== cp862 ==== is single byte
+==== cp863 ==== is single byte
+==== cp864 ==== is single byte
+==== cp865 ==== is single byte
+==== cp866 ==== is single byte
+==== cp869 ==== is single byte
+==== cp874 ==== is single byte
+==== cp875 ==== is single byte
+==== dingbats ==== is single byte
+==== hp-roman8 ==== is single byte
+==== iso-8859-10 ==== is single byte
+==== iso-8859-11 ==== is single byte
+==== iso-8859-13 ==== is single byte
+==== iso-8859-14 ==== is single byte
+==== iso-8859-15 ==== is single byte
+==== iso-8859-16 ==== is single byte
+==== iso-8859-2 ==== is single byte
+==== iso-8859-3 ==== is single byte
+==== iso-8859-4 ==== is single byte
+==== iso-8859-5 ==== is single byte
+==== iso-8859-6 ==== is single byte
+==== iso-8859-7 ==== is single byte
+==== iso-8859-8 ==== is single byte
+==== iso-8859-9 ==== is single byte
+==== jis0201-raw ==== is single byte
+==== koi8-f ==== is single byte
+==== koi8-r ==== is single byte
+==== koi8-u ==== is single byte
+==== MacArabic ==== is single byte
+==== MacCentralEurRoman ==== is single byte
+==== MacCroatian ==== is single byte
+==== MacCyrillic ==== is single byte
+==== MacDingbats ==== is single byte
+==== MacFarsi ==== is single byte
+==== MacGreek ==== is single byte
+==== MacHebrew ==== is single byte
+==== MacIcelandic ==== is single byte
+==== MacRoman ==== is single byte
+==== MacRomanian ==== is single byte
+==== MacRumanian ==== is single byte
+==== MacSami ==== is single byte
+==== MacSymbol ==== is single byte
+==== MacThai ==== is single byte
+==== MacTurkish ==== is single byte
+==== nextstep ==== is single byte
+==== symbol ==== is single byte
+==== viscii ==== is single byte

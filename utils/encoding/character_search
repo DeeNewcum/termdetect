@@ -10,6 +10,7 @@
     use warnings;
 
     use utf8;
+    use charnames ();
     #use feature 'unicode_strings';
     use Encode qw[encode decode];
     require bytes;
@@ -35,85 +36,41 @@ my $ctr = 0;
 while (defined(my $char = $generator->())) {
     my $encoded = $encoder->($char);
 
-    next unless ($encoded =~ /\x9b/);
+    next unless ($encoded =~ /\x9b/);       # C1 version of CSI
+    0 && next unless ($char =~ /[
+            \p{Specials}
+            \p{Cntrl}
+        ]/x);
 
     my @encoded = unpack("C*", $encoded);
-    print join(" ", map {sprintf "%02X", $_} @encoded), "\n";
-
+    my $octets = join(" ", map {sprintf "%02X", $_} @encoded);
+    printf "%-30s  %s\n",
+        $octets,
+        charnames::viacode(ord($char)) || '';
 
     #print "\n";
     #exit;
-    exit if (++$ctr > 129);
+    #exit if (++$ctr > 129);
     #exit if (++$ctr > 5);
-}
-
-
-# generates all possible UTF8 encodings
-# see "Higher-Order Perl" chapter 4 for more info about generators
-sub utf8_generator {
-    # In Perl, all strings are natively UTF-8.  So we don't need to do anything!
-    return unicode_generator();
 }
 
 
 # generates all possible Unicode characters
 # see "Higher-Order Perl" chapter 4 for more info about generators
-sub unicode_generator {
+sub utf8_generator {
+                use Unicode::UCD;
     my $cur_char = -1;
-    my @ranges = (          # valid unicode ranges, per http://en.wikipedia.org/wiki/Unicode_plane#Overview
-        [0x0000, 0x0FFF],
-        [0x1000, 0x1FFF],
-        [0x2000, 0x2FFF],
-        [0x3000, 0x3FFF],
-        [0x4000, 0x4FFF],
-        [0x5000, 0x5FFF],
-        [0x6000, 0x6FFF],
-        [0x7000, 0x7FFF],
-        [0x8000, 0x8FFF],
-        [0x9000, 0x9FFF],
-        [0xA000, 0xAFFF],
-        [0xB000, 0xBFFF],
-        [0xC000, 0xCFFF],
-        [0xD000, 0xDFFF],
-        [0xE000, 0xEFFF],
-        [0xF000, 0xFFFF],
-        [0x10000, 0x10FFF],
-        [0x11000, 0x11FFF],
-        [0x12000, 0x12FFF],
-        [0x13000, 0x13FFF],
-        [0x16000, 0x16FFF],
-        [0x1B000, 0x1BFFF],
-        [0x1D000, 0x1DFFF],
-        [0x1E000, 0x1EFFF],
-        [0x1F000, 0x1FFFF],
-        [0x20000, 0x20FFF],
-        [0x21000, 0x21FFF],
-        [0x22000, 0x22FFF],
-        [0x23000, 0x23FFF],
-        [0x24000, 0x24FFF],
-        [0x25000, 0x25FFF],
-        [0x26000, 0x26FFF],
-        [0x27000, 0x27FFF],
-        [0x28000, 0x28FFF],
-        [0x29000, 0x29FFF],
-        [0x2A000, 0x2AFFF],
-        [0x2B000, 0x2BFFF],
-        [0x2F000, 0x2FFFF],
-        [0xE0000, 0xE0FFF],
-        [0xF0000, 0xFFFFF],
-        [0x100000, 0x10FFFF],
-    );
+    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
     my $cur_range_end = -2;
     return sub {
         if ($cur_char > $cur_range_end) {
-            return undef unless @ranges;        # we're all done!
-            ($cur_char, $cur_range_end) = @{ shift @ranges };
+            return undef unless @blocks;        # we're all done!
+            ($cur_char, $cur_range_end) = @{ shift @blocks };
         }
         return chr($cur_char++);
     }
 }
 
 
-
 # display a string to the user, via `xxd`
-sub xxd_utf8 {utf8::encode(my$str=shift);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}
+sub xxd {Encode::_utf8_off(my$str=shift);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}

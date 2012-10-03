@@ -1,0 +1,57 @@
+#!/usr/bin/env perl
+
+    use strict;
+    use warnings;
+
+    use Encode;
+    use Data::Dumper;
+
+
+
+
+my %single_byte = map {$_ => 1} list_EncodeByte_encodings();
+
+
+#print Dumper \%Encode::Encoding;   exit;
+#print Dumper \%single_byte;    exit;
+
+
+foreach my $encoding (Encode->encodings(":all")) {                                                   
+    if ($single_byte{$encoding}) {
+        printf "%-30s  SINGLE\n", $encoding;
+    } else {
+        printf "%-30s  MULTIPLE\n", $encoding;
+    }
+}
+
+
+
+# list which encodings are covered by Encode::Byte
+sub list_EncodeByte_encodings {
+    my $orig_define_encoding = \&Encode::define_encoding;
+
+    my %added;
+    ## add our hook
+    {
+        no warnings 'redefine';
+
+        *Encode::define_encoding = sub {
+            my ($obj, $name) = @_;
+            $added{$name} = 1;
+            $orig_define_encoding->(@_);
+        };
+    }
+
+    require Encode::Byte;
+    Encode::Byte->import;
+    if (!%added) {
+        die "error: Encode::Byte was already loaded...  It must NOT be loaded until we run\n\t";
+    }
+    ## remove our hook
+    {
+        no warnings 'redefine';
+        *Encode::define_encoding = $orig_define_encoding;
+    }
+    return keys %added;
+}
+

@@ -33,6 +33,7 @@ http://msdn.microsoft.com/en-us/library/5z097dxa%28v=vs.71%29.aspx
     http://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms
 
     ---- characters that don't move the cursor at all ----
+    >>>> http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Special-purpose_characters <<<<
     http://en.wikipedia.org/wiki/Combining_character
     http://en.wikipedia.org/wiki/Zero-width_non-joiner
     http://en.wikipedia.org/wiki/Zero-width_non-joiner
