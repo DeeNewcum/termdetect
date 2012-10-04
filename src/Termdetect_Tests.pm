@@ -139,6 +139,8 @@ sub perform_all_tests {
 
 # s_ff_clears -- does the form-feed character (^L) clear the screen?
 sub synthetic__ff_clears {
+    return if ($::ARGV{'nose'});        # side effect: clears the screen
+
     output("\r\e[K");           # clear any gibberish that might be on this line, since we're dropping down a line
     output("\n");               # move a line first, to make sure we're not on the top line
     run_test("\x0c",

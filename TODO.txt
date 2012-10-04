@@ -4,9 +4,6 @@
         - it appears to be happening on the 'm_sub' test
 
 
-- add code to detect if more than one terminal matches...  if this happens, I want people to email
-  me!           (better yet, that I notice it before shipping!)
-
 
 ==== command-line argument processing ====
 
@@ -18,11 +15,6 @@
                 - current font size
                 - current screen size
                 - current window title
-
-    - add a --nose flag (for "no side-effects").  This flag would disable tests that have any sort
-      of side-effects.  Of the tests we've included so far, these include:
-            - visual bell  (\eg)
-            - changing the window title     (two tests do this)
 
 
 

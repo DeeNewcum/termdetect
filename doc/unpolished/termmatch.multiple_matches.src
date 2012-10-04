@@ -1,0 +1,40 @@
+# This is a version of the termmatch.src that is used for testing termdetect's behavior when
+# it has multiple terminals match the current results.
+
+vte|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
+    s_ff_clears=false,
+
+linux|Linux console,
+    s_ff_clears=false,
+
+xterm,
+    s_ff_clears=true,
+
+putty,
+    s_ff_clears=true,
+
+rxvt,
+    s_ff_clears=false,
+
+aterm,
+    use=rxvt,
+
+urxvt,
+    s_ff_clears=false,
+
+mrxvt,
+    s_ff_clears=true,
+
+screen,
+    s_ff_clears=false,
+
+tmux,
+    s_ff_clears=false,
+
+mosh,
+    s_ff_clears=false,
+
+konsole,
+    s_ff_clears=false,
+
+

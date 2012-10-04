@@ -39,9 +39,12 @@ my $test_results = perform_all_tests();
     #print Dumper $test_results;     exit;
     #print ansi_escape_no_nl(Dumper $test_results);      exit;
 
-
 ## ... and match them together
-my $term = match_results($test_results, $termmatch_db);
+my $term;
+if (!$ARGV{snapshot} && !$ARGV{dump}) {
+    $term = match_results($test_results, $termmatch_db);
+}
+
 
 
 ## generate the desired output
@@ -145,9 +148,8 @@ termdetect
     --nose
             "No Side Effects".  Doesn't run tests that may have side-effects.
             Gibberish may still be displays on your screen, but they will be (mostly) erased
-            before exiting.  Side effects includes:  visual bell, and changing the terminal title.
-            Currently, most tests don't have side-effects, so this option shouldn't greatly reduce
-            the chances of correctly identifying your terminal.
+            before exiting.  Most tests don't have side-effects, so using this option doesn't
+            greatly reduce the chances of correctly identifying your terminal.
 
     --snapshot
             Outputs the current tests results in a form that's suitable for pasting into

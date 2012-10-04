@@ -24,16 +24,23 @@ sub match_results {
     my $match_stats = calculate_match_statistics($test_results, $termmatch_db);
         #print Dumper $match_stats;
 
-    my $highest_match;
-    my $highest_match_numyes = 0;
+
+    my @no_mismatches;      # list of all terminals that had zero mismatches, and at least one match
     while (my ($term, $stats) = each %$match_stats) {
-        if (!exists $stats->{n} && defined($stats->{y}) && $stats->{y} > $highest_match_numyes) {
-            $highest_match_numyes = $stats->{y};
-            $highest_match = $term;
+        if (!exists $stats->{n} && defined($stats->{y})) {
+            push @no_mismatches, [$term, $stats->{y}];
         }
     }
 
-    return $highest_match;
+    if (@no_mismatches > 1) {
+        print STDERR "Error: Multiple terminals matched: ",
+                    join(", ", map {$_->[0]} @no_mismatches), "\n";
+        print STDERR "\n\nPlease file a bug for this at https://github.com/DeeNewcum/termdetect/issues\n";
+        print STDERR "and include the output of   termdetect --dump\n";
+        exit 1;
+    }
+
+    return $no_mismatches[0][0];
 }
 
 
