@@ -46,6 +46,7 @@ package Termdetect_Tests;
             s_font_size
             s_screen_size
             s_window_icon_label
+            s_window_size
             s_window_pos
             s_window_title
         );
@@ -362,6 +363,39 @@ sub calculate_derived_values {
         $all_results->{s_window_icon_label}{received} = $1;
     }
 }
+
+sub calculate_derived_values_after_match {
+    my ($all_results, $termmatch_db, $matched_term) = @_;
+
+    calculate_version($all_results, $matched_term);
+}
+
+
+sub calculate_version {
+    my ($all_results, $matched_term) = @_;
+
+    return unless (exists $all_results->{r_device_attr2});
+    my (undef, $da2) = split /;/, $all_results->{r_device_attr2}{received};
+
+    # The exact interpretation of the second argument of DA2 varies based on terminal.
+    # This is the only place in the code that we have terminal-specific code.  This really
+    # out to be moved to termmatch.src in some way.
+    if ($matched_term eq 'vte') {
+        my ($lasttwo) = ($da2 =~ s/(\d\d)$//);
+        $all_results->{s_term_version}{received} = sprintf "libvte v%0.2f.%d", $da2 / 100, $lasttwo;
+    } elsif ($matched_term eq 'screen') {
+        my ($lasttwo) = ($da2 =~ s/(\d\d)$//);
+        $all_results->{s_term_version}{received} = sprintf "v%0.2f.%02d", $da2 / 100, $lasttwo;
+    } elsif ($matched_term eq 'mrxvt') {
+        # mrxvt's version number already has dots in it, which is a total violation of the spec
+        $all_results->{s_term_version}{received} = "v$da2";     
+    } elsif ($matched_term eq 'xterm') {
+        $all_results->{s_term_version}{received} = "#$da2";
+    } else {
+        # otherwise, the version usually just means "we are feature-compatible with version XX of xterm"
+    }
+}
+
 
     sub round_up {
         my ($n, $modulo) = @_;

@@ -18,29 +18,46 @@ package Termdetect_Match;
 # returns the name of the $TERM that best matches
 sub match_results {
     my ($test_results,              # the results from running all the tests on the current terminal
-        $termmatch_db               # the contents of "termmatch.src"
+        $termmatch_db,              # the contents of "termmatch.src"
+        $die_on_multiple,           # should error out when there are multiple matches?
+                                    #           (optional param, defaults to yes)
             ) = @_;
+
+    $die_on_multiple = 1        if (!defined($die_on_multiple));
 
     my $match_stats = calculate_match_statistics($test_results, $termmatch_db);
         #print Dumper $match_stats;
 
 
     my @no_mismatches;      # list of all terminals that had zero mismatches, and at least one match
+    my $highest_match;
+    my $highest_match_numyes = 0;
     while (my ($term, $stats) = each %$match_stats) {
         if (!exists $stats->{n} && defined($stats->{y})) {
-            push @no_mismatches, [$term, $stats->{y}];
+            push @no_mismatches, $term;
+            if ($stats->{y} > $highest_match_numyes) {
+                $highest_match_numyes = $stats->{y};
+                $highest_match = $term;
+            }
         }
     }
 
     if (@no_mismatches > 1) {
-        print STDERR "Error: Multiple terminals matched: ",
-                    join(", ", map {$_->[0]} @no_mismatches), "\n";
-        print STDERR "\n\nPlease file a bug for this at https://github.com/DeeNewcum/termdetect/issues\n";
-        print STDERR "and include the output of   termdetect --dump\n";
-        exit 1;
+        if ($die_on_multiple) {
+            print STDERR "Error: Multiple terminals matched: ",
+                        join(", ", @no_mismatches), "\n";
+            print STDERR "\n\nPlease file a bug for this at https://github.com/DeeNewcum/termdetect/issues\n";
+            print STDERR "and include the output of   termdetect --dump\n";
+            exit 1;
+        } else {
+            print STDERR "Error: Multiple terminals matched: ",
+                        join(", ", @no_mismatches), "\n\n";
+        }
+    } elsif (@no_mismatches == 1) {
+        Termdetect_Tests::calculate_derived_values_after_match($test_results, $termmatch_db, $highest_match);
     }
 
-    return $no_mismatches[0][0];
+    return $highest_match;
 }
 
 

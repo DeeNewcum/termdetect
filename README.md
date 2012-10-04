@@ -5,8 +5,13 @@ What if don't just want things minimally working, but you want things to work *w
 Fortunately, there are [some request/reply ANSI sequences](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md) that give us bits of information about the terminal.  This program looks up the responses in a database of known terminals and finds the closest match.  This allows your remote machine to know *exactly* what terminal it's talking to.
 
     $ termdetect
-    teraterm4.59
-    
+                terminal:   vte
+                 version:   libvte v0.32.1
+           terminal size:   318 x 74
+               font size:   6 x 13
+         window position:   5 x 81
+             screen size:   3200 x 1080
+
     $ export TERM=$(termdetect -t)
 
     $ termping 

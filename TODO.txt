@@ -5,14 +5,14 @@
 
 
 
+- for terminal entries that don't match up exactly with the $TERM names in the ncurses terminfo,
+  we need a way to specify which "fallback" $TERM setting to use, that *does* match ncuses terminfo
+
+
 ==== command-line argument processing ====
 
 - in the default (long) display, show:
-
-    - terminal version  (if available)
     - current character encoding
-
-
 
 
 - create a flag that enables "show me the results of a single test" mode, where it doesn't try

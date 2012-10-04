@@ -40,10 +40,8 @@ my $test_results = perform_all_tests();
     #print ansi_escape_no_nl(Dumper $test_results);      exit;
 
 ## ... and match them together
-my $term;
-if (!$ARGV{snapshot} && !$ARGV{dump}) {
-    $term = match_results($test_results, $termmatch_db);
-}
+my $term = match_results($test_results, $termmatch_db,
+    !($ARGV{snapshot} || $ARGV{dump}));
 
 
 
@@ -62,7 +60,7 @@ if ($ARGV{snapshot}) {
         print summarize_result($test_results->{$ARGV{result}}), "\n";
     }
 
-} else {
+} elsif (!$ARGV{check}) {
     if (defined($term)) {
         if ($ARGV{t}) {
             print "$term\n";
