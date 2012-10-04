@@ -375,8 +375,8 @@ sub ti_dump_terminal {
     foreach my $terminal (@terms) {
         $return .= "================[ " . join(" -- ", @{$terminal->{termnames}}, $terminal->{term_descr} || '') .
                     " ]================\n";
-        if ($terminal->{alias}) {
-            #printf "%20s   %s\n\n", "alias of", $terminal->{alias};
+        if (exists $terminal->{alias}) {
+            $return .= sprintf "%20s   %s\n\n", "alias of", $terminal->{alias};
             next;
         }
 

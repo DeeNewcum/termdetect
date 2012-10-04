@@ -4,7 +4,7 @@
 #
 # See termmatch.md for more info.
 
-vte|libVTE - used in GNOME Terminal etc,
+vte|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
     m_c1=%x+3,
     m_cancel=%x+4,
     m_esc=%x+5,

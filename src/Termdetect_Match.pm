@@ -27,7 +27,7 @@ sub match_results {
     my $highest_match;
     my $highest_match_numyes = 0;
     while (my ($term, $stats) = each %$match_stats) {
-        if (!exists $stats->{n} && $stats->{y} > $highest_match_numyes) {
+        if (!exists $stats->{n} && defined($stats->{y}) && $stats->{y} > $highest_match_numyes) {
             $highest_match_numyes = $stats->{y};
             $highest_match = $term;
         }
@@ -50,6 +50,8 @@ sub calculate_match_statistics {
 
     foreach my $termmatch_entry (values %$termmatch_db) {
         my $termname = $termmatch_entry->{termnames}[0];
+
+        next if (exists $termmatch_entry->{alias});     # skip aliases, we'll only process canonical names
 
         my $check_this = (exists $::ARGV{check} &&
                 ($::ARGV{check} eq '1' || $::ARGV{check} eq $termname));

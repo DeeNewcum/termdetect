@@ -20,7 +20,7 @@
 #
 # Caveat:   Some specific terminals add a lot of latency, just in ANSI-sequence handling.
 #           Specific ones that seem to do this:
-#                   vte     --  actually varies a lot, but an average of 10ms
+#                   libvte  --  response time actually varies considerably, but an average of 10ms
 #
 # Caveat:   Any user input while termping is running causes missed pings.
 #           The reason for this is unclear.  It needs to be investigated and fixed if possible.
