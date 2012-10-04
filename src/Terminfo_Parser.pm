@@ -96,11 +96,11 @@ sub _parse_terminfo  {
         our $is_continuation;
         $lines[$lineno] =~ m{
               ^ \# .*           # ignore comment lines
-            | ^ \h* $           # ignore blank lines
-            | ^( \h* )
+            | ^ \s* $           # ignore blank lines
+            | ^( \s* )
                                     (?{ $is_continuation = length $^N    })
                 (?:
-                    (?! \h )
+                    (?! \s )
                     ((?:  \\\d\d\d  |  [\\^][^\n]  |  [^,\\^\n=\#]  )+)
                        #  ^^^^^^^^     ^^^^^^^^     ^^^^^^^^^^^    various escape codes
                                     (?{ local $field{capability} = $^N   })
@@ -110,7 +110,7 @@ sub _parse_terminfo  {
                          | \# (\d+)
                                     (?{ local $field{num} = $^N    })
                          )?
-                    , \h*  
+                    , \s*  
                                     (?{ push(@fields, {%field})   })
                 )+ $
         }x

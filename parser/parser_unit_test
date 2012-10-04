@@ -149,9 +149,9 @@ sub unittest_terminfo {
 
     # report the final status of the testing
     if ($num_errors) {
-        print "Total number of errors: $num_errors\n";
+        print STDERR "Total number of errors: $num_errors\n";
     } else {
-        print "No errors!  All tests passed.\n"
+        print STDERR "No errors!  All tests passed.\n"
     }
 }
 
