@@ -62,7 +62,9 @@ sub calculate_match_statistics {
             my $test_result = $test_results->{$cap};
 
             next if ($cap =~ /^c_/);
-
+            next if ($Termdetect_Tests::rarely_tested_synthetics{$cap} &&
+                        !exists $termmatch_entry->{fields}{$cap});
+            
             printf "\t%-20s  ", $cap            if $check_this;
             $pass_fail_count{$termname}{total}++;
             if (exists $termmatch_entry->{fields}{$cap}) {

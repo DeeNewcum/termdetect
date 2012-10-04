@@ -107,15 +107,8 @@ sub show_snapshot {
         push @$list, '%+',          # lowest priority:  match a non-empty string
     }
     # s_* values that we don't *usually* test against   (we can though, if it's useful for that terminal)
-    my %ignored_synthetics = map {$_ => 1} qw(
-            s_font_size
-            s_screen_size
-            s_window_icon_label
-            s_window_pos
-            s_window_title
-        );
     foreach my $cap (sort keys %$test_results) {
-        next if $ignored_synthetics{$cap};
+        next if $Termdetect_Tests::rarely_tested_synthetics{$cap};
         my $r = summarize_result($test_results->{$cap});
         foreach my $gen (@{ $generalizations{$cap} }) {
             if (Termdetect_Match::match_one_field($test_results->{$cap}, {assign => $gen})) {

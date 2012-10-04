@@ -41,6 +41,16 @@ package Termdetect_Tests;
     # globals
     our @read_queue;
 
+    # synthetic capabilities that are rarely tested against
+    our %rarely_tested_synthetics = map {$_ => 1} qw(
+            s_font_size
+            s_screen_size
+            s_window_icon_label
+            s_window_pos
+            s_window_title
+        );
+
+
 
 
 # returns a data structure with the results of running the tests
