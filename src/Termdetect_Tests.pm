@@ -321,6 +321,10 @@ sub do_queued_async_reads {
 sub calculate_derived_values {
     my ($all_results) = @_;
 
+    if ($all_results->{r_window_size_char}{received}) {
+        my (undef, $ch_y, $ch_x) = ansi_params($all_results->{r_window_size_char}{received});
+        $all_results->{s_window_size}{received} = "$ch_x x $ch_y";
+    }
     my ($fontsize_x, $fontsize_y);
     if ($all_results->{r_window_size_px}{received} && $all_results->{r_window_size_char}{received}) {
         my (undef, $px_y, $px_x) = ansi_params($all_results->{r_window_size_px}{received});
@@ -328,7 +332,7 @@ sub calculate_derived_values {
         #print Dumper [$ch_x, $ch_y];
         $fontsize_x = int($px_x / $ch_x);
         $fontsize_y = int($px_y / $ch_y);
-        $all_results->{s_font_size}{received} = "${fontsize_x}x${fontsize_y}";
+        $all_results->{s_font_size}{received} = "$fontsize_x x $fontsize_y";
     }
     if ($all_results->{r_window_size_px}{received} && $all_results->{r_window_size_char}{received} &&
             $all_results->{r_screen_size}{received}) {
@@ -344,12 +348,12 @@ sub calculate_derived_values {
         # based on the greatest-common-factor for resolution widths and heights.
         $s_x = round_up($s_x, 8);
         $s_y = round_up($s_y, 4);
-        $all_results->{s_screen_size}{received} = "${s_x}x${s_y}";
+        $all_results->{s_screen_size}{received} = "$s_x x $s_y";
     }
     if ($all_results->{r_window_pos}{received}) {
         my (undef, $p_x, $p_y) = ansi_params($all_results->{r_window_pos}{received});
                     # ^^^^^^ is this backwards?  This is what libVTE uses, but it seems backwards.
-        $all_results->{s_window_pos}{received} = "${p_x}x${p_y}";
+        $all_results->{s_window_pos}{received} = "$p_x x $p_y";
     }
     if (($all_results->{r_window_title}{received} || '') =~ /^\e\]l(.*)\e\\$/) {
         $all_results->{s_window_title}{received} = $1;

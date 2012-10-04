@@ -64,7 +64,26 @@ if ($ARGV{snapshot}) {
 
 } else {
     if (defined($term)) {
-        print "$term\n";
+        if ($ARGV{t}) {
+            print "$term\n";
+        } else {
+            my @fields = (
+                    ['terminal',            $term],
+                    ['version',             $test_results->{s_term_version}],
+                    ['terminal size',       $test_results->{s_window_size}],
+                    ['font size',           $test_results->{s_font_size}],
+                    ['window position',     $test_results->{s_window_pos}],
+                    ['screen size',         $test_results->{s_screen_size}],
+            );
+            foreach my $field (@fields) {
+                next unless defined($field->[1]);
+                my $disp = $field->[1];
+                if (ref($disp) eq 'HASH' && exists $disp->{received}) {
+                    $disp = $disp->{received};
+                }
+                printf "%20s:   %s\n", $field->[0], $disp;
+            }
+        }
     } else {
         print STDERR "No \$TERM matched.  Run again with --check for more information.\n";
         print "$ENV{TERM}\n"        if ($ARGV{t});      # pass through the existing terminal

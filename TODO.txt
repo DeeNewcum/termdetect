@@ -7,14 +7,11 @@
 
 ==== command-line argument processing ====
 
-    - by default (when the -t flag isn't used, etc), display more information:
-            - the matching $TERM
-            - the version  (if available)
-            - the stuff listed below:
-                - current character encoding
-                - current font size
-                - current screen size
-                - current window title
+- in the default (long) display, show:
+
+    - terminal version  (if available)
+    - current character encoding
+
 
 
 
