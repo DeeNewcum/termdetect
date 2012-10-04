@@ -177,12 +177,5 @@ termdetect
             Similar to --snapshot, but tends to give a little more data.
 
     --result=<test_id>
-            Display the result of a single test.  Some test that are more useful for this are:
-                    s_term_version
-                    s_char_encoding
-                    s_font_size
-                    s_screen_size
-                    s_window_title
-                    s_window_icon_label
-                    r_enquiry
-
+            Display the result of a single test.  To get a list of test_ids you can use, run
+            termdetect --dump

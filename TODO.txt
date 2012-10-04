@@ -9,32 +9,18 @@
   we need a way to specify which "fallback" $TERM setting to use, that *does* match ncuses terminfo
 
 
+
+
+- possibly calculate the s_window_size in other ways:
+        - Term::ReadKey::GetTerminalSize()
+        - see "TIOCGWINSZ" in the source for IO::Tty
+        - `stty size`
+
+
 ==== command-line argument processing ====
 
 - in the default (long) display, show:
     - current character encoding
-
-
-- create a flag that enables "show me the results of a single test" mode, where it doesn't try
-  to do term-matching, but rather gives the output of a single test.
-
-  In the documentation, note that useful tests to use this with are:
-
-            - current character encoding
-
-            - current terminal size
-                    (use Term::ReadKey::GetTerminalSize())
-                    (or see "TIOCGWINSZ" in the source for IO::Tty)
-
-            - current font size   (only available if the terminal supports getting the terminal size in pixels)
-
-            - current screen size
-                    - this requires some estimation, based on the font size
-                    - note that most computer screens are either 4:3 or 16:9.
-                                (16:10 can go jump off a cliff)
-                      If you play around with the math a little, you realize you can just round
-                      the width to the nearest 20, and the height to the nearest 15, and you'll 
-                      probably be spot-on)
 
 
 
