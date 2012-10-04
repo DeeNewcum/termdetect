@@ -209,6 +209,9 @@ Some tests have custom code written for each test.  Their behavior may be more c
 <tr><th>capability name
     <th>description
 
+<tr><td><tt>s_ff_clears
+    <td>"true" or "false", Whether the form-feed character (^L) clears the screen.
+
 <tr><td><tt>s_term_version
     <td>The specific version number of the terminal.  See also <tt>c_version_decimalplaces</tt>.
 

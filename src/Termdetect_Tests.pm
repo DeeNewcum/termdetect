@@ -76,6 +76,8 @@ sub perform_all_tests {
     run_and_store_test(m_sub                => "\e[?\x1A");
     run_and_store_test(m_esc                => "\e[?\eK");
 
+    synthetic__ff_clears();
+
 
     if (0) {
         ################# things that haven't been given a test_id yet ###############
@@ -119,6 +121,36 @@ sub perform_all_tests {
     return \%all_results;
 }
 
+
+##########################################################################################
+##################################[ synthetic tests ]#####################################
+##########################################################################################
+
+
+# s_ff_clears -- does the form-feed character (^L) clear the screen?
+sub synthetic__ff_clears {
+    output("\r\e[K");           # clear any gibberish that might be on this line, since we're dropping down a line
+    output("\n");               # move a line first, to make sure we're not on the top line
+    run_test("\x0c",
+        sub {
+            my ($test_result) = @_;
+            our %all_results;           # pull this in from the 'local'ized copy in perform_all_tests()
+
+            # did we move up one or more lines?
+            $all_results{s_ff_clears}{received} =
+                    (($test_result->{y_delta} || 0) < 0) ? 'true' : 'false';
+
+            if ($all_results{s_ff_clears}{received} eq 'false') {
+                # if the screen wasn't cleared, move back up one line
+                output("\e[A");
+            }
+        });
+}
+
+
+##########################################################################################
+##################################[ standard tests ]######################################
+##########################################################################################
 
 # We use the cursor-position report a lot...   if that doesn't work, then things will get hung up
 # and take way too long.
