@@ -8,6 +8,10 @@
 #
 #           ATYPICAL MOTION IN ATYPICAL LOCATIONS
 #
+#
+# Before running this, you should install the LastResort font:
+#       http://unicode.org/policies/lastresortfont_eula.html
+# otherwise unrecognized characters will appear as double-wide characters.
 
     use strict;
     use warnings;
@@ -49,6 +53,13 @@ my %avoid_chars = map {$_ => 1} (
         "\x0E",     # shift out -- can change the encoding the terminal uses
         "\x0F",     # shift in -- can change the encoding the terminal uses
         "\x10",     # DLE (data link escape) -- can cause the following characters to be interpretted differently
+
+        # permanently invalid chars
+        "\x{DFFE}",      "\x{DFFF}",
+        "\x{FDFE}",      "\x{FDFF}",
+        "\x{FFFE}",      "\x{FFFF}",
+        "\x{FFFFE}",    "\x{FFFFF}",
+        "\x{10FFFE}",  "\x{10FFFF}",
     );
 
 my $generator = utf8_generator();
@@ -56,40 +67,55 @@ while (defined(my $char = $generator->())) {
     #next if ($char lt "\x20");
     next if ($avoid_chars{$char});
 
-    select undef, undef, undef, 0.010;       # some terminals seem to need a very small delay
+    #select undef, undef, undef, 0.010;       # some terminals seem to need a very small delay
+    #select undef, undef, undef, 0.1;       # others (eg. VTE) tend to need a larger delay
 
-    #select undef, undef, undef, 0.1;       # VTE does some strange/slow buffering
-                # is it because it's writing them to disk?
-                #       http://www.climagic.org/bugreports/libvte-scrollback-written-to-disk.html
-        # Scratch that, DON'T USE VTE for this test...  it's weird and slow.
+    #select undef, undef, undef, 0.200;       # some terminals seem to need a very small delay
 
 
-    #output("\r  ");         # jump to two characters from the left side of the screen
-    output("\e[1;3H");      # jump to the first line, third column
-    run_test("K${char}K", sub {
-            my ($test_result) = @_;
-            if (($test_result->{x_delta} || 1) != 3 || ($test_result->{y_delta} || 0) != 0) {
-                check_stuck_negative_problem($test_result->{x_delta} || 0, $test_result->{y_delta} || 0, $char);
-                    
-                if (0) {
-                    output("\e[u");         # restore the cursor position
+    my $done = 0;
 
-                    printf STDERR "\r%-12s  %s\n",
-                        sprintf("\\x{%x}", ord($char)),
-                        summarize_deltas($test_result);
+    while (!$done) {
 
-                    output("\e[s");         # save the cursor position
+        #output("\r  ");         # jump to two characters from the left side of the screen
+        output("\e[1;3H");      # jump to the first line, third column
+        run_test("K${char}K", sub {
+                my ($test_result) = @_;
+
+                # (0,0) happens JUST before the stuck-negative problem...  if it happens, then retry
+                if (($test_result->{x_delta} || 0) == 0 && ($test_result->{y_delta} || 0) == 0) {
+                    read_ansi_reply(0.2, 'R');      # do an extra read, to clear the loss-of-sync problem
+                    #print LOG "retrying\n";
+
+                    $done = 0;
+                    return;
                 }
 
-                printf LOG "\r%-12s  %s\n",
-                    sprintf("\\x{%x}", ord($char)),
-                    summarize_deltas($test_result);
-            }
-        },
-        0.5);
+                $done = 1;      # don't retry
+
+                if (($test_result->{x_delta} || 1) != 3 || ($test_result->{y_delta} || 0) != 0) {
+                    check_stuck_negative_problem($test_result->{x_delta} || 0, $test_result->{y_delta} || 0, $char);
+                        
+                    if (0) {
+                        output("\e[u");         # restore the cursor position
+
+                        printf STDERR "\r%-12s  %s\n",
+                            sprintf("\\x{%x}", ord($char)),
+                            summarize_deltas($test_result);
+
+                        output("\e[s");         # save the cursor position
+                    }
+
+                    printf LOG "%-12s  %s\n",
+                        sprintf("\\x{%x}", ord($char)),
+                        summarize_deltas($test_result);
+                }
+            },
+            0.5);
+    }
 
 
-    last if ($char gt "\x{5FF}");
+    #last if ($char gt "\x{5FF}");
 }
 
 output("\r\e[K");
@@ -248,6 +274,7 @@ sub read_ansi_reply {
     die $@ if ($@ && $@ ne "alarm\n");                                                               
     alarm 0;                                                                                         
     print "read response:  ", ansi_escape($reply), "\n"     if ($DEBUG);                             
+    die "received XOFF\n"   if ($reply =~ /[\x13\x11]/);
     return $reply;                                                                                   
 }    
 
