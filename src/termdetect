@@ -164,7 +164,7 @@ termdetect
 
     --nose
             "No Side Effects".  Doesn't run tests that may have side-effects.
-            Gibberish may still be displays on your screen, but they will be (mostly) erased
+            Gibberish may still be displayed on your screen, but they will be (mostly) erased
             before exiting.  Most tests don't have side-effects, so using this option doesn't
             greatly reduce the chances of correctly identifying your terminal.
 
@@ -174,7 +174,7 @@ termdetect
 
     --dump
             Dumps the result of all tests run.
-            Similar to --snapshot, but tends to give a little more data.
+            Similar to --snapshot, but gives a little more detailed information.
 
     --result=<test_id>
             Display the result of a single test.  To get a list of test_ids you can use, run

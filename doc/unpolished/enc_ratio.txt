@@ -1,8 +1,0 @@
-The main goal is to find varations in the ratio:
-
-    (number of bytes sent) : (number of spaces the cursor moves)
-
-Things like tabs (more than one spaces horizontally) or newlines (*vertical* movement) would
-*seem* like a good idea.  Unfortunately, these are usually in the 0x00 - 0x7F range.
-
-What WOULD be useful is if any of these "atypical cursor movement characters" can be found outside the lower-128 range.
