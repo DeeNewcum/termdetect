@@ -15,8 +15,11 @@ Percent codes may sometimes look like termcap entries, but they have completely 
 
 <table>
 
-<tr><td><tt>%x+[0-9]
-    <td>The terminal responded by moving the cursor right N positions. (often because it printed some characters)
+<tr><td><tt>%x[-+][0-9]
+    <td>The terminal responded by moving the cursor right N positions, often because it printed some characters.  (+x is right, -x is left)
+
+<tr><td><tt>%y[-+][0-9]
+    <td>The terminal responded by moving the cursor down N positions.  (+y is down, -y is up)
 
 <tr><td><tt>%*
     <td>Matches zero or more of *any* character.   (it's not a regexp, so you don't have to put anything like a "%." in front)
@@ -25,7 +28,7 @@ Percent codes may sometimes look like termcap entries, but they have completely 
     <td>Matches one or more of *any* character.  (it's not a regexp, so you don't have to put anything like a "%." in front)
 
 <tr><td><tt>%%
-    <td>a way to specify just the "%" character
+    <td>A literal "%"
 
 </table>
 
@@ -155,7 +158,7 @@ There are three main ways that a terminal emulator chooses to respond to an ANSI
 
 We can detect group #3 by watching for cursor movement, using the CPR (cursor position report) sequence.
 
-Group #3 happens because there is no standard or agreement on the format of all possible ANSI sequences.  Terminal programmers want to be conservative and not hide anything that was intended to be displayed.  (okay, there is [this carefully-researched document describing the DEC VT500 behavior](http://www.vt100.net/emu/dec_ansi_parser), but it isn't very well-known.  Also, VT500-compatibility may not be the highest priority)
+Group #3 happens because there is no standard or agreement on the format of all possible ANSI sequences.  Terminal programmers want to be conservative and not hide anything that was intended to be displayed.  (actually, there is [this carefully-researched document describing the DEC VT500 behavior](http://www.vt100.net/emu/dec_ansi_parser), but not enough people know about it)
 
 <table>
 
@@ -213,21 +216,26 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <td>Does the form-feed character (^L) clear the screen?  ("true" or "false")
 
 <tr><td><tt>s_term_version
-    <td>The specific version number of the terminal.  See also <tt>c_version_decimalplaces</tt>.
+    <td>The specific version number of the terminal.  Not available on all terminals.
 
 <tr><td><tt>s_window_title
-    <td>Only available on terminals that support <tt>r_window_title</tt>.
+    <td>Not available on all terminals.
 
 <tr><td><tt>s_char_encoding
     <td>The current character-encoding setting.
 
+<tr><td><tt>s_window_size
+    <td>The size of the terminal, in characters.  Not available on all terminals.
+
 <tr><td><tt>s_font_size
-    <td>Useful mainly for <tt>--results</tt>.  The size of each character, in pixels.  The format is "width x height".  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt>.
+    <td>The size of each character, in pixels.  Not available on all terminals.
 
 <tr><td><tt>s_screen_size
-    <td>Useful mainly for <tt>--results</tt>.  The size of the screen, in pixels.  Only available on terminals that support <tt>r_window_size_px</tt> and <tt>r_window_size_char</tt> and <tt>r_screen_size</tt>.
+    <td>The size of the screen, in pixels.  Not available on all terminals.  Note that this is a guesstimate, and it's sometimes off by a small amount.  Generally, the smaller your font, the more accurate this is.
 
 </table>
+
+All sizes are given in "width x height".
 
 ### References
 

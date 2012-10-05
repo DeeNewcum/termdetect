@@ -1,9 +1,3 @@
-- with rxvt-unicode, there is uningested data that gets dumped out at the command-line afterwards...
-  we need to figure out what's going on here
-
-        - it appears to be happening on the 'm_sub' test
-
-
 
 - for terminal entries that don't match up exactly with the $TERM names in the ncurses terminfo,
   we need a way to specify which "fallback" $TERM setting to use, that *does* match ncuses terminfo
@@ -21,6 +15,20 @@
 
 - in the default (long) display, show:
     - current character encoding
+
+
+
+==== small or medium problems with specific terminals ====
+
+- with rxvt-unicode, there is uningested data that gets dumped out at the command-line afterwards...
+  we need to figure out what's going on here
+
+        - it appears to be happening on the 'm_sub' test
+
+
+- in Putty, the tests turn off the cursor, even when --nose is used.  We need to find the offending
+  test, and disable it under --nose.
+
 
 
 
