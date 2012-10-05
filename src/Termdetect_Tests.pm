@@ -218,7 +218,7 @@ sub run_and_display_test {
 }
 
 
-# From the outside, this routine merely sense an ANSI query, and reads the reply.
+# From the outside, this routine merely sends an ANSI query, and reads the reply.
 # Internally though, we do it a somewhat fairly sophisticated way.  We surround the request with a
 # CPR queries both before and after, which means that 1) we know if the query caused the cursor
 # to move, and 2) if the terminal doesn't send any reply at all, we know that too, without having

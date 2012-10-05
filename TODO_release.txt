@@ -6,10 +6,6 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
-    - move the version-number-formatting into Perl-code only...  remove the c_*
-      capabilities, and instead have some custom bit of code for each terminal, that
-      converts the DA2-number into a formatted version number
-
     - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
         and have it include a setting for $LANG  (but only if the character coding was detected)
 
@@ -18,9 +14,7 @@ The goal of this is to get some possible feedback about the use-cases.
         - detect whether UTF8 is in use or not
                 (the rest of the character encoding is too complicated for now)
 
-        - version number ...?
-
-        
+    - FATPACK it
 
     - distribute it somewhat widely:
             - post it on Facebook
@@ -32,8 +26,6 @@ The goal of this is to get some possible feedback about the use-cases.
 ##############################[ beta release ]##################################
 ################################################################################
 
-- use App:FatPacker on it
+- add more terminals to the termmatch database
 
-- add a BUNCH more terminals to the termmatch database
-
-- implement more character encoding detection?
+- try to address the "variance" issues

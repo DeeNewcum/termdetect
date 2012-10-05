@@ -1,0 +1,311 @@
+#!/usr/bin/perl
+
+# this outputs UTF-8 characters to the terminal, and determines if they cause any movement other
+# than X+1
+#
+#
+# This is the first step towards the goal of finding:
+#
+#           ATYPICAL MOTION IN ATYPICAL LOCATIONS
+#
+
+    use strict;
+    use warnings;
+
+    use utf8;
+    use charnames ();
+    #use feature 'unicode_strings';
+    use Encode qw[encode decode];
+    require bytes;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+    our $DEBUG = 0;
+
+
+open LOG, '>', "log"        or die $!;
+
+select LOG;
+$| = 1;
+select STDOUT;
+
+cooked_mode();
+
+binmode STDERR, ":utf8";
+binmode STDOUT, ":utf8";
+
+
+output("\e[2;1H");      # jump to the second line
+output("\e[s");         # save the cursor position
+
+my %avoid_chars = map {$_ => 1} (
+        #"\x06",
+        #"\x0a",
+        #"\x0b",  "\x0c", "\x0d",
+        #"\x12", "\x13",
+        #"\x1e",  "\x1f",
+        #"\x22",
+        "\x0E",     # shift out -- can change the encoding the terminal uses
+        "\x0F",     # shift in -- can change the encoding the terminal uses
+        "\x10",     # DLE (data link escape) -- can cause the following characters to be interpretted differently
+    );
+
+my $generator = utf8_generator();
+while (defined(my $char = $generator->())) {
+    #next if ($char lt "\x20");
+    next if ($avoid_chars{$char});
+
+    select undef, undef, undef, 0.010;       # some terminals seem to need a very small delay
+
+    #select undef, undef, undef, 0.1;       # VTE does some strange/slow buffering
+                # is it because it's writing them to disk?
+                #       http://www.climagic.org/bugreports/libvte-scrollback-written-to-disk.html
+        # Scratch that, DON'T USE VTE for this test...  it's weird and slow.
+
+
+    #output("\r  ");         # jump to two characters from the left side of the screen
+    output("\e[1;3H");      # jump to the first line, third column
+    run_test("K${char}K", sub {
+            my ($test_result) = @_;
+            if (($test_result->{x_delta} || 1) != 3 || ($test_result->{y_delta} || 0) != 0) {
+                check_stuck_negative_problem($test_result->{x_delta} || 0, $test_result->{y_delta} || 0, $char);
+                    
+                if (0) {
+                    output("\e[u");         # restore the cursor position
+
+                    printf STDERR "\r%-12s  %s\n",
+                        sprintf("\\x{%x}", ord($char)),
+                        summarize_deltas($test_result);
+
+                    output("\e[s");         # save the cursor position
+                }
+
+                printf LOG "\r%-12s  %s\n",
+                    sprintf("\\x{%x}", ord($char)),
+                    summarize_deltas($test_result);
+            }
+        },
+        0.5);
+
+
+    last if ($char gt "\x{5FF}");
+}
+
+output("\r\e[K");
+
+
+
+
+# produce a nice human-readable version of the deltas
+sub summarize_deltas {
+    my ($test_result) = @_;
+    return sprintf "(%d, %d)",
+                ($test_result->{x_delta} || 0),
+                ($test_result->{y_delta} || 0);
+}
+
+
+
+# generates all possible Unicode characters
+# see "Higher-Order Perl" chapter 4 for more info about generators
+sub utf8_generator {
+                use Unicode::UCD;
+    my $cur_char = -1;
+    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
+    my $cur_range_end = -2;
+    return sub {
+        if ($cur_char > $cur_range_end) {
+            return undef unless @blocks;        # we're all done!
+            ($cur_char, $cur_range_end) = @{ shift @blocks };
+        }
+        return chr($cur_char++);
+    }
+}
+
+
+
+# read_phase() is used by the main program to make asynchronous reads possible...   here, we
+# aren't going to use them, so force it to be synchronous
+sub read_phase(&) { shift()->(); }
+
+
+# From the outside, this routine merely sends an ANSI query, and reads the reply.                    
+# Internally though, we do it a somewhat fairly sophisticated way.  We surround the request with a   
+# CPR queries both before and after, which means that 1) we know if the query caused the cursor      
+# to move, and 2) if the terminal doesn't send any reply at all, we know that too, without having    
+# to do any waiting.                                                                                 
+sub run_test {                                                                                       
+    my ($sequence, $cps, $timeout) = @_;                                                             
+    $cps ||= sub{};     # CPS = continuation-passing style                                           
+    $timeout = 2.0  unless defined($timeout);       # in floating-point seconds                      
+                                                                                                     
+    my $test_result = {                                                                              
+        sent => $sequence,                                                                           
+    };                                                                                               
+                                                                                                     
+    if ($sequence =~ /^(?:\e\[|\x9B)\??6n$/) {                                                       
+        # run_test() isn't designed to work with a Cursor Position Report command.  This is because  
+        # it uses a CPR-reply as a way to know when to stop reading.                                 
+        #                                                                                            
+        # When we're asked to do a CPR sequence, we'll revert to much dumbed-down behavior instead.  
+                                                                                                     
+        output("\r", $sequence,                                                                      
+              "\e[5n");      # add a DSR (device status report) to the end, so we can at least       
+                            # quickly determine a non-response                                       
+                                                                                                     
+        read_phase {                                                                                 
+            my $reply = read_ansi_reply($timeout, 'n');                                              
+            $reply =~ s/\e\[\d+n$//s;                                                                
+                                                                                                     
+            $test_result->{received} = $reply;                                                       
+            @_ = $test_result;  goto &$cps;       # continuation-passing style                       
+        };                                                                                           
+        return;                                                                                      
+    }                                                                                                
+                                                                                                     
+    output("\r", "\e[6n", $sequence, "\e[6n");      # send a CPR (cursor position report) before and after
+    #debug_show_remaining_input();                                                                   
+                                                                                                     
+    read_phase {                                                                                     
+        my $replies = '';                                                                            
+        my $start = time();                                                                          
+        while (1) {                                                                                  
+            $replies .= read_ansi_reply($timeout, 'R') || last;                                      
+                                                                                                     
+            if ($replies =~ /.*\e\[(\d+);(\d+)R(.*)\e\[(\d+);(\d+)R/s) {                             
+                $test_result->{x_delta}  = $5 - $2     if ($5 - $2);                                 
+                $test_result->{y_delta}  = $4 - $1     if ($4 - $1);                                 
+                $test_result->{received} = $3;                                                       
+                                                                                                     
+                @_ = $test_result;  goto &$cps;    # continuation-passing style                      
+            }                                                                                        
+                                                                                                     
+            last if (time() - $start > $timeout);                                                    
+        }                                                                                            
+        $replies =~ s/^.*?\e\[\d+;\d+R//s;                                                           
+        $test_result->{received} = $replies;                                                         
+        @_ = $test_result;  goto &$cps;    # continuation-passing style                              
+    };                                                                                               
+}    
+
+
+
+
+sub output {                                                                                         
+    print "sending: ", ansi_escape(join "", @_), "\n"       if ($DEBUG);                             
+    print STDERR @_;                                                                                 
+}     
+
+
+# Gets an ANSI response, reading only as many characters as necessary, and waiting only as long      
+# as necessary.                                                                                      
+#                                                                                                    
+# $timeout                                                                                           
+#       Seconds to wait for a reply.  Use 0 for no timeout.                                          
+#                                                                                                    
+# $response_end_character                                                                            
+#       If we see this character, we know the response is finished.                                  
+#                                                                                                    
+#       Special values:                                                                              
+#           - empty string -- means "read one buffer's worth of data".                               
+#           - undef -- means "there is no specific end-character...  read until timeout              
+#           - regexp reference -- match several characters, not just one                             
+#                   (use the "qr" quote-like operator)                                               
+sub read_ansi_reply {                                                                                
+    my ($timeout,                                                                                    
+        $response_end_character) = @_;                                                               
+                                                                                                     
+    $timeout = 1.0 unless defined($timeout);                                                         
+                                                                                                     
+    my $reply = '';                                                                                  
+    eval {                                                                                           
+        local $SIG{ALRM} = sub { die "alarm\n" };                                                    
+        alarm($timeout)     if ($timeout != 0);                                                      
+                                                                                                     
+        if (defined($response_end_character) && $response_end_character eq '') {                     
+            # an empty-string means "read everything that's in the buffer"...  this assumes that     
+            # the response will be sent all-at-once, and that there will be a slight timegap in between
+            # the response and anything else the terminal sends to us                                
+            my $numchars = sysread(STDIN, $reply, 1024);                                             
+            $reply = substr($reply, 0, $numchars);                                                   
+        } else {                                                                                     
+            while (1) {                                                                              
+                if (defined(my $c = getc())) {                                                       
+                    #print ".";                                                                      
+                    $reply .= $c;                                                                    
+                    if (defined($response_end_character)) {                                          
+                        if (ref($response_end_character) eq 'Regexp') {                              
+                            last if ($reply =~ $response_end_character);                             
+                        } else {                                                                     
+                            last if ($c eq $response_end_character);                                 
+                        }                                                                            
+                    }                                                                                
+                }                                                                                    
+            }                                                                                        
+        }                                                                                            
+    };                                                                                               
+    die $@ if ($@ && $@ ne "alarm\n");                                                               
+    alarm 0;                                                                                         
+    print "read response:  ", ansi_escape($reply), "\n"     if ($DEBUG);                             
+    return $reply;                                                                                   
+}    
+
+
+# put the terminal in cooked mode   (and make sure it gets changed back before the program exits)    
+sub cooked_mode {                                                                                    
+    ## cooked mode, echo off                                                                         
+    #Term::ReadKey::ReadMode(2);                                                                     
+    system 'stty', '-icanon', '-echo', 'eol', "\001";                                                
+    $|++;                                                                                            
+                                                                                                     
+    eval q{                                                                                          
+        END {                                                                                        
+            ## reset tty mode before exiting                                                         
+            #Term::ReadKey::ReadMode(0);                                                             
+            system 'stty', 'icanon', 'echo', 'eol', chr(0);                                          
+        }                                                                                            
+    };                                                                                               
+}          
+
+
+# The stuck-negative problem is where, after a certain point, ALL responses come back the same:
+# they're all (-3, 0) or (-4, 0) after a certain point.  What's odd is that this point changes
+# every time you run the program.  It also varies a lot across terminals.
+# 
+# Terminals this happens on include:
+#       - libvte
+#       - konsole
+#       - aterm  (though it doesn't/can't support unicode)
+#       - putty
+#
+# Terminals that definitely don't have this problem:
+#       - urxvt
+
+BEGIN {
+    my $last_xdelta = 0;
+    my $last_ydelta = 0;
+    my $rle_start_char = '';
+    my $rle_count = 0;
+    sub check_stuck_negative_problem {
+        my ($x_delta, $y_delta, $character) = @_;
+        if ($x_delta == $last_xdelta && $y_delta == $last_ydelta) {
+            $rle_count++;
+
+            if ($rle_count > 10 && $last_ydelta == 0 && $x_delta <= -2) {
+                print "\r\e[K";
+                select undef, undef, undef, 0.1;
+                die sprintf("stuck on ($x_delta, $y_delta) starting at \\x{%X}\n    (run it again, it will probably get stuck at a different place)\n", ord($character));
+            }
+        } else {
+            $last_xdelta = $x_delta;
+            $last_ydelta = $y_delta;
+            $rle_start_char = $character;
+            $rle_count = 0;
+        }
+    }
+}
+
+
+# display a string to the user, via `xxd`
+sub xxd {Encode::_utf8_off(my$str=shift);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}
