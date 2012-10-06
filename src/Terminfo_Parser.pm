@@ -1,13 +1,7 @@
 # A Perl-based parser for the terminfo source format.
 #
-# See unit tests in parser/terminfo_parser -- we tested this somewhat well against the original
-# tic parser.
-
-
-# TODO:
-#       - this doesn't work on Perl 5.8...  figure out why it breaks...
-#               - I suspect it's partly because 5.8 doesn't support 
-#                 nested/re-entrant calls to the regexp engine
+# See unit tests in parser/parser_unit_test -- we tested this somewhat well against the original
+# tic(1) parser.
 
 
 package Terminfo_Parser;

@@ -2,7 +2,7 @@ The 'termmatch.src' file is the database of known terminals that termdetect uses
 
 ## Syntax
 
-Termmatch files have the *exact* same syntax as terminfo files, with only a few differences:
+Termmatch files have the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
 
 * capability names are different  (and often longer)
 * percent syntax is entirely different
@@ -152,8 +152,8 @@ Within termmatch files, "capabilities" can also be called "tests" — each refer
 
 There are three main ways that a terminal emulator chooses to respond to an ANSI code:
 
-1. SUPPORTED.  The code is minimally supported — the terminal changes a setting or moves the cursor, or does something in response.
-2. HIDDEN.  The code isn't supported at all, but the terminal recognizes it as ANSI code that another terminal would support, so it hides it from the user, but does nothing else with the code.
+1. SUPPORTED.  The code is at least minimally supported — the terminal changes a setting or moves the cursor, or does *something* in response.
+2. HIDDEN.  The code isn't supported at all, but at least the terminal recognizes it as ANSI code that another terminal would support, so it hides the escape sequence from the user, but does nothing else with it.
 3. DISPLAYED.  The code isn't supported.  Further, the terminal doesn't even recognize it as a legitimate ANSI code, and it displays some or all of the sequences's characters to the user.
 
 We can detect group #3 by watching for cursor movement, using the CPR (cursor position report) sequence.
@@ -216,30 +216,30 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <td>Does the form-feed character (^L) clear the screen?  ("true" or "false")
 
 <tr><td><tt>s_term_version
-    <td>The specific version number of the terminal.  Not available on all terminals.
+    <td>The specific version number of the terminal.†
 
 <tr><td><tt>s_window_title
-    <td>Not available on all terminals.
+    <td>†
 
 <tr><td><tt>s_char_encoding
     <td>The current character-encoding setting.
 
 <tr><td><tt>s_window_size
-    <td>The size of the terminal, in characters.  Not available on all terminals.
+    <td>The size of the terminal, in characters.†
 
 <tr><td><tt>s_font_size
-    <td>The size of each character, in pixels.  Not available on all terminals.
+    <td>The size of each character, in pixels.†
 
 <tr><td><tt>s_screen_size
-    <td>The size of the screen, in pixels.  Not available on all terminals.  Note that this is a guesstimate, and it's sometimes off by a small amount.  Generally, the smaller your font, the more accurate this is.
+    <td>The size of the screen, in pixels.†   Note that this is a guesstimate, and it's sometimes off by a small amount.  Generally, the smaller your font, the more accurate this is.
 
 </table>
 
 All sizes are given in "width x height".
 
-### References
+† Not available on all terminals.
 
-Documents referenced:
+### Documents referenced
 
 * vt102 — [VT102 User Guide, Appendix C](http://vt100.net/docs/vt102-ug/appendixc.html)
 * vt510 — [VT510 Video Terminal Programmer Information](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)

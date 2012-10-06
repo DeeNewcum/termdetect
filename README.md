@@ -2,7 +2,7 @@ The $TERM variable is handy because it gets passed between machines when you SSH
 
 What if don't just want things minimally working, but you want things to work *well*?
 
-Fortunately, there are [some request/reply ANSI sequences](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md) that give us bits of information about the terminal.  This program looks up the responses in a database of known terminals and finds the closest match.  This allows your remote machine to know *exactly* what terminal it's talking to.
+Fortunately, there are [some request/reply ANSI sequences](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) that give us bits of information about the terminal.  This program looks up the responses in a database of known terminals and finds the closest match.  This allows your remote machine to know *exactly* what terminal it's talking to.
 
     $ termdetect
                 terminal:   vte
