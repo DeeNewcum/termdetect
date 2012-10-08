@@ -12,7 +12,7 @@ The goal of this is to get some possible feedback about the use-cases.
     - detect whether UTF8 is in use or not
             (the rest of the character encoding is too complicated for now)
 
-    - release a patpacked version   (using src/Makefile)
+    - release a fatpacked version   (using src/Makefile)
 
     - distribute it somewhat widely:
             - post it on Facebook

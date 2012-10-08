@@ -17,6 +17,7 @@
 * ["Illegal and ambiguous sequences in use" on Wikipedia](http://en.wikipedia.org/wiki/ANSI_escape_code#Illegal_and_ambiguous_sequences_in_use)
 * "VT100 Magic", by Sami Tabih, Proceedings of the DEC Users Society, St. Louis, Missouri, May 1983  (referenced in vttest's "known bugs" section)
 * [Mosh discussion of UTF-8, and UTF8 + ISO2022 interactions](http://mosh.mit.edu/#techinfo)
+* [Soft hyphen (SHY) – a hard problem?](http://www.cs.tut.fi/~jkorpela/shy.html)
 
 ## General
 

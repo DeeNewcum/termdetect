@@ -139,6 +139,12 @@ sub perform_all_tests {
 
 
 # s_ff_clears -- does the form-feed character (^L) clear the screen?
+#
+# NOTE however, that some terminals will respond to FF by clearing the screen, but NOT moving the
+#       cursor back to (1,1).  What we're REALLY detecting here is moving the cursor back to
+#       (1,1), *not* whether the screen is cleared.
+#
+#       See:  http://www.aivosto.com/vbtips/control-characters.html#FF
 sub synthetic__ff_clears {
     return if ($::ARGV{'nose'});        # side effect: clears the screen
 

@@ -1,0 +1,150 @@
+#!/usr/bin/perl
+
+# search for character-encodings that meet specific criteria
+
+    use strict;
+    use warnings;
+
+    use utf8;
+    #use feature 'unicode_strings';
+    use Encode qw[encode decode];
+    require bytes;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+my $criteria = shift
+    or die "please specify a criteria to use\n";
+        # should be one of the criteria_* functions below
+
+my $criteria_func = $::{"criteria_$criteria"};
+die "criteria_${criteria}() not found\n"   unless defined($criteria_func);
+    
+    # a criteria function should:
+    #       - expect to be called only one time, and it should return a closure that will be called
+    #         from then on
+    #       
+    #       - the main closure will be called once for each new encoding.  It should return
+    #         *another* closure, hereby refered to as the "inner closure".
+    #
+    #               - if it instead returns undef, then the inner-closure won't (can't) be called,
+    #                 and instead the main closure does all the scanning it needs to, itself
+    #
+    #       - the inner closure will be called once for each character.  It should return
+    #         true/false to indicate whether to continue scanning the characters in this encoding.
+    #         (basically, false = "last")
+    #
+    #       - the inner closure will be called one last time, with an 'undef' for the character,
+    #         to indicate that we've finished scanning this particular encoding
+
+
+# run closure constructor
+$criteria_func = $criteria_func->();
+
+
+open STDERR, '>', '/dev/null';
+
+binmode(STDOUT, ':encoding(utf8)');
+
+my $ctr = 0;
+
+my $rot_encoding = rotator();
+
+foreach my $encoding (Encode->encodings(":all")) {
+    next if ($encoding eq 'null' || $encoding eq 'ascii-ctrl');     # these are special
+
+    #print "======== $encoding ========\n";
+    #display_encoding("======== $encoding ========");
+    #print "\r\e[4C", $rot_encoding->(), "\r";
+
+    my $inner_criteria_func = $criteria_func->($encoding);
+    next if (!defined($inner_criteria_func));
+
+    my $total_chars = 0;
+    my $generator = utf8_generator();
+    while (defined(my $char = $generator->())) {
+        next if (ord($char) < 256);
+
+        my $octets = eval { encode($encoding, my $c = $char, Encode::FB_QUIET) };
+
+        next if (defined($octets) && bytes::length($octets) == 0);      # there's no equivalent for this utf8 character
+
+        $total_chars++;
+
+        my $crit_ret = $inner_criteria_func->($char, $octets);
+        last if (!$crit_ret);        # return true to continue searching this encoding; false to stop
+    }
+
+    $inner_criteria_func->(undef);
+}
+
+
+sub no_utf {
+    Encode::_utf8_off(my $char = shift);
+    return $char;
+}
+
+
+sub display_encoding {
+    my ($encoding) = @_;
+
+    print "\e[s",           # save cursor
+          "\e[1;1f",        # move cursor to top-left
+          "\e[K",           # erase to end of line
+          $encoding,
+          "\e[u";           # restore cursor
+}
+
+
+exit;
+
+
+
+# generates all possible Unicode characters
+# see "Higher-Order Perl" chapter 4 for more info about generators
+sub utf8_generator {
+                use Unicode::UCD;
+    my $cur_char = -1;
+    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
+    my $cur_range_end = -2;
+    return sub {
+        if ($cur_char > $cur_range_end) {
+            return undef unless @blocks;        # we're all done!
+            ($cur_char, $cur_range_end) = @{ shift @blocks };
+        }
+        return chr($cur_char++);
+    }
+}
+
+
+# returns a generator
+sub rotator {
+    my $state = -1;
+    my @chars = qw( / - \ | );
+    $| = 1;
+    return sub {
+        $state = ($state + 1) % 4;
+        return $chars[$state];
+    };
+}
+
+
+sub criteria_C1 {
+    my $encoding_scanner = sub {
+        my ($encoding) = @_;
+
+        print "======== $encoding ========\n";
+
+        return undef;
+
+        my $char_scanner = sub {
+            my ($char, $octets) = @_;
+        };
+        return $char_scanner;
+    };
+    return $encoding_scanner;
+}
+
+
+# display a string to the user, via `xxd`
+sub xxd {my$str=shift;Encode::_utf8_off($str);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}    

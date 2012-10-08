@@ -4,3 +4,9 @@
         http://en.wikipedia.org/wiki/International_Components_for_Unicode
 
         (the ICU data is used by Perl itself, see: http://perldoc.perl.org/enc2xs.html )
+
+
+- the chart here:
+                http://www.aivosto.com/vbtips/control-characters.html#unicode
+  suggests that NBSP (non-breaking space) and SHY (soft hyphen) are special and not found in a ton
+  of encodings

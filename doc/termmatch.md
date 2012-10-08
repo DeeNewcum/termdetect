@@ -96,7 +96,7 @@ Within termmatch files, "capabilities" can also be called "tests" — each refer
     <td>ENQ, enquiry character
     <td><tt>\x05
     <td><tt>PUTTY
-    <td>c0_c1
+    <td>control
 
 <tr><td><tt>r_ext_cursor_pos
     <td>DECXCPR, extended cursor position report
@@ -170,7 +170,7 @@ Group #3 happens because there is no standard or agreement on the format of all 
 <tr><td><tt>m_c1
     <td>is the C1 character set supported?<br>C1-CSI version of erase to EOL
     <td><tt>\x9b0k
-    <td>c0_c1
+    <td>control
 
 <tr><td><tt>m_pad_null
     <td>padding
@@ -180,7 +180,7 @@ Group #3 happens because there is no standard or agreement on the format of all 
 <tr><td><tt>m_pad_c1
     <td>padding, C1 version
     <td><tt>\0200
-    <td>terminfo<br>c0_c1
+    <td>terminfo<br>control
 
 <tr><td><tt>m_null_inside
     <td>
@@ -245,6 +245,6 @@ All sizes are given in "width x height".
 * vt510 — [VT510 Video Terminal Programmer Information](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)
 * xterm — [Xterm Control Sequences](http://www.xfree86.org/current/ctlseqs.html)
 * all — [all-escapes.txt from bjh21 (Ben Harris)](http://bjh21.me.uk/all-escapes/all-escapes.txt)
-* c0_c1 — [wikipedia's article on "C0 and C1 control codes"](http://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_.28ASCII_and_derivatives.29)
+* control — [Control characters in ASCII and Unicode](http://www.aivosto.com/vbtips/control-characters.html#list_C0) [aivosto.com]
 * terminfo — [terminfo(5) man page](http://invisible-island.net/ncurses/man/terminfo.5.html)
 

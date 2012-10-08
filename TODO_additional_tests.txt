@@ -60,6 +60,10 @@
     - double-height mode
 
 
+- [control code]  all the C1 control codes
+        Right now, I only test the CSI and the C1 padding.  There are lots more to test:
+        http://www.aivosto.com/vbtips/control-characters.html#list_C1
+
 
 - [control code]  \n
         http://en.wikipedia.org/wiki/C0_and_C1_control_codes says that on "some terminal emulator",
