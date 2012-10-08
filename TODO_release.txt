@@ -9,12 +9,10 @@ The goal of this is to get some possible feedback about the use-cases.
     - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
         and have it include a setting for $LANG  (but only if the character coding was detected)
 
-    - things to finish before shipping:
+    - detect whether UTF8 is in use or not
+            (the rest of the character encoding is too complicated for now)
 
-        - detect whether UTF8 is in use or not
-                (the rest of the character encoding is too complicated for now)
-
-    - FATPACK it
+    - release a patpacked version   (using src/Makefile)
 
     - distribute it somewhat widely:
             - post it on Facebook
