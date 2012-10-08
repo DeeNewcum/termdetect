@@ -26,6 +26,11 @@ The goal of this is to get some possible feedback about the use-cases.
 ##############################[ beta release ]##################################
 ################################################################################
 
-- add more terminals to the termmatch database
+- find an install of Perl v5.6.2 to test this against, to see if it will run even on old Perls
+            (building it via PerlBrew has failed on two of my machines so far)
 
-- try to address the "variance" issues
+- add more terminals to the termmatch database, particularly some OS/X ones
+
+- see if I can do more character encodings
+
+- try to address some of the "variance" issues

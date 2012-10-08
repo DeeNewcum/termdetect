@@ -27,3 +27,7 @@ Fortunately, there are [some request/reply ANSI sequences](https://github.com/De
 
 * see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
 * run <tt>termdetect --help</tt>
+
+## Dependencies
+
+termdetect requires only a base install of Perl; it requires no extra libraries.  It has been tested on Perl v5.8.8.

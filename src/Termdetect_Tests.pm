@@ -294,11 +294,8 @@ sub read_phase(&) {
         if ($CHECK_ALIGNMENT) {
             my $any_more_reads = read_ansi_reply(0.1);      # the fractional number here can range from 0.1 to 2.0, depending on how slow the link between them is
             if (length($any_more_reads)) {
-                eval 'use Carp';
+                eval 'use Carp';                        # We don't want to rely on any non-core libraries unless really needed.  This will only be needed in development.
                 Carp::confess("out of alignment\n");
-                #my (undef, $filename, $line, $function) = caller(1);
-                #print "\n\n\r";
-                #die "Out of alignment at $filename:$line, in $function()\n\n\n";
             }
         }
     }
