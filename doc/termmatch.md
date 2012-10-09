@@ -213,7 +213,7 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <th>description
 
 <tr><td><tt>s_ff_clears
-    <td>Does the form-feed character (^L) clear the screen?  ("true" or "false")
+    <td>Does the form-feed character (^L) move the cursor to the upper-left? (an indirect measure of whether ^L clears the screen)  ("true" or "false")
 
 <tr><td><tt>s_term_version
     <td>The specific version number of the terminal.†
