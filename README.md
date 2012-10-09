@@ -23,6 +23,14 @@ Fortunately, there are [some request/reply ANSI sequences](https://github.com/De
 
     # ^^ from this, we can guess that the end-user's terminal is located on the same machine or in close proximity
 
+## Current status
+
+The software is alpha quality, and not ready for wide use.
+
+The main features of the code are minimally working, but a few more features need to be complete before release, and the code needs to be packaged to make it easier to install.
+
+See [here](https://github.com/DeeNewcum/termdetect/graphs/code-frequency) and [here](https://github.com/DeeNewcum/termdetect/branches) to see the recent activity level.
+
 ## Documentation
 
 * see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
