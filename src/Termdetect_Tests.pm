@@ -8,6 +8,8 @@ package Termdetect_Tests;
     use strict;
     use warnings;
 
+    use Termdetect_Encoding;
+
     use Time::HiRes qw[alarm];
     #use Term::ReadKey;
 
@@ -16,6 +18,7 @@ package Termdetect_Tests;
     use Exporter 'import';
 
     our @EXPORT = qw( perform_all_tests ansi_escape_no_nl ansi_escape summarize_result );
+    our @EXPORT_OK = qw( run_test read_phase output );
 
 
     # constants
@@ -88,6 +91,8 @@ sub perform_all_tests {
     run_and_store_test(m_esc                => "\e[?\eK");
 
     synthetic__ff_clears();
+
+    Termdetect_Encoding::do_encoding_tests(\%all_results);
 
 
     if (0) {
