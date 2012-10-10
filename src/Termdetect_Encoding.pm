@@ -17,17 +17,57 @@ package Termdetect_Encoding;
 
 
 
+# TODO: We need to determine what the canonical names for these should be.
+#       Our main intention is for filling out the $LANG locale variable, however, 
+#       the "The Open Group Base Specifications Issue 6" says:
+#               "settings of language, territory, and codeset are implementation-defined"
+#
+#       For now, we're using the encoding name found on linux  (run `locale -a` or `locale -m`)
+
+
+# each test consists of:
+#       - one or more octets that we will send to the terminal
+#       - the expected X movement of the cursor in response to these octets
+#       - the expected Y movement of the cursor in response to these octets
 our %encoding_tests = (
+
+    'utf8' => {
+        # in case there are any font-support issues, (I think I've seen cases where missing glyphs
+        # resulted in the character being rendered as [2, 0]) the codepoints that have named HTML
+        # entities are somewhat more likely to be supported by most fonts?
+        #       http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Character_entity_references_in_HTML
+
+        'C2 A9'       => [1, 0],        # copyright symbol
+        'C3 86'       => [1, 0],        # AE ligature
+        'E2 80 94'    => [1, 0],        # em-dash
+        'E2 99 A3'    => [1, 0],        # clubs symbol
+    },
+
 );
+
 
 sub do_encoding_tests {
     our $all_results = shift;
+
+    # Do a union set-operation on all tests.  We will run all tests, regardless of which encoding
+    # they're attached to.
+    my @encoding_tests = uniq(map {keys %$_} values %encoding_tests);
+        #print Dumper \@encoding_tests; exit;
 
     read_phase {
         $all_results->{s_encoding}{received} = "yourmom";
     };
 }
 
+
+
+# removes duplicate elements from a list
+sub uniq {
+    my %seen;
+    grep
+        { !$seen{$_}++ }
+        @_
+}
 
 
 1;

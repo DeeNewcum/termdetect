@@ -1,0 +1,220 @@
+Key properties I'm interested in:
+
+
+    \p{Line_Break: Combining_Mark}      combining marks   (as well as controls)
+    \p{Line_Break: Glue}                characters that prevent breaking        (some visible, some not)
+    \p{Line_Break: Break_After}         mandatory break
+    \p{Line_Break: Carriage_Return}       "
+    \p{Line_Break: Line_Feed}             "
+    \p{Line_Break: Next_Line}             "
+    \p{Line_Break: ZWSpace}             invisible space
+
+    \p{East_Asian_Width: Wide}          wide characters
+    \p{East_Asian_Width: Ambiguous}     ambiguous -- see the Venn diagram at http://www.unicode.org/reports/tr11/tr11-14.html
+
+
+
+
+    \p{Diacritic}                       is this character a diacritic?
+
+    \p{Format}                          zero-width  (but includes some newlines)
+
+    \p{Default_Ignorable_Code_Point}    zero-width!!!       http://www.unicode.org/review/pr-5.html
+
+
+
+
+    \p{Print}                   \p{Graph} + \p{Space}
+    \p{Graph}                   all visible characters
+
+    \p{Unassigned}              this codepoint is unassigned by the Unicode folks
+    \p{Assigned}                this codepoint IS assigned
+
+
+    \p{Surrogate}
+
+
+
+\p{Line_Break: ZW}
+\p{Line_Break: ZWSpace}
+
+\p{Decomposition_Type: Nobreak}
+
+\p{Grapheme_Extend}
+
+
+\p{Grapheme_Cluster_Break: CN}
+\p{Grapheme_Cluster_Break: Control}
+\p{Grapheme_Cluster_Break: CR}
+\p{Grapheme_Cluster_Break: EX}
+\p{Grapheme_Cluster_Break: Extend}
+\p{Grapheme_Cluster_Break: L}
+\p{Grapheme_Cluster_Break: LF}
+\p{Grapheme_Cluster_Break: LV}
+\p{Grapheme_Cluster_Break: LVT}
+\p{Grapheme_Cluster_Break: Other}
+\p{Grapheme_Cluster_Break: PP}
+\p{Grapheme_Cluster_Break: Prepend}
+\p{Grapheme_Cluster_Break: SM}
+\p{Grapheme_Cluster_Break: SpacingMark}
+\p{Grapheme_Cluster_Break: T}
+\p{Grapheme_Cluster_Break: V}
+\p{Grapheme_Cluster_Break: XX}
+
+
+\p{General_Category=Control}
+
+
+\p{Join_Control}
+
+
+\p{Joining_Type: Transparent}
+\p{Joining_Type: Dual_Joining}
+\p{Joining_Type: Right_Joining}
+\p{Joining_Type: Join_Causing}
+\p{Joining_Type: Left_Joining}
+
+
+\p{Decomposition_Type: Canonical}
+\p{Decomposition_Type: Non_Canonical}
+\p{Decomposition_Type: Font}
+\p{Decomposition_Type: Compat}
+\p{Decomposition_Type: Square}
+\p{Decomposition_Type: Circle}
+\p{Decomposition_Type: Final}
+\p{Decomposition_Type: Isolated}
+\p{Decomposition_Type: Initial}
+\p{Decomposition_Type: Super}
+\p{Decomposition_Type: Narrow}
+\p{Decomposition_Type: Wide}
+\p{Decomposition_Type: Medial}
+\p{Decomposition_Type: Sub}
+\p{Decomposition_Type: Vertical}
+\p{Decomposition_Type: Small}
+\p{Decomposition_Type: Fraction}
+\p{Decomposition_Type: Nobreak}
+
+
+
+\p{Line_Break: Unknown}
+\p{Line_Break: Ideographic}
+\p{Line_Break: Alphabetic}
+\p{Line_Break: H3}
+\p{Line_Break: Surrogate}
+\p{Line_Break: Combining_Mark}
+\p{Line_Break: Ambiguous}
+\p{Line_Break: Complex_Context}
+\p{Line_Break: Numeric}
+\p{Line_Break: H2}
+\p{Line_Break: Break_After}
+\p{Line_Break: JT}
+\p{Line_Break: JL}
+\p{Line_Break: JV}
+\p{Line_Break: Close_Punctuation}
+\p{Line_Break: Open_Punctuation}
+\p{Line_Break: Nonstarter}
+\p{Line_Break: Prefix_Numeric}
+\p{Line_Break: Exclamation}
+\p{Line_Break: Quotation}
+\p{Line_Break: Postfix_Numeric}
+\p{Line_Break: Break_Before}
+\p{Line_Break: Glue}
+\p{Line_Break: Infix_Numeric}
+\p{Line_Break: Inseparable}
+\p{Line_Break: Mandatory_Break}
+\p{Line_Break: Close_Parenthesis}
+\p{Line_Break: Word_Joiner}
+\p{Line_Break: Break_Both}
+\p{Line_Break: Break_Symbols}
+\p{Line_Break: Carriage_Return}
+\p{Line_Break: Contingent_Break}
+\p{Line_Break: Hyphen}
+\p{Line_Break: Line_Feed}
+\p{Line_Break: Next_Line}
+\p{Line_Break: Space}
+\p{Line_Break: ZWSpace}
+
+
+
+
+\p{General_Category: Other}
+\p{General_Category: Unassigned}
+\p{General_Category: Private_Use}
+\p{General_Category: Letter}
+\p{General_Category: Other_Letter}
+\p{General_Category: Symbol}
+\p{General_Category: Other_Symbol}
+\p{General_Category: Cased_Letter}
+\p{General_Category: Surrogate}
+\p{General_Category: Lowercase_Letter}
+\p{General_Category: Mark}
+\p{General_Category: Uppercase_Letter}
+\p{General_Category: Nonspacing_Mark}
+\p{General_Category: Number}
+\p{General_Category: Math_Symbol}
+\p{General_Category: Punctuation}
+\p{General_Category: Other_Number}
+\p{General_Category: Decimal_Number}
+\p{General_Category: Other_Punctuation}
+\p{General_Category: Spacing_Mark}
+\p{General_Category: Letter_Number}
+\p{General_Category: Modifier_Letter}
+\p{General_Category: Format}
+\p{General_Category: Modifier_Symbol}
+\p{General_Category: Open_Punctuation}
+\p{General_Category: Close_Punctuation}
+\p{General_Category: Control}
+\p{General_Category: Currency_Symbol}
+\p{General_Category: Titlecase_Letter}
+\p{General_Category: Dash_Punctuation}
+\p{General_Category: Separator}
+\p{General_Category: Space_Separator}
+\p{General_Category: Enclosing_Mark}
+\p{General_Category: Initial_Punctuation}
+\p{General_Category: Connector_Punctuation}
+\p{General_Category: Final_Punctuation}
+\p{General_Category: Line_Separator}
+\p{General_Category: Paragraph_Separator}
+
+
+
+
+
+
+
+"Code point type" means:  Any of the seven fundamental classes of code points in the standard:
+
+    - Graphic      = A character with the General Category of Letter (L), Combining Mark (M),
+                     Number (N), Punctuation (P), Symbol (S), or Space Separator (Zs).
+
+    - Format       = Invisible but affects neighboring characters; includes line/paragraph separators
+
+    - Control      = Usage defined by protocols or standards outside the Unicode Standard
+
+    - Private-Use  = Usage defined by private agreement outside the Unicode Standard
+
+    - Surrogate    = These allow the code points U+10000 to U+10FFFF to be encoded in UTF-16.
+                     Without surrogate pairs, these codepoints would be outside of UTF-16's range.
+                     http://en.wikipedia.org/wiki/UTF-16#Code_points_U.2B10000_to_U.2B10FFFF
+
+    - Noncharacter = Sixty-six code points are not used to encode characters. Noncharacters consist
+                     of U+FDD0..U+FDEF and any code point ending in the value FFFE16 or FFFF16 —
+                     that is, U+FFFE, U+FFFF, U+1FFFE, U+1FFFF, ... U+10FFFE, U+10FFFF.
+
+    - Reserved     = Reserved for future assignment; restricted interchange
+
+
+This page is quite useful:
+        http://unicode.org/glossary/
+
+
+READ SECTION 3.6 "COMBINATION" OF THE UNICODE STANDARD
+    http://www.unicode.org/versions/Unicode6.1.0/ch03.pdf#G30602
+
+READ THE LINE-BREAKING CLASSES
+    http://unicode.org/reports/tr14/#Table1
+    http://unicode.org/reports/tr14/
+
+READ THE NARROW / WIDE EAST-ASIAN WIDTH
+    http://www.unicode.org/reports/tr11/tr11-14.html
+            (particularly see the Venn diagram)

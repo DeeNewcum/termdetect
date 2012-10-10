@@ -1,0 +1,91 @@
+#!/usr/bin/perl
+
+# extracts the properties from perluniprops.pod that we expect would hilight atypical characters
+
+# CAVEAT:   This hasn't been tested with many versions of Perl.  This script screen-scrapes the 
+#           free-form text, and because it's free-form, its format my vary over time.
+#           This code has been tested with:
+#               - Perl v5.14.2
+
+    use strict;
+    use warnings;
+
+    use IO::All;
+    use Pod::Perldoc;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+my @uniprops = parse_uniprops_table();
+
+if (1) {
+    @uniprops =
+                sort {$b->[3] <=> $a->[3]}
+                grep {$_->[3] ne ''}
+                @uniprops;
+}
+
+foreach my $prop (@uniprops) {
+    next if ($prop->[1] =~ /: N\*/);                # skip negative properties
+    printf "%-10s %-50s %-150s  %s\n", @$prop;
+}
+
+
+## combines the properties into a form readable by a Perl regexp (with /.../x )
+#sub combine_properies {
+#    my (@properties) = @_;
+#    return join(" ",   "[", @properties, "]");
+#}
+
+
+sub parse_uniprops_table {
+    ## find the perluniprops.pod file
+    my $perldoc = Pod::Perldoc->new();
+    my ($perluniprops_pod) = $perldoc->grand_search_init( ["perluniprops"] );
+    if (!defined($perluniprops_pod)) {
+        die "Unable to locate perluniprops.pod\n";
+    }
+
+    ## locate and extract the properties table from the .pod file
+    my $pod = io($perluniprops_pod)->all();
+    my @sections = split /(\n=[^\n]*)/s, $pod;
+    my ($prop_table) = grep /Present_In: 2\.0/, @sections;
+    if (!defined($prop_table)) {
+        die "Properties table couldn't be located\n";
+    }
+
+    ## remove the header
+    while ($prop_table !~ /^[^\n]*\\p{/) {
+        $prop_table =~ s/^[^\n]*\n//s;
+    }
+
+    ## remove line-wrapping
+    $prop_table =~ s/\n {28,}/ /sg;          # we assume wrapped lines are indented by 28 spaces
+
+    ## parse each line into 1) the flags on the left, 2) the "name" column, and 3) the "info" column
+    my @lines;
+    my $ctr = 0;
+    foreach my $line   (split(/\n/, $prop_table)) {
+        my ($flags, $name, $info) = split /(\\p{.*?})/, $line, 2;
+        my $num_codepoints = '';
+        if ($info =~ s/\(([0-9_]+)\)$//s) {
+            $num_codepoints = $1;
+            $num_codepoints =~ s/_//g;
+        }
+        push @lines,
+            [ trim($flags), $name, trim($info), $num_codepoints];
+    }
+
+    return @lines;
+}
+
+
+
+# trim any leading or trailing spaces
+sub trim {
+    local $_ = shift;
+    s/^\s*//s;
+    s/\s+$//s;
+    return $_;
+}
