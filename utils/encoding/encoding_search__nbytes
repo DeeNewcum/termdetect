@@ -38,7 +38,7 @@ foreach my $encoding (Encode->encodings(":all")) {
     my $total_chars = 0;
     my $generator = utf8_generator();
     while (defined(my $char = $generator->())) {
-        next if (ord($char) < 256);
+        #next if (ord($char) < 256);
 
         my $octets = eval { encode($encoding, my $c = $char, Encode::FB_QUIET) };
 
