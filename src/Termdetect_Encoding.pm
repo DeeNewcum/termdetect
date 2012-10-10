@@ -21,7 +21,7 @@ our %encoding_tests = (
 );
 
 sub do_encoding_tests {
-    local our $all_results = shift;
+    our $all_results = shift;
 
     read_phase {
         $all_results->{s_encoding}{received} = "yourmom";
