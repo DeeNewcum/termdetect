@@ -24,6 +24,7 @@ Fortunately, there is.
     vte
 
     ****TODO****: suggest some lines that users can put in their .vimrc to properly set things up as either 16 color or 256 color
+    ****TODO****: also, if there's anything needed to get vimrc to use utf8 whenever termdetect senses that...
 
     $ termping 
        1 ms    (min 1,  max 1,   avg 1.0)
