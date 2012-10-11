@@ -3,6 +3,12 @@
   we need a way to specify which "fallback" $TERM setting to use, that *does* match ncuses terminfo
 
 
+- m_c1 causes problems across several terminals  (Putty, SecureCRT, probably more):
+
+    - I suspect one problem is that C1-CSI is encoded as 9B in most non-UTF8 encodings, and 
+      is encoded as  C2 9B  in UTF8.  At the very least, we should change m_c1 to s_c1, and
+      have s_c1 try BOTH possible ways to encode it, and return the boolean-OR result of the two.
+
 
 
 - possibly calculate the s_window_size in other ways:
