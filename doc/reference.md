@@ -54,7 +54,8 @@ Is there a list of canonical names for various terminals / terminal emulators?
 
 Is there a list of canonical names for various character encodings?
 
-* [IANA Character Set registry](http://www.iana.org/assignments/character-sets), referenced by the HTTP RFC  (RFC 2616)
+* [IANA Character Set registry](http://www.iana.org/assignments/character-sets), referenced by the HTTP spec  (RFC 2616)
+* [encoding names supported by Vim](http://vimdoc.sourceforge.net/htmldoc/mbyte.html#encoding-values)
 * in Perl, run <tt>perl -MData::Dumper -MEncode -le 'print Dumper [Encode->encodings(":all")]'</tt>
   * [enc2xs](http://perldoc.perl.org/enc2xs.html) says that this data comes from 1) the [Unicode Character Mapping files (.ucm)](https://metacpan.org/source/RJBS/perl-5.16.1/cpan/Encode/ucm), and 2) the Tcl Encoding Files (.enc)
 * what LANG/LC_ALL/etc use.  See [The Open Group Base Specifications Issue 6, section 8.3](http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap08.html#tag_08_02)
