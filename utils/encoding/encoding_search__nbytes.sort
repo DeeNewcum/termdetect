@@ -22,7 +22,14 @@ my @lines = <>;
 
 @lines = grep {!/<td>MIME/} @lines;     # remove the MIME-* ones
 
-print @lines;
+my $last_line = '';
+foreach my $line (@lines) {
+    print "\n<tr><td colspan=2><br><br>\n\n"
+            if (($last_line =~ /<td>1$/ && $line =~ /<td>(?!1)\d+$/)
+             || ($last_line =~ /<td>\d+$/ && $line =~ /<td>\d+ - \d+$/));
+    print $line;
+    $last_line = $line;
+}
 
 
 sub sort_crit {

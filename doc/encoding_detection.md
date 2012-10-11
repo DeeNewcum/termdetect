@@ -146,7 +146,6 @@ This varies by encoding:
 <tr><td>UTF-16 <td>4 - 6
 <tr><td>iso-2022-kr <td>5 - 14
 
-
 </table>
 
 (In this section, encoding names are those used by Perl's "Encode" module.  Note that we will probably end up using a different standard for determining an encoding's canonical name)
