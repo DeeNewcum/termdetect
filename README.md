@@ -7,6 +7,7 @@ Fortunately, there are [some request/reply ANSI sequences](https://github.com/De
     $ termdetect
                 terminal:   vte
                  version:   libvte v0.32.1
+                encoding:   utf8
            terminal size:   318 x 74
                font size:   6 x 13
          window position:   5 x 81

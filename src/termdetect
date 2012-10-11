@@ -68,6 +68,7 @@ if ($ARGV{snapshot}) {
             my @fields = (
                     ['terminal',            $term],
                     ['version',             $test_results->{s_term_version}],
+                    ['encoding',            $test_results->{s_encoding}],
                     ['terminal size',       $test_results->{s_window_size}],
                     ['font size',           $test_results->{s_font_size}],
                     ['window position',     $test_results->{s_window_pos}],

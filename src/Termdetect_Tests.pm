@@ -52,6 +52,7 @@ package Termdetect_Tests;
             s_window_size
             s_window_pos
             s_window_title
+            s_encoding
         );
 
 

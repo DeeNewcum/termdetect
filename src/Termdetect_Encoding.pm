@@ -5,15 +5,18 @@ package Termdetect_Encoding;
     use strict;
     use warnings;
 
-    use Termdetect_Tests  qw( read_phase  /./  );
+    use Termdetect_Tests  qw( read_phase  run_test  );
+    use bytes qw();
 
     use Data::Dumper;
 
     use Exporter 'import';
     our @EXPORT = qw( do_encoding_tests );
 
-    # prototypes
+    # I shouldn't have to do this....  Exporter should do its job, and import these for me.
+    # I'm doing something wrong somewhere...?
     sub read_phase(&) {Termdetect_Tests::read_phase(@_)}
+    sub run_test {Termdetect_Tests::run_test(@_)}
 
 
 
@@ -47,16 +50,57 @@ our %encoding_tests = (
 
 
 sub do_encoding_tests {
-    our $all_results = shift;
+    my $all_results = shift;
+
+    my %encoding_results;
 
     # Do a union set-operation on all tests.  We will run all tests, regardless of which encoding
     # they're attached to.
     my @encoding_tests = uniq(map {keys %$_} values %encoding_tests);
         #print Dumper \@encoding_tests; exit;
 
+    my %still_matching = map {$_ => 1}
+                             keys %encoding_tests;
+    foreach my $encoding_test (@encoding_tests) {
+        my $bytes = join "",
+                    map {bytes::chr(hex($_))}
+                        split ' ', $encoding_test;
+        run_test($bytes,
+                 sub {
+                    my ($test_result) = @_;
+                    process_encoding_results($encoding_test, $test_result, \%still_matching);
+                 });
+                
+    }
+
     read_phase {
-        $all_results->{s_encoding}{received} = "yourmom";
+        # record the final conclusion of the encoding tests
+        if (scalar(keys(%still_matching)) == 1) {
+            ($all_results->{s_encoding}{received}) = keys %still_matching;
+        }
     };
+}
+
+
+sub process_encoding_results {
+    my ($encoding_test, $test_result, $still_matching) = @_;
+
+    foreach my $encoding (keys %$still_matching) {
+        next unless exists $encoding_tests{$encoding}{$encoding_test};
+        my $expected = $encoding_tests{$encoding}{$encoding_test};
+
+        # for newlines, we only care about delta-Y, we ignore delta-X
+        if ($expected->[1] && $expected->[1] != $test_result->{y_delta}
+                || $expected->[0] != $test_result->{x_delta})
+        {
+            delete $still_matching->{$encoding};
+
+            #my $result = sprintf "(%d, %d)",
+            #                     $test_result->{x_delta} || 0,
+            #                     $test_result->{y_delta} || 0;
+            #print "FAILED MATCH on encoding=$encoding and test='$encoding_test'.  Result was: $result\n\n\n";
+        }
+    }
 }
 
 
@@ -68,6 +112,10 @@ sub uniq {
         { !$seen{$_}++ }
         @_
 }
+
+
+#use Encode;
+#sub xxd {Encode::_utf8_off(my$str=shift);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}    
 
 
 1;
