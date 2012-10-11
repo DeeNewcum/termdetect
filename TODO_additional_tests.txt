@@ -97,6 +97,14 @@
 ========================[ maybe ]========================
 =========================================================
 
+- bidirectional text markers
+        http://www.ecma-international.org/publications/techreports/E-TR-053.htm
+        Terminals that seem to support it:
+            - Putty     http://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/bidi.html
+            - Konsole   https://bugs.kde.org/show_bug.cgi?id=198169
+            - mlterm    http://fribidi.org/users.html
+            - Bicon     http://projects.arabeyes.org/project.php?proj=BiCon
+
 - add request/reply sequences for:
 
     - ISO-2022 suport
