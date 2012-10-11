@@ -18,8 +18,6 @@ There are four ways a character can move the cursor:
 
 This varies by encoding:
 
-(NOTE: I NEED TO RE-RUN THE NUMBERS ON THESE...  I previously had a bug that prevented some encodings from giving a 1-byte result in some cases)
-
 <table>
 <tr><th>encoding  <th>encoded bytes
 
