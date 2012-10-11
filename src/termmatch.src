@@ -215,7 +215,6 @@ screen,
 
 # the terminfo.src from invisible-island.net doesn't have a "securecrt" entry...
 securecrt,
-    m_c1=%x+3,
     m_cancel=,
     m_esc=,
     m_null_inside=,
