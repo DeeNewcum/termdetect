@@ -26,19 +26,11 @@ This varies by encoding:
 <tr><td>AdobeStandardEncoding <td>1
 <tr><td>AdobeSymbol <td>1
 <tr><td>AdobeZdingbat <td>1
-<tr><td>cp1006 <td>1
-<tr><td>cp1026 <td>1
-<tr><td>cp1250 <td>1
-<tr><td>cp1251 <td>1
-<tr><td>cp1252 <td>1
-<tr><td>cp1253 <td>1
-<tr><td>cp1254 <td>1
-<tr><td>cp1255 <td>1
-<tr><td>cp1256 <td>1
-<tr><td>cp1257 <td>1
-<tr><td>cp1258 <td>1
+<tr><td>ascii <td>1
+<tr><td>cp37 <td>1
 <tr><td>cp424 <td>1
 <tr><td>cp437 <td>1
+<tr><td>cp500 <td>1
 <tr><td>cp737 <td>1
 <tr><td>cp775 <td>1
 <tr><td>cp850 <td>1
@@ -57,14 +49,21 @@ This varies by encoding:
 <tr><td>cp869 <td>1
 <tr><td>cp874 <td>1
 <tr><td>cp875 <td>1
+<tr><td>cp1006 <td>1
+<tr><td>cp1026 <td>1
+<tr><td>cp1047 <td>1
+<tr><td>cp1250 <td>1
+<tr><td>cp1251 <td>1
+<tr><td>cp1252 <td>1
+<tr><td>cp1253 <td>1
+<tr><td>cp1254 <td>1
+<tr><td>cp1255 <td>1
+<tr><td>cp1256 <td>1
+<tr><td>cp1257 <td>1
+<tr><td>cp1258 <td>1
 <tr><td>dingbats <td>1
 <tr><td>hp-roman8 <td>1
-<tr><td>iso-8859-10 <td>1
-<tr><td>iso-8859-11 <td>1
-<tr><td>iso-8859-13 <td>1
-<tr><td>iso-8859-14 <td>1
-<tr><td>iso-8859-15 <td>1
-<tr><td>iso-8859-16 <td>1
+<tr><td>iso-8859-1 <td>1
 <tr><td>iso-8859-2 <td>1
 <tr><td>iso-8859-3 <td>1
 <tr><td>iso-8859-4 <td>1
@@ -73,6 +72,12 @@ This varies by encoding:
 <tr><td>iso-8859-7 <td>1
 <tr><td>iso-8859-8 <td>1
 <tr><td>iso-8859-9 <td>1
+<tr><td>iso-8859-10 <td>1
+<tr><td>iso-8859-11 <td>1
+<tr><td>iso-8859-13 <td>1
+<tr><td>iso-8859-14 <td>1
+<tr><td>iso-8859-15 <td>1
+<tr><td>iso-8859-16 <td>1
 <tr><td>jis0201-raw <td>1
 <tr><td>koi8-f <td>1
 <tr><td>koi8-r <td>1
@@ -93,53 +98,56 @@ This varies by encoding:
 <tr><td>MacSymbol <td>1
 <tr><td>MacThai <td>1
 <tr><td>MacTurkish <td>1
+<tr><td>MacUkrainian <td>1
 <tr><td>nextstep <td>1
+<tr><td>posix-bc <td>1
 <tr><td>symbol <td>1
 <tr><td>viscii <td>1
 
 <tr><td colspan=2><br><br>
 
-<tr><td>big5-eten<td>2
-<tr><td>big5-hkscs<td>2
-<tr><td>euc-cn<td>2
-<tr><td>euc-kr<td>2
-<tr><td>gb12345-raw<td>2
-<tr><td>gb2312-raw<td>2
-<tr><td>iso-ir-165<td>2
-<tr><td>jis0208-raw<td>2
-<tr><td>jis0212-raw<td>2
-<tr><td>johab<td>2
-<tr><td>ksc5601-raw<td>2
-<tr><td>UCS-2BE<td>2
-<tr><td>UCS-2LE<td>2
-<tr><td>UTF-32BE<td>4
-<tr><td>UTF-32LE<td>4
-<tr><td>hz<td>6
-<tr><td>UTF-32<td>8
+<tr><td>gb2312-raw <td>2
+<tr><td>gb12345-raw <td>2
+<tr><td>iso-ir-165 <td>2
+<tr><td>jis0208-raw <td>2
+<tr><td>jis0212-raw <td>2
+<tr><td>ksc5601-raw <td>2
+<tr><td>UCS-2BE <td>2
+<tr><td>UCS-2LE <td>2
+<tr><td>UTF-32BE <td>4
+<tr><td>UTF-32LE <td>4
+<tr><td>UTF-32 <td>8
 
 <tr><td colspan=2><br><br>
 
-<tr><td>cp932<td>1 - 2
-<tr><td>cp936<td>1 - 2
-<tr><td>cp949<td>1 - 2
-<tr><td>cp950<td>1 - 2
-<tr><td>gsm0338<td>1 - 2
-<tr><td>MacChineseSimp<td>1 - 2
-<tr><td>MacChineseTrad<td>1 - 2
-<tr><td>MacJapanese<td>1 - 2
-<tr><td>MacKorean<td>1 - 2
-<tr><td>shiftjis<td>1 - 2
-<tr><td>euc-jp<td>2 - 3
-<tr><td>UTF-16BE<td>2 - 4
-<tr><td>UTF-16LE<td>2 - 4
-<tr><td>utf8<td>1 - 4
-<tr><td>utf-8-strict<td>1 - 4
-<tr><td>UTF-16<td>4 - 6
-<tr><td>UTF-7<td>5 - 8
-<tr><td>7bit-jis<td>7 - 9
-<tr><td>iso-2022-jp<td>8 - 9
-<tr><td>iso-2022-jp-1<td>8 - 9
-<tr><td>iso-2022-kr<td>8 - 14
+<tr><td>big5-eten <td>1 - 2
+<tr><td>big5-hkscs <td>1 - 2
+<tr><td>cp932 <td>1 - 2
+<tr><td>cp936 <td>1 - 2
+<tr><td>cp949 <td>1 - 2
+<tr><td>cp950 <td>1 - 2
+<tr><td>euc-cn <td>1 - 2
+<tr><td>euc-kr <td>1 - 2
+<tr><td>gsm0338 <td>1 - 2
+<tr><td>johab <td>1 - 2
+<tr><td>MacChineseSimp <td>1 - 2
+<tr><td>MacChineseTrad <td>1 - 2
+<tr><td>MacJapanese <td>1 - 2
+<tr><td>MacKorean <td>1 - 2
+<tr><td>shiftjis <td>1 - 2
+<tr><td>euc-jp <td>1 - 3
+<tr><td>utf8 <td>1 - 4
+<tr><td>utf-8-strict <td>1 - 4
+<tr><td>hz <td>1 - 6
+<tr><td>UTF-7 <td>1 - 8
+<tr><td>7bit-jis <td>1 - 9
+<tr><td>iso-2022-jp <td>1 - 9
+<tr><td>iso-2022-jp-1 <td>1 - 9
+<tr><td>UTF-16BE <td>2 - 4
+<tr><td>UTF-16LE <td>2 - 4
+<tr><td>UTF-16 <td>4 - 6
+<tr><td>iso-2022-kr <td>5 - 14
+
 
 </table>
 

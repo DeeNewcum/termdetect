@@ -18,7 +18,10 @@
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
 
-open STDERR, '>', '/dev/null';
+open STDERR, '>', '/dev/null'       or die $!;
+open LOG, '>', '/var/tmp/e'     or die $!;
+
+select LOG; $|=1; select STDOUT;
 
 binmode(STDOUT, ':encoding(utf8)');
 
@@ -62,14 +65,21 @@ foreach my $encoding (Encode->encodings(":all")) {
         if ($min == $max) {
             #print "FIXED encoding: $min byte(s)\n";
             #print "==== $encoding ==== is fixed multibyte: $min bytes\n"    if ($min > 1);
-            print "==== $encoding ==== is single byte\n"    if ($min == 1);
+            #print "==== $encoding ==== is single byte\n"    if ($min == 1);
+            log_print("<tr><td>$encoding <td>$min\n");
         } else {
             #print "VARIABLE encoding: $min - $max bytes\n";
             #print "==== $encoding ==== is variable: $min - $max bytes\n";
+            log_print("<tr><td>$encoding <td>$min - $max\n");
         }
     }
 }
 
+
+sub log_print {
+    print LOG @_;
+    print @_;
+}
 
 sub no_utf {
     Encode::_utf8_off(my $char = shift);
