@@ -8,6 +8,12 @@
 #   - bah....  I think there are times when there are round-trip problems...  
 #           I think I need to start from the desired encoding, and convert from there back
 #           to UTF8...   going the other way may cause problems?
+#
+# NOTE to self:
+#       I thought there were some combining characters in ISO-8859-2 and similar...  Turns out
+#       that...   no...  these aren't combining characters.  They ARE diacritics, but strangely,
+#       they can't be combined with other chars.
+#                   http://www.cs.tut.fi/~jkorpela/latin1/3.html#B4
 
     use strict;
     use warnings;
