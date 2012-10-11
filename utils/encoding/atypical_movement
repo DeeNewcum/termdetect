@@ -1,0 +1,143 @@
+#!/usr/bin/perl
+
+# give a specific encoding on the command line, and we'll point out all the characters that
+# cause atypical cursor movement in that encoding
+
+
+# TODO:
+#   - bah....  I think there are times when there are round-trip problems...  
+#           I think I need to start from the desired encoding, and convert from there back
+#           to UTF8...   going the other way may cause problems?
+
+    use strict;
+    use warnings;
+
+    use utf8;
+    #use feature 'unicode_strings';
+    use Encode qw[encode decode];
+    require bytes;
+    
+    use charnames ();
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+#print Dumper atypical_movement("\x{02d8}"); exit;
+
+
+my $encoding = shift
+        or die "specify an encoding to scan\n";
+
+my $generator = utf8_generator();
+while (defined(my $utf8_char = $generator->())) {
+    my $octets = eval { encode($encoding, my $c = $utf8_char, Encode::FB_QUIET) };
+
+    next if (defined($octets) && bytes::length($octets) == 0);      # there's no equivalent for this utf8 character
+
+    next unless (my $movement = atypical_movement($utf8_char));
+
+
+    my $is_control = ($utf8_char =~ /\p{General_Category: Control}/);
+
+    my @octets = unpack("C*", $octets);
+    my $display_octets = join(" ", map {sprintf "%02X", $_} @octets);
+
+    #printf "%-30s %-10s   %3s  %s\n",
+    printf "U+%04X    %-30s  %3s  %s\n",                                                             
+        ord($utf8_char),            
+        $display_octets,
+        $movement,
+        $is_control ? "[C]" : "   ",
+        charnames::viacode(ord($utf8_char)) || '';
+
+    #last if (ord($utf8_char) > 256);
+}
+
+
+# does the specified utf8 character cause atypical movement?
+#       returns an empty string if no, and a non-empty string describing the movement, if yes
+sub atypical_movement {
+    local $_ = shift;
+    
+    return 'Y+1'    if /\v/s;
+    return 'X+2'    if /\p{East_Asian_Width: Wide}/;        # full-width characters
+    return 'X+0'    if /[\x00-\x1F\x7F-\x9F]/;              # control characters
+    #return 'X+0'    if /\p{Diacritic}/;
+    return 'X+0'    if /^\p{Block: Combining_Diacritical_Marks}$/;
+    return 'X+0'    if /^\p{Line_Break: Combining_Mark}$/;    # combining marks
+    return '';          # nope, this causes typical movement (X+1)
+}
+
+
+# turn off the UTF8 flag  (but *not* in-place)
+sub no_utf {
+    Encode::_utf8_off(my $char = shift);
+    return $char;
+}
+
+
+sub display_encoding {
+    my ($encoding) = @_;
+
+    print "\e[s",           # save cursor
+          "\e[1;1f",        # move cursor to top-left
+          "\e[K",           # erase to end of line
+          $encoding,
+          "\e[u";           # restore cursor
+}
+
+
+exit;
+
+
+
+# generates all possible Unicode characters
+# see "Higher-Order Perl" chapter 4 for more info about generators
+sub utf8_generator {
+                use Unicode::UCD;
+    my $cur_char = -1;
+    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
+    my $cur_range_end = -2;
+    return sub {
+        do {
+            if ($cur_char > $cur_range_end) {
+                return undef unless @blocks;        # we're all done!
+                ($cur_char, $cur_range_end) = @{ shift @blocks };
+            }
+        } while ($cur_char !~ /\p{Assigned}/);      # make sure we return assigned characters
+        return chr($cur_char++);
+    }
+}
+
+
+# returns a generator
+sub rotator {
+    my $state = -1;
+    my @chars = qw( / - \ | );
+    $| = 1;
+    return sub {
+        $state = ($state + 1) % 4;
+        return $chars[$state];
+    };
+}
+
+
+sub criteria_C1 {
+    my $encoding_scanner = sub {
+        my ($encoding) = @_;
+
+        print "======== $encoding ========\n";
+
+        return undef;
+
+        my $char_scanner = sub {
+            my ($char, $octets) = @_;
+        };
+        return $char_scanner;
+    };
+    return $encoding_scanner;
+}
+
+
+# display a string to the user, via `xxd`
+sub xxd {my$str=shift;Encode::_utf8_off($str);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}    

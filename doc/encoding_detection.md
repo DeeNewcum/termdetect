@@ -160,7 +160,7 @@ During development, we use Perl's [unicode properties](http://perldoc.perl.org/p
 <table>
 <tr><th>movement    <th>description     <th>property
 
-<tr><td>X + 2       <td>full-width characters       <td><tt>\p{East_Asian_Width: Wide}
+<tr><td>X + 2       <td>full-width characters [4]   <td><tt>\p{East_Asian_Width: Wide}
 
 <tr><td>Y + 1       <td>various newlines            <td><tt>\p{Line_Break: Break_After}<br>\p{Line_Break: Carriage_Return}<br>\p{Line_Break: Line_Feed}<br>\p{Line_Break: Next_Line}
 
