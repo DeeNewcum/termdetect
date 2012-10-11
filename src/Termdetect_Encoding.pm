@@ -112,9 +112,8 @@ sub process_encoding_results {
 # removes duplicate elements from a list
 sub uniq {
     my %seen;
-    grep
-        { !$seen{$_}++ }
-        @_
+    grep { !$seen{$_}++ }
+         @_
 }
 
 

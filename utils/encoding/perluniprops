@@ -74,7 +74,7 @@ sub parse_uniprops_table {
             $num_codepoints =~ s/_//g;
         }
         push @lines,
-            [ trim($flags), $name, trim($info), $num_codepoints];
+             [ trim($flags), $name, trim($info), $num_codepoints ];
     }
 
     return @lines;
