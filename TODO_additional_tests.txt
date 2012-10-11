@@ -28,16 +28,8 @@
     
     - the boolean terminfo capabilities mentioned in 'cursor_movement.md"
 
-    - character encoding
+    - ask the terminal to change character encodings, and see if it complies
 
-        - figure out what the current encoding is   (based on which byte sequences render as a
-          single character, versus which get interpretted as multiple characters)
-            
-            To see Perl's list of available encodings:
-                    perl -MData::Dumper -MEncode -le 'print Dumper [Encode->encodings(":all")]'
-                    https://metacpan.org/module/Encode::Supported
-
-        - ask the terminal to change character encodings, and see if it complies
 
 - add request/reply sequences for:
 

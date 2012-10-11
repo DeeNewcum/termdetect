@@ -13,7 +13,7 @@ package Termdetect_Encoding;
     use Exporter 'import';
     our @EXPORT = qw( do_encoding_tests );
 
-    # I shouldn't have to do this....  Exporter should do its job, and import these for me.
+    # I shouldn't have to do this....  Exporter's job is to import these for me.
     # I'm doing something wrong somewhere...?
     sub read_phase(&) {Termdetect_Tests::read_phase(@_)}
     *run_test = \&Termdetect_Tests::run_test;

@@ -11,12 +11,6 @@
         - `stty size`
 
 
-==== command-line argument processing ====
-
-- in the default (long) display, show:
-    - current character encoding
-
-
 
 ==== small or medium problems with specific terminals ====
 
