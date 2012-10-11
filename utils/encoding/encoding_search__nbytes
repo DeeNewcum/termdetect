@@ -1,10 +1,14 @@
 #!/usr/bin/perl
 
-# this searches a particular character-encoding space for matches
-# 
-# the intent is to answer questions like:
-#
-#       "is there any UTF-8 character that maps to bytes that might look like an escape sequence?"
+# this scans all encodings, and displays the maximum and minimum bytes used for each encoding
+
+# A much faster (and more accurate) way to get this information is to look at the header of each of
+# the *.ucm files in http://site.icu-project.org/charts/charset    For example:
+#           <code_set_name>               "ibm-943_P15A-2003"                                                    
+#           <mb_cur_max>                  2                                                                      
+#           <mb_cur_min>                  1     
+# That describes a variable-width encoding, where some codepoints get translated to 1-byte and
+# some to 2.
 
     use strict;
     use warnings;

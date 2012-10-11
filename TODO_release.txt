@@ -11,6 +11,7 @@ The goal of this is to get some possible feedback about the use-cases.
 
     - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
       confidence
+            - here are the most commonly-used encodings:  http://w3techs.com/technologies/overview/character_encoding/all
 
     - release a fatpacked version   (using src/Makefile)
 
@@ -33,5 +34,7 @@ The goal of this is to get some possible feedback about the use-cases.
 
 - if we generate a locale that doesn't yet exist locally  (ie. it's in `locale -m` but not `locale -a`),
   then use either localedef(1) or locale-gen(1) to create one
+        - creating locales is...  kind of complicated :|
+            http://serverfault.com/questions/274163/select-locales-on-ubuntu-10-04-after-installation#answer-274194
 
 - try to address some of the "variance" issues

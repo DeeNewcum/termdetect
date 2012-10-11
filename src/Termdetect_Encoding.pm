@@ -29,6 +29,13 @@ package Termdetect_Encoding;
 #       For now, we're using the encoding name found on linux  (run `locale -a` or `locale -m`)
 
 
+# TODO: The %encoding_tests below have problems whenever a glyph isn't found in the current font.
+#       The "not found" replacement glyph is different cell-widths on different terminals.
+#       One way to accomodate this would be designate a specific codepoint that will DEFINITELY
+#       result in a "not found" glyph being displayed, measure how wide that is, and then discard
+#       any test results that match that width.
+
+
 # each test consists of:
 #       - one or more octets that we will send to the terminal
 #       - the expected X movement of the cursor in response to these octets
@@ -41,11 +48,18 @@ our %encoding_tests = (
         # entities are somewhat more likely to be supported by most fonts?
         #       http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Character_entity_references_in_HTML
 
-        'C2 A9'       => [1, 0],        # copyright symbol
-        'C3 86'       => [1, 0],        # AE ligature
-        'E2 80 94'    => [1, 0],        # em-dash
-        'E2 99 A3'    => [1, 0],        # clubs symbol
+        'C2 A9'         => [1, 0],      # copyright symbol
+        'C3 86'         => [1, 0],      # AE ligature
+        'E2 80 94'      => [1, 0],      # em-dash
+        'E2 99 A3'      => [1, 0],      # clubs symbol
     },
+
+    ## The below tests...  aren't that useful.  They may serve to distinguish gb2312 from utf8, but
+    ## they don't distinguish gb2312 from any other two-byte encoding.
+    #'gb2312' => {
+    #    'A1 DE'         => [1, 0],      # infinity symbol
+    #    'A6 C8',        => [1, 0],      # theta
+    #},
 
 );
 
@@ -97,7 +111,7 @@ sub process_encoding_results {
         {
             delete $still_matching->{$encoding};
 
-            if (0) {
+            if (0) {                # set this to '1' to do the equivalent of --check for encodings
                 my $result = sprintf "(%d, %d)",
                                      $test_result->{x_delta} || 0,
                                      $test_result->{y_delta} || 0;
