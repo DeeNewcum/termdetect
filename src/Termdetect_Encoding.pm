@@ -5,7 +5,7 @@ package Termdetect_Encoding;
     use strict;
     use warnings;
 
-    use Termdetect_Tests  qw( read_phase  run_test  );
+    use Termdetect_Tests  qw( read_phase  run_test  output );
     use bytes qw();
 
     use Data::Dumper;
@@ -16,7 +16,8 @@ package Termdetect_Encoding;
     # I shouldn't have to do this....  Exporter should do its job, and import these for me.
     # I'm doing something wrong somewhere...?
     sub read_phase(&) {Termdetect_Tests::read_phase(@_)}
-    sub run_test {Termdetect_Tests::run_test(@_)}
+    *run_test = \&Termdetect_Tests::run_test;
+    *output   = \&Termdetect_Tests::output;
 
 
 
@@ -65,6 +66,7 @@ sub do_encoding_tests {
         my $bytes = join "",
                     map {bytes::chr(hex($_))}
                         split ' ', $encoding_test;
+        output("\r");
         run_test($bytes,
                  sub {
                     my ($test_result) = @_;
@@ -90,15 +92,17 @@ sub process_encoding_results {
         my $expected = $encoding_tests{$encoding}{$encoding_test};
 
         # for newlines, we only care about delta-Y, we ignore delta-X
-        if ($expected->[1] && $expected->[1] != $test_result->{y_delta}
-                || $expected->[0] != $test_result->{x_delta})
+        if ($expected->[1] && $expected->[1] != ($test_result->{y_delta} || 0)
+                || $expected->[0] != ($test_result->{x_delta} || 0))
         {
             delete $still_matching->{$encoding};
 
-            #my $result = sprintf "(%d, %d)",
-            #                     $test_result->{x_delta} || 0,
-            #                     $test_result->{y_delta} || 0;
-            #print "FAILED MATCH on encoding=$encoding and test='$encoding_test'.  Result was: $result\n\n\n";
+            if (0) {
+                my $result = sprintf "(%d, %d)",
+                                     $test_result->{x_delta} || 0,
+                                     $test_result->{y_delta} || 0;
+                print "FAILED MATCH on encoding=$encoding and test='$encoding_test'.  Result was: $result\n\n\n";
+            }
         }
     }
 }
