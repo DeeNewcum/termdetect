@@ -41,9 +41,7 @@
 #                   - konsole
 #                   - mosh
 #                   - securecrt
-#                           - some variance though:
-#                                   - on Windows, and v6.7.2, everything is fine
-#                                   - on Linux, and v7.0.2, it has problems
+#                           - works on SecureCRT v6.7.2, fails on v7.0.2
 #
 #
 # When running this script, you may want to install and uninstall various fonts, to see what the
