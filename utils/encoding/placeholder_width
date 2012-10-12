@@ -60,7 +60,7 @@
     use strict;
     use warnings;
 
-    use lib '../../src';
+    use otherlibs;
     use Termdetect_Tests qw( run_test read_phase output cooked_mode do_queued_async_reads );
 
     use charnames ();
