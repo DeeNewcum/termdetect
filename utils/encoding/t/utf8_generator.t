@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# note: currently, this runs great on Perl v5.16, but it barfs a lot on Perl v5.10, complaining
+#       about surrogate characters.
+
     use strict;
     use warnings;
 
