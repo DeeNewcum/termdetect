@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+
+# this scans all encodings, and displays the maximum and minimum bytes used for each encoding
+
+# however, it does it in a much faster and more precise way than the other script:
+#       - download the source code to one of the Perl releases
+#       - chdir to cpan/Encode/ucm/ within the source code tree
+#       - run this script from there
+# This script scans the files in that directory, and gives the information straight from there.
+
+
+    use strict;
+    use warnings;
+
+    use FindBin;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+
+
+my @ucm_files = glob "*.ucm"
+    or die "Chdir to .../cpan/Encode/ucm/ within the Perl source tree before running this.\n";
+
+
+# send out output to the sorter
+open STDOUT, '|-', "$FindBin::Bin/encoding_search__nbytes.sort"     or die $!;
+
+
+foreach my $file (@ucm_files) {
+    my $lines = slurp($file);
+    my ($min) = ($lines =~ /\n<mb_cur_min>\s*(\d+)/s);
+    my ($max) = ($lines =~ /\n<mb_cur_max>\s*(\d+)/s);
+    (my $enc = $file) =~ s/\.ucm$//;
+    if ($min == $max) {
+        print "<tr><td>$enc <td>$min\n";
+    } else {
+        print "<tr><td>$enc <td>$min - $max\n";
+    }
+}
+
+
+
+sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
