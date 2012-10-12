@@ -16,7 +16,9 @@ There are four ways a character can move the cursor:
 
 ## Number of bytes per character
 
-This varies by encoding:
+(note: [here is a list](http://w3techs.com/technologies/overview/character_encoding/all) of the most popular encodings)
+
+The number of bytes varies by encoding:
 
 <table>
 <tr><th>encoding  <th>encoded bytes

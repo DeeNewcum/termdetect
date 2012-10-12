@@ -11,7 +11,14 @@ The goal of this is to get some possible feedback about the use-cases.
 
     - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
       confidence
-            - here are the most commonly-used encodings:  http://w3techs.com/technologies/overview/character_encoding/all
+
+            - get some solid data on how terminals deal with placeholder glyphs:
+
+                    - for codepoints that are normally 1-cell-width,  is the placeholder sometimes rendered as
+                      2-cells-wide?   (depending on the terminal emulator)
+
+                    - for codepoints that are normally 2-cell-width,  is the placeholder always 
+                      2-cells-wide, or is it sometimes 1-cell?
 
     - release a fatpacked version   (using src/Makefile)
 
