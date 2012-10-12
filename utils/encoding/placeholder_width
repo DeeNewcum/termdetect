@@ -1,0 +1,123 @@
+#!/usr/bin/perl
+
+# This script is designed to explore how placeholder glyphs are displayed, and how they move the
+# cursor.
+#
+# A placeholder-glyph is displayed whenever the terminal tries to display a codepoint that isn't
+# supported by the current font.
+#
+# Questions that I'm trying to answer:
+#
+#       - is the placeholder-glyph wider on some terminals than others?
+#               (this seems like it's *visually* apparent...   libvte shows very wide placeholder
+#                glyphs sometimes, but this needs to be explored fully)
+#
+#       - is the placeholder-glyph for a full-width codepoint wider than for a half-width codepoint?
+#
+#
+#
+# Answers:
+#   
+# The below are all done for UTF-8 characters:
+#
+#       1. placeholder-width doesn't vary significantly by terminals.
+#
+#       2. in general, yes.  Terminals that do this include:
+#                   - libvte
+#                   - putty
+#                   - securecrt
+#                   - konsole
+#                   - linux console
+#                   - urxvt
+#                   - screen
+#                   - tmux
+#                   - mosh
+#          However, a few DON'T -- they display ALL codepoints as 1-cell-wide:
+#                   - teraterm
+#
+#       2b. Note, however, that some interpret higher characters (those that encode to UTF-8 in four
+#           bytes or more) as basically double a normal character.
+#           Terminals that seem to do this include:
+#                   - konsole
+#                   - mosh
+#                   - securecrt
+#                           - some variance though:
+#                                   - on Windows, and v6.7.2, everything is fine
+#                                   - on Linux, and v7.0.2, it has problems
+#
+#
+# When running this script, you may want to install and uninstall various fonts, to see what the
+# effect is.
+#
+#       - in Linux, a good way to identify fonts to uninstall is 'apt-get install font-manager'
+#       
+#           - or just remove files from ~/.fonts/
+#
+#       - a good place to go to find placeholder codepoints is:
+#               http://en.wikipedia.org/wiki/Template:CJK_ideographs_in_Unicode
+#               http://en.wikipedia.org/wiki/Category:Unicode_charts
+#
+
+
+    use strict;
+    use warnings;
+
+    use lib '../../src';
+    use Termdetect_Tests qw( run_test read_phase output cooked_mode do_queued_async_reads );
+
+    use charnames ();
+
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+
+
+cooked_mode();
+
+placeholder(0x2615);         # HOT BEVERAGE
+placeholder(0x1f4a9);        # PILE OF POO
+placeholder(0x5048);         # Unicode Han Character 'brave; martial; hasty; scudding' 
+placeholder(0x2e80);         # CJK RADICAL REPEAT        (full-width)
+placeholder(0x214f);         # http://en.wikipedia.org/wiki/%E2%85%8F
+
+
+
+sub placeholder {
+    my $charnum = shift;
+
+    printf STDERR "%04X", $charnum;
+
+    column(10);
+    print STDERR ">";
+    
+    run_test( chr($charnum),
+        sub {
+            my ($test_result) = @_;
+            print STDERR "<";
+
+            column(20);
+            if (!$test_result->{timeout}) {
+                printf STDERR "(%d, %d)",
+                              $test_result->{x_delta} || 0,
+                              $test_result->{y_delta} || 0;
+            } else {
+                print STDERR "timeout";
+            }
+
+            column(35);
+            printf STDERR "%s\n",
+                          charnames::viacode($charnum);
+        }, 0.5, 1);
+
+    do_queued_async_reads();        # we want to do things synchronously
+}
+
+
+
+# moves the cursor to the specified column on the current line
+sub column {
+    my $col = shift;
+    print  STDERR "\r\e[${col}C";
+}
