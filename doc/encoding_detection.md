@@ -23,7 +23,7 @@ The number of bytes varies by encoding:
 <table>
 <tr><th>encoding  <th>encoded bytes
 
-<tr><td>AdobeStandardEncoding <td>1
+<tr><td>adobeStdenc <td>1
 <tr><td>AdobeSymbol <td>1
 <tr><td>AdobeZdingbat <td>1
 <tr><td>ascii <td>1
@@ -78,7 +78,7 @@ The number of bytes varies by encoding:
 <tr><td>iso-8859-14 <td>1
 <tr><td>iso-8859-15 <td>1
 <tr><td>iso-8859-16 <td>1
-<tr><td>jis0201-raw <td>1
+<tr><td>jis0201 <td>1
 <tr><td>koi8-f <td>1
 <tr><td>koi8-r <td>1
 <tr><td>koi8-u <td>1
@@ -90,7 +90,7 @@ The number of bytes varies by encoding:
 <tr><td>MacFarsi <td>1
 <tr><td>MacGreek <td>1
 <tr><td>MacHebrew <td>1
-<tr><td>MacIcelandic <td>1
+<tr><td>macIceland <td>1
 <tr><td>MacRoman <td>1
 <tr><td>MacRomanian <td>1
 <tr><td>MacRumanian <td>1
@@ -109,14 +109,9 @@ The number of bytes varies by encoding:
 <tr><td>gb2312-raw <td>2
 <tr><td>gb12345-raw <td>2
 <tr><td>iso-ir-165 <td>2
-<tr><td>jis0208-raw <td>2
-<tr><td>jis0212-raw <td>2
+<tr><td>jis0208 <td>2
+<tr><td>jis0212 <td>2
 <tr><td>ksc5601-raw <td>2
-<tr><td>UCS-2BE <td>2
-<tr><td>UCS-2LE <td>2
-<tr><td>UTF-32BE <td>4
-<tr><td>UTF-32LE <td>4
-<tr><td>UTF-32 <td>8
 
 <tr><td colspan=2><br><br>
 
@@ -128,25 +123,13 @@ The number of bytes varies by encoding:
 <tr><td>cp950 <td>1 - 2
 <tr><td>euc-cn <td>1 - 2
 <tr><td>euc-kr <td>1 - 2
-<tr><td>gsm0338 <td>1 - 2
 <tr><td>johab <td>1 - 2
 <tr><td>MacChineseSimp <td>1 - 2
-<tr><td>MacChineseTrad <td>1 - 2
+<tr><td>macChintrad <td>1 - 2
 <tr><td>MacJapanese <td>1 - 2
 <tr><td>MacKorean <td>1 - 2
 <tr><td>shiftjis <td>1 - 2
 <tr><td>euc-jp <td>1 - 3
-<tr><td>utf8 <td>1 - 4
-<tr><td>utf-8-strict <td>1 - 4
-<tr><td>hz <td>1 - 6
-<tr><td>UTF-7 <td>1 - 8
-<tr><td>7bit-jis <td>1 - 9
-<tr><td>iso-2022-jp <td>1 - 9
-<tr><td>iso-2022-jp-1 <td>1 - 9
-<tr><td>UTF-16BE <td>2 - 4
-<tr><td>UTF-16LE <td>2 - 4
-<tr><td>UTF-16 <td>4 - 6
-<tr><td>iso-2022-kr <td>5 - 14
 
 </table>
 

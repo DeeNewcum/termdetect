@@ -30,15 +30,21 @@ open STDOUT, '|-', "$FindBin::Bin/encoding_search__nbytes.sort"     or die $!;
 
 foreach my $file (@ucm_files) {
     my $lines = slurp($file);
-    my ($min) = ($lines =~ /\n<mb_cur_min>\s*(\d+)/s);
-    my ($max) = ($lines =~ /\n<mb_cur_max>\s*(\d+)/s);
+    my ($name) = ($lines =~ /\n<code_set_name> "(.*?)"/s);
+    my ($min)  = ($lines =~ /\n<mb_cur_min>\s*(\d+)/s);
+    my ($max)  = ($lines =~ /\n<mb_cur_max>\s*(\d+)/s);
+
     (my $enc = $file) =~ s/\.ucm$//;
+    $name = $enc unless (defined($name));
+
     if ($min == $max) {
-        print "<tr><td>$enc <td>$min\n";
+        print "<tr><td>$name <td>$min\n";
     } else {
-        print "<tr><td>$enc <td>$min - $max\n";
+        print "<tr><td>$name <td>$min - $max\n";
     }
 }
+
+close STDOUT;
 
 
 

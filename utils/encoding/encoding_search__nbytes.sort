@@ -11,16 +11,16 @@
 
 
 #if (-t STDOUT && !@ARGV) {
-if (!@ARGV) {
-    @ARGV = '/var/tmp/e';       # this is the default output of encoding_search__nbytes
-}
+#if (!@ARGV) {
+#    @ARGV = '/var/tmp/e';       # this is the default output of encoding_search__nbytes
+#}
 
 my @lines = <>;
 
 #@lines = sort {sort_crit($a) cmp sort_crit($b)} @lines;
 @lines = sort {&natural_sort} @lines;
 
-@lines = grep {!/<td>MIME/} @lines;     # remove the MIME-* ones
+@lines = grep {!/<td>(?:MIME|null|ctrl)/} @lines;     # remove the MIME-* ones
 
 my $last_line = '';
 foreach my $line (@lines) {
