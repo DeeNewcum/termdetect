@@ -103,7 +103,10 @@ sub process_cmdline {
 }
 
 
-sub usage { print STDERR <DATA>; exit; }
+sub usage {
+    print STDERR <DATA>;
+    exit;
+}
 
 
 sub show_snapshot {
@@ -125,9 +128,8 @@ sub show_snapshot {
     );
     foreach my $list (values %generalizations) {
         unshift @$list, '';         # highest priority:  match an empty string
-        push @$list, '%+',          # lowest priority:  match a non-empty string
+        push    @$list, '%+';       # lowest priority:  match a non-empty string
     }
-    # s_* values that we don't *usually* test against   (we can though, if it's useful for that terminal)
     foreach my $cap (sort keys %$test_results) {
         next if $Termdetect_Tests::rarely_tested_synthetics{$cap};
         my $r = summarize_result($test_results->{$cap});
