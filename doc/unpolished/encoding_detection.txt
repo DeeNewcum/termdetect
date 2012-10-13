@@ -1,0 +1,22 @@
+
+
+==== Number of bytes for each encoding ====
+
+
+==== ISO-8859-2 distinguishing characteristics ====
+
+Cause less cursor movement:
+
+    A0      NBSP
+    A2      breve  (diacritic)
+    A8      diaeresis (diacritic)      
+    AD      SHY
+    B2      ogonek (diacritic)
+    B4      acute accent (diacritic)
+    B7      caron (diacritic)
+    B8      cedilla (diacritic)
+    BD      double acute accent (diacritic)
+    FF      dot (diacritic)
+
+
+

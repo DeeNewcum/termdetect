@@ -1,0 +1,3 @@
+
+- sub atypical_movement() should probably be unit-tested...  somehow...
+

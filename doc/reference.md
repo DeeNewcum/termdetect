@@ -50,6 +50,28 @@ Is there a list of canonical names for various terminals / terminal emulators?
 
 * [the most actively-maintained terminfo database](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo).  Although some entries are generic, there are some terminal-specific entries, such as putty, linux console, DOS ansi.sys, rxvt, aterm, gnome (vte), etc.
 
+## Canonical character-encoding names
+
+Is there a list of canonical names for various character encodings?
+
+* [IANA Character Set registry](http://www.iana.org/assignments/character-sets), referenced by the HTTP spec  (RFC 2616)
+* [encoding names supported by Vim](http://vimdoc.sourceforge.net/htmldoc/mbyte.html#encoding-values)
+* in Perl, run <tt>perl -MData::Dumper -MEncode -le 'print Dumper [Encode->encodings(":all")]'</tt>
+  * [enc2xs](http://perldoc.perl.org/enc2xs.html) says that this data comes from 1) the [Unicode Character Mapping files (.ucm)](https://metacpan.org/source/RJBS/perl-5.16.1/cpan/Encode/ucm), and 2) the [Tcl Encoding Files (.enc)](http://core.tcl.tk/tcl/dir?name=tools/encoding)
+* what LANG/LC_ALL/etc use.  See [The Open Group Base Specifications Issue 6, section 8.3](http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap08.html#tag_08_02)
+  * Unfortunately, that says "settings of language, territory, and codeset are implementation-defined".
+  * in Linux, language/territory/codeset are defined in [setlocale(3)](http://manpages.ubuntu.com/manpages/precise/en/man3/setlocale.3.html)
+  * just run <tt>locale -a</tt>, and run <tt>locale -m</tt> to see the list of codesets
+  * "[There are no standard for codeset and modifier](http://www.debian.org/doc/manuals/intro-i18n/ch-locale.en.html)"
+* [how to list the available locales on different OS's](http://perldoc.perl.org/perllocale.html#Finding-locales)
+* [Encode::Locale](https://metacpan.org/module/Encode::Locale) will translate the OS's name to Perl's own name
+  * it internally uses [I18N::Langinfo](https://metacpan.org/module/I18N::Langinfo)  (on Unix systems anyway)
+  * and I18N::Langinfo simply calls [nl_langinfo()](http://manpages.ubuntu.com/manpages/precise/man3/nl_langinfo.3.html)
+
+Background info:
+
+* [a good intro on what a "locale" is](http://perldoc.perl.org/perllocale.html)
+
 ## Scope of all possible escape codes, from a lexer standpoint
 
 Is there any sort of standard-ish document that suggests the total possible scope?

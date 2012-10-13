@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+
+# pipe the output of encoding_search__nbytes here, and it'll sort it
+
+    use strict;
+    use warnings;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+
+#if (-t STDOUT && !@ARGV) {
+#if (!@ARGV) {
+#    @ARGV = '/var/tmp/e';       # this is the default output of encoding_search__nbytes
+#}
+
+my @lines = <>;
+
+#@lines = sort {sort_crit($a) cmp sort_crit($b)} @lines;
+@lines = sort {&natural_sort} @lines;
+
+@lines = grep {!/<td>(?:MIME|null|ctrl)/} @lines;     # remove the MIME-* ones
+
+my $last_line = '';
+foreach my $line (@lines) {
+    print "\n<tr><td colspan=2><br><br>\n\n"
+            if (($last_line =~ /<td>1$/ && $line =~ /<td>(?!1)\d+$/)
+             || ($last_line =~ /<td>\d+$/ && $line =~ /<td>\d+ - \d+$/));
+    print $line;
+    $last_line = $line;
+}
+
+
+sub sort_crit {
+    my $line = shift;
+
+    if ($line =~ /<td>(\d+)$/) {
+        return sprintf "FIXED-%03d-000\x00%s", $1, $line
+    } elsif ($line =~ /<td>(\d+) - (\d+)$/) {
+        return sprintf "MULTI-%03d-%03d\x00%s", $1, $2, $line;
+    }
+}
+
+
+
+# Thanks to http://www.perlmonks.org/?node_id=68185
+sub natural_sort {
+  my @a = split /(\d+)/, lc(sort_crit($a));
+  my @b = split /(\d+)/, lc(sort_crit($b));
+  my $M = @a > @b ? @a : @b;
+  my $res = 0;
+  for (my $i = 0; $i < $M; $i++) {
+    return -1 if ! defined $a[$i];
+    return 1 if  ! defined $b[$i];
+    if ($a[$i] =~ /\d/) {
+      $res = $a[$i] <=> $b[$i];
+    } else {
+      $res = $a[$i] cmp $b[$i];
+    }
+    last if $res;
+  }
+  $res;
+}

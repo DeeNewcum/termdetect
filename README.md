@@ -14,6 +14,7 @@ Fortunately, there is.
     $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
                  version:   libvte v0.32.1
+                encoding:   utf8
            terminal size:   318 x 74
                font size:   6 x 13
          window position:   5 x 81

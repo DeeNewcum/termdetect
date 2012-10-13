@@ -1,0 +1,11 @@
+"Variance" means any test-response for ONE TERMINAL that is different depending on various
+conditions, but that 'termdetect' should still detect detect it as the same terminal anyway.
+
+
+========================================[ version variance ]========================================
+
+- SecureCRT v6.7.2 vs v7.0.2
+        run this:   uperl -le 'print "\x{1031e}"'
+        in v6.7.2, it displays as a single character
+        in v7.0.2, it reads the 4-byte utf8 sequence as a 3-byte sequence, followed by an 0x9E,
+                which causes it to eat the following escape sequence

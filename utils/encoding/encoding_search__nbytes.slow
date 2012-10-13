@@ -1,0 +1,158 @@
+#!/usr/bin/perl
+
+# this scans all encodings, and displays the maximum and minimum bytes used for each encoding
+
+# A much faster (and more accurate) way to get this information is to look at the header of each of
+# the *.ucm files in http://site.icu-project.org/charts/charset    For example:
+#           <code_set_name>               "ibm-943_P15A-2003"                                                    
+#           <mb_cur_max>                  2                                                                      
+#           <mb_cur_min>                  1     
+# That describes a variable-width encoding, where some codepoints get translated to 1-byte and
+# some to 2.
+
+    use strict;
+    use warnings;
+
+    use encoding_utils;
+
+    #use feature 'unicode_strings';
+    use Encode qw[encode decode];
+    require bytes;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+
+open STDERR, '>', '/dev/null'       or die $!;
+open LOG, '>', '/var/tmp/e'     or die $!;
+
+select LOG; $|=1; select STDOUT;
+
+binmode(STDOUT, ':encoding(utf8)');
+
+my $ctr = 0;
+
+my $rot_encoding = rotator();
+my $rot_char = slow_rotator(1000);
+
+foreach my $encoding (Encode->encodings(":all")) {
+    next if ($encoding eq 'null' || $encoding eq 'ascii-ctrl');     # these are special
+
+    #next if ($encoding eq '7bit-jis');     # skip the first one, for development, because it's so slow
+    #print "======== $encoding ========\n";
+    display_encoding("======== $encoding ========");
+    #print "\r\e[4C", $rot_encoding->(), "\r";
+    my ($min, $max) = (99, 0);
+    my $total_chars = 0;
+    my $generator = utf8_generator();
+    while (defined(my $char = $generator->())) {
+        #next if (ord($char) < 256);
+
+        my $octets = eval { encode($encoding, my $c = $char, Encode::FB_QUIET) };
+
+        next if (defined($octets) && bytes::length($octets) == 0);      # there's no equivalent for this utf8 character
+
+        $total_chars++;
+
+        $rot_char->();
+
+        my $l = bytes::length($octets);
+        if (defined $l) {
+            $max = $l if($l > $max);
+            $min = $l if($l < $min);
+        }
+    }
+
+    #print "======== $encoding ========\n";
+    #print "total chars:  $total_chars\n";
+
+    if ($total_chars) {
+        if ($min == $max) {
+            #print "FIXED encoding: $min byte(s)\n";
+            #print "==== $encoding ==== is fixed multibyte: $min bytes\n"    if ($min > 1);
+            #print "==== $encoding ==== is single byte\n"    if ($min == 1);
+            log_print("<tr><td>$encoding <td>$min\n");
+        } else {
+            #print "VARIABLE encoding: $min - $max bytes\n";
+            #print "==== $encoding ==== is variable: $min - $max bytes\n";
+            log_print("<tr><td>$encoding <td>$min - $max\n");
+        }
+    }
+}
+
+
+sub log_print {
+    print LOG @_;
+    print @_;
+}
+
+sub no_utf {
+    Encode::_utf8_off(my $char = shift);
+    return $char;
+}
+
+
+sub display_encoding {
+    my ($encoding) = @_;
+
+    print "\e[s",           # save cursor
+          "\e[1;1f",        # move cursor to top-left
+          "\e[K",           # erase to end of line
+          $encoding,
+          "\e[u";           # restore cursor
+}
+
+
+exit;
+
+
+
+sub utf8_special_generator {
+    my @special_chars = map {chr $_} (
+        0xFFF9 .. 0xFFFB,       # interlinear annotation            http://en.wikipedia.org/wiki/Specials_%28Unicode_block%29
+        0xFFFC,                 # object replacement character      http://en.wikipedia.org/wiki/Specials_%28Unicode_block%29
+        0x200E, 0x200F, 0x202A..0x202E,     # bidirectional text control        http://en.wikipedia.org/wiki/Unicode_control_characters
+        0xFE00 .. 0xFE0F,       # variation selectors               http://en.wikipedia.org/wiki/Unicode_control_characters
+        0xFEFF,                 # byte-order mark                   http://en.wikipedia.org/wiki/Byte_order_mark
+        0x2060,                 # word joiner
+        0x200B,                 # zero-width space
+        0x200C,                 # zero-width non-joiner
+        0x200D,                 # zero-width joiner
+        0x2061 .. 0x2064,       # mathematical invisibles           http://en.wikipedia.org/wiki/Mapping_of_Unicode_characters#Mathematical_invisibles
+        0x2044,                 # fraction slash
+
+
+        # ones that haven't been included yet:
+        #       http://en.wikipedia.org/wiki/Unicode_control_characters#Language_tags
+    );
+}
+
+
+# returns a generator
+sub rotator {
+    my $state = -1;
+    my @chars = qw( / - \ | );
+    $| = 1;
+    return sub {
+        $state = ($state + 1) % 4;
+        return $chars[$state];
+    };
+}
+sub slow_rotator {
+    my $num_per_rot = shift || 1;
+    my $state = -1;
+    my $until_next_rot = $num_per_rot;
+    my @chars = qw( / - \ | );
+    $| = 1;
+    return sub {
+        if (--$until_next_rot < 0) {
+            $state = ($state + 1) % 4;
+            print "$chars[$state]\r";
+            $until_next_rot = $num_per_rot;
+        }
+    };
+}
+
+
+# display a string to the user, via `xxd`
+sub xxd {my$str=shift;Encode::_utf8_off($str);open my$xxd,'|-','xxd'or die$!;print$xxd $str;close$xxd}    

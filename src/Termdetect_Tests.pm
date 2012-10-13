@@ -8,6 +8,8 @@ package Termdetect_Tests;
     use strict;
     use warnings;
 
+    use Termdetect_Encoding;
+
     use Time::HiRes qw[alarm];
     #use Term::ReadKey;
 
@@ -16,6 +18,9 @@ package Termdetect_Tests;
     use Exporter 'import';
 
     our @EXPORT = qw( perform_all_tests ansi_escape_no_nl ansi_escape summarize_result );
+
+    # these really out to be split off as a separate module...   'Termdetect_IO'
+    our @EXPORT_OK = qw( run_test read_phase output cooked_mode do_queued_async_reads );
 
 
     # constants
@@ -49,6 +54,7 @@ package Termdetect_Tests;
             s_window_size
             s_window_pos
             s_window_title
+            s_encoding
         );
 
 
@@ -88,6 +94,8 @@ sub perform_all_tests {
     run_and_store_test(m_esc                => "\e[?\eK");
 
     synthetic__ff_clears();
+
+    Termdetect_Encoding::do_encoding_tests(\%all_results);
 
 
     if (0) {
@@ -230,9 +238,11 @@ sub run_and_display_test {
 # to move, and 2) if the terminal doesn't send any reply at all, we know that too, without having
 # to do any waiting.
 sub run_test {
-    my ($sequence, $cps, $timeout) = @_;
+    my ($sequence, $cps, $timeout, $no_cr) = @_;
     $cps ||= sub{};     # CPS = continuation-passing style
     $timeout = 2.0  unless defined($timeout);       # in floating-point seconds
+                        # $no_cr -- usually we do a \r right before running the test;  setting this
+                        #           to true disables that behavior
 
     my $test_result = {
         sent => $sequence,
@@ -244,7 +254,8 @@ sub run_test {
         #
         # When we're asked to do a CPR sequence, we'll revert to much dumbed-down behavior instead.
         
-        output("\r", $sequence,
+        output("\r")        unless $no_cr;
+        output($sequence,
               "\e[5n");      # add a DSR (device status report) to the end, so we can at least
                             # quickly determine a non-response
                             
@@ -258,14 +269,20 @@ sub run_test {
         return;
     }
 
-    output("\r", "\e[6n", $sequence, "\e[6n");      # send a CPR (cursor position report) before and after
+    output("\r")    unless $no_cr;
+    output("\e[6n", $sequence, "\e[6n");      # send a CPR (cursor position report) before and after
     #debug_show_remaining_input();
 
     read_phase {
         my $replies = '';
         my $start = time();
         while (1) {
-            $replies .= read_ansi_reply($timeout, 'R') || last;
+            my $reply = read_ansi_reply($timeout, 'R');
+            if (!defined($reply)) {
+                $test_result->{timeout} = 1;
+                last;
+            }
+            $replies .=  $reply;
 
             if ($replies =~ /.*\e\[(\d+);(\d+)R(.*)\e\[(\d+);(\d+)R/s) {
                 $test_result->{x_delta}  = $5 - $2     if ($5 - $2);
@@ -275,7 +292,10 @@ sub run_test {
                 @_ = $test_result;  goto &$cps;    # continuation-passing style
             }
 
-            last if (time() - $start > $timeout);
+            if (time() - $start > $timeout) {
+                $test_result->{timeout} = 1;
+                last;
+            }
         }
         $replies =~ s/^.*?\e\[\d+;\d+R//s;
         $test_result->{received} = $replies;
@@ -472,6 +492,7 @@ sub cooked_mode {
     #Term::ReadKey::ReadMode(2);
     system 'stty', '-icanon', '-echo', 'eol', "\001";
     $|++;
+    binmode(STDERR, ':utf8');
 
     eval q{
         END {

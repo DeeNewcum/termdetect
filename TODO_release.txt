@@ -9,8 +9,8 @@ The goal of this is to get some possible feedback about the use-cases.
     - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
         and have it include a setting for $LANG  (but only if the character coding was detected)
 
-    - detect whether UTF8 is in use or not
-            (the rest of the character encoding is too complicated for now)
+    - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
+      confidence
 
     - release a fatpacked version   (using src/Makefile)
 
@@ -29,6 +29,11 @@ The goal of this is to get some possible feedback about the use-cases.
 
 - add more terminals to the termmatch database, particularly some OS/X ones
 
-- see if I can do more character encodings
+- see if I can detect more character encodings
+
+- if we generate a locale that doesn't yet exist locally  (ie. it's in `locale -m` but not `locale -a`),
+  then use either localedef(1) or locale-gen(1) to create one
+        - creating locales is...  kind of complicated :|
+            http://serverfault.com/questions/274163/select-locales-on-ubuntu-10-04-after-installation#answer-274194
 
 - try to address some of the "variance" issues

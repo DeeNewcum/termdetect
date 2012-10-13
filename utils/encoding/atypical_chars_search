@@ -16,7 +16,8 @@
     use strict;
     use warnings;
 
-    use utf8;
+    use encoding_utils;
+
     use charnames ();
     #use feature 'unicode_strings';
     use Encode qw[encode decode];
@@ -129,24 +130,6 @@ sub summarize_deltas {
     return sprintf "(%d, %d)",
                 ($test_result->{x_delta} || 0),
                 ($test_result->{y_delta} || 0);
-}
-
-
-
-# generates all possible Unicode characters
-# see "Higher-Order Perl" chapter 4 for more info about generators
-sub utf8_generator {
-                use Unicode::UCD;
-    my $cur_char = -1;
-    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
-    my $cur_range_end = -2;
-    return sub {
-        if ($cur_char > $cur_range_end) {
-            return undef unless @blocks;        # we're all done!
-            ($cur_char, $cur_range_end) = @{ shift @blocks };
-        }
-        return chr($cur_char++);
-    }
 }
 
 

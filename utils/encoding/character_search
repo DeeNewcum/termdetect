@@ -9,7 +9,8 @@
     use strict;
     use warnings;
 
-    use utf8;
+    use encoding_utils;
+
     use charnames ();
     #use feature 'unicode_strings';
     use Encode qw[encode decode];
@@ -34,18 +35,25 @@ if ($encoding eq 'utf8') {
 
 my $ctr = 0;
 while (defined(my $char = $generator->())) {
+    next unless ($char =~ /\p{Assigned}/);
     my $encoded = $encoder->($char);
 
-    next unless ($encoded =~ /\x9b/);       # C1 version of CSI
-    0 && next unless ($char =~ /[
-            \p{Specials}
-            \p{Cntrl}
-        ]/x);
+    0 && next unless ($encoded =~ /\x9b/);       # C1 version of CSI
+    #next unless ($char =~ /\p{Format}/);
+    0 && next if ($char =~ /\p{Print}/
+          && $char !~ /\p{Surrogate}/
+          && $char !~ /\p{High_Surrogates}/);
+
+    next unless ($char =~ /\p{Line_Break: CM}/);        # combining marks
+
+    my $is_control = ($char =~ /\p{General_Category: Control}/);
 
     my @encoded = unpack("C*", $encoded);
     my $octets = join(" ", map {sprintf "%02X", $_} @encoded);
-    printf "%-30s  %s\n",
+    printf "U+%04X    %-30s  %3s  %s\n",
+        ord($char),
         $octets,
+        $is_control ? "[C]" : "   ",
         charnames::viacode(ord($char)) || '';
 
     #print "\n";
@@ -55,21 +63,6 @@ while (defined(my $char = $generator->())) {
 }
 
 
-# generates all possible Unicode characters
-# see "Higher-Order Perl" chapter 4 for more info about generators
-sub utf8_generator {
-                use Unicode::UCD;
-    my $cur_char = -1;
-    my @blocks = sort {$a->[0] <=> $b->[0]} map { @$_ } values %{ Unicode::UCD::charblocks() };
-    my $cur_range_end = -2;
-    return sub {
-        if ($cur_char > $cur_range_end) {
-            return undef unless @blocks;        # we're all done!
-            ($cur_char, $cur_range_end) = @{ shift @blocks };
-        }
-        return chr($cur_char++);
-    }
-}
 
 
 # display a string to the user, via `xxd`

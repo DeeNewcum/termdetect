@@ -1,0 +1,7 @@
+  To enable color higlighting:      ( <leader> S )
+     match PmenuSel /^[^ \t#].*/ | set nowrap
+
+
+
+perl -e 'binmode(STDOUT, ":utf8"); print "\x{2014}"' | xxd
+ show the UTF encoding of a specific unicode character  (in this case, U+2014)
