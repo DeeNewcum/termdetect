@@ -6,11 +6,21 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
-    - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
-        and have it include a setting for $LANG  (but only if the character coding was detected)
-
     - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
       confidence
+        
+            - now that 'placeholder_width' has been written...  modify it to display characters for
+              specific encodings:  utf8, gb2312, and shiftjis...    We SHOULD be able to discern
+              these encodings now, but 'placeholder_width' will confirm this for us
+
+    - implement the --parcel flag, that generates a td_parcel.txt file, to make it easy for
+      people to email me data
+
+    - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
+        and have it include a setting for $LANG
+
+                - but ONLY if the character coding was detected -- trying to make a new locale is...
+                  complicated enough that it'll have to wait until the next release
 
     - release a fatpacked version   (using src/Makefile)
 
