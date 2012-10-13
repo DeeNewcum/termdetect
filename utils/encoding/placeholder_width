@@ -106,7 +106,7 @@ sub placeholder {
 
             column(35);
             printf STDERR "%s\n",
-                          charnames::viacode($charnum);
+                          charnames::viacode($charnum) || "";
         }, 0.5, 1);
 
     do_queued_async_reads();        # we want to do things synchronously
