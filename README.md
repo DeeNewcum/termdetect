@@ -11,7 +11,9 @@ What if there was a way for Vim to know *for sure* if it was talking to a 256 co
 
 Fortunately, there is.
 
-    $ termdetect
+    $ cd src
+
+    $ ./termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
                  version:   libvte v0.32.1
                 encoding:   utf8
@@ -20,14 +22,14 @@ Fortunately, there is.
          window position:   5 x 81
              screen size:   3200 x 1080
 
-    $ export TERM=$(termdetect -t)
+    $ export TERM=$(./termdetect -t)
     $ echo $TERM
     vte
 
     ****TODO****: suggest some lines that users can put in their .vimrc to properly set things up as either 16 color or 256 color
     ****TODO****: also, if there's anything needed to get vimrc to use utf8 whenever termdetect senses that...
 
-    $ termping 
+    $ ./termping 
        1 ms    (min 1,  max 1,   avg 1.0)
        1 ms    (min 1,  max 1,   avg 1.0)
        1 ms    (min 1,  max 1,   avg 1.0)
@@ -42,9 +44,9 @@ There are [some request/reply ANSI sequences](https://github.com/DeeNewcum/termd
 
 ## Current status
 
-The software is alpha quality, and not ready for wide use.
+The software is pre-beta quality.  It's usable, but has some kinks that would be good to sort out.
 
-The main features of the code are minimally working, but a few more features need to be complete before release, and the code needs to be packaged to make it easier to install.
+A few minor features need to be completed before its initial release, and the code needs to be packaged to make it easier to install.
 
 See [here](https://github.com/DeeNewcum/termdetect/graphs/code-frequency) and [here](https://github.com/DeeNewcum/termdetect/branches) to see the recent activity level.
 

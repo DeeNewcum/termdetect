@@ -6,6 +6,13 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
+    - when no exact match can be found, in the error message, mention which
+      matches came closest
+
+                - this is a more user-friendly way of dealing with variance, and it's important from
+                  a user-confidence perspective, especially at the beginning when we still have a
+                  lot of variance problems
+
     - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
       confidence
         
@@ -13,7 +20,7 @@ The goal of this is to get some possible feedback about the use-cases.
               specific encodings:  utf8, gb2312, and shiftjis...    We SHOULD be able to discern
               these encodings now, but 'placeholder_width' will confirm this for us
 
-    - implement the --parcel flag, that generates a td_parcel.txt file, to make it easy for
+    - implement the --bundle flag, that generates a td_bundle.txt file, to make it easy for
       people to email me data
 
     - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
