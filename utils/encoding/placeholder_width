@@ -91,10 +91,22 @@ if ($encoding eq 'utf8') {
     binmode STDERR, ':bytes';
 
     placeholder(0x3000, "\xA1\xA1");        # IDEOGRAPHIC SPACE
+    placeholder(0xFFE1, "\xA1\xEA");        # FULLWIDTH POUND SIGN
     placeholder(0x3013, "\xA1\xFE");        # GETA MARK
     placeholder(0x2475, "\xA2\xC6");        # PARENTHESIZED DIGIT TWO
     placeholder(0x2461, "\xA2\xDA");        # PARENTHESIZED DIGIT TWO
     placeholder(0x3221, "\xA2\xE6");        # PARENTHESIZED IDEOGRAPH TWO
+
+} elsif ($encoding eq 'shiftjis') {
+    binmode STDERR, ':bytes';
+
+    placeholder(0xFF1C, "\x81\x83");        # FULLWIDTH LESS-THAN SIGN
+    placeholder(0x226A, "\x81\xE1");        # MUCH LESS_THAN
+    placeholder(0x2203, "\x81\xCE");        # THERE EXISTS
+    placeholder(0x222A, "\x81\xBE");        # UNION
+    placeholder(0x2229, "\x81\xBF");        # INTERSECTION
+    placeholder(0xFF41, "\x82\x81");        # FULLWIDTH LATIN SMALL LETTER A
+
 }
 
 
