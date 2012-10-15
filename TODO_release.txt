@@ -23,6 +23,8 @@ The goal of this is to get some possible feedback about the use-cases.
                 - but ONLY if the character coding was detected -- trying to make a new locale is...
                   complicated enough that it'll have to wait until the next release
 
+                - I don't know if  Encode::Locale  could help with this at all?
+
     - release a fatpacked version   (using src/Makefile)
 
             - post it like this:  http://paperlined.org/apps/github/release_files.html
