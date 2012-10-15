@@ -5,22 +5,22 @@
 all:	termdetect.fatpacked
 
 termdetect.fatpacked:	termdetect
-	# we manually create lib/ and fatlib/, because we know for sure that we don't need any
-	# external libraries
-	mkdir lib
-	mkdir fatlib
-	cp *.pm lib
-	echo "$$FATPACK_HEADER" > termdetect.fatpacked
+	@# we manually create lib/ and fatlib/, because we know for sure that we don't need any
+	@# external libraries
+	@mkdir lib
+	@mkdir fatlib
+	@cp *.pm lib
+	@echo "$$FATPACK_HEADER" > termdetect.fatpacked
 	fatpack file           >> termdetect.fatpacked
-	cat termdetect         >> termdetect.fatpacked
-	chmod +x termdetect.fatpacked
-	rm lib/*
-	rmdir fatlib lib
+	@cat termdetect         >> termdetect.fatpacked
+	@chmod +x termdetect.fatpacked
+	@rm lib/*
+	@rmdir fatlib lib
 
 clean:
-	-rm lib/*
-	-rmdir fatlib lib
-	-rm termdetect.fatpacked
+	@rm lib/*                  2>/dev/null    || true
+	@rmdir fatlib lib          2>/dev/null    || true
+	@rm termdetect.fatpacked   2>/dev/null    || true
 
 
 

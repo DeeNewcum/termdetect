@@ -1,5 +1,6 @@
-# This module directly performs tests on the terminal.  Routines that deal only with the test
-# RESULTS are located elsewhere.
+# This module directly performs terminal-type tests on the terminal.
+# Routines that deal only with the test RESULTS are located elsewhere.
+# (also, tests that are encoding-specific are located in Termdetect_Encoding.pm)
 #
 # This module also includes lower-level I/O routines.
 

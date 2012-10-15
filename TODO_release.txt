@@ -45,6 +45,8 @@ The goal of this is to get some possible feedback about the use-cases.
             and then integrate that into many more scripts, to fix all the DRY problems where 
             read_ansi_reply() and run_test() have been copy-n-pasted in several different files
 
+                - this may also solve the weird Export problems in Termdetect_Encoding.pm
+
     - it would be nice if the I/O routines could be toggled between async and synchronous, from
             code outside the module, rather than hard-coded and requiring manual editing to toggle
 
