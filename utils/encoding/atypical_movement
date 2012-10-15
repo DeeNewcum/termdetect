@@ -4,6 +4,10 @@
 # cause atypical cursor movement in that encoding
 
 
+# piping the output of this to    sort -k 2    will sort the output by encoded octets, rather than
+# Unicode order
+
+
 # TODO:
 #   - bah....  I think there are times when there are round-trip problems...  
 #           I think I need to start from the desired encoding, and convert from there back
@@ -23,13 +27,15 @@
     #use feature 'unicode_strings';
     use Encode qw[encode decode];
     require bytes;
-    
+    use Unicode::UCD 'charinfo';
     use charnames ();
 
     use Data::Dumper;
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
 #print Dumper atypical_movement("\x{02d8}"); exit;
+
+binmode(STDOUT, ':utf8');
 
 
 my $encoding = shift;
@@ -46,7 +52,11 @@ while (defined(my $utf8_char = $generator->())) {
 
     next if (defined($octets) && bytes::length($octets) == 0);      # there's no equivalent for this utf8 character
 
-    next unless (my $movement = atypical_movement($utf8_char));
+    #xxd($utf8_char);
+    #xxd($octets); exit;
+
+    #next unless (my $movement = atypical_movement($utf8_char));
+    my $movement = atypical_movement($utf8_char);
 
 
     my $is_control = ($utf8_char =~ /\p{General_Category: Control}/);
@@ -54,13 +64,22 @@ while (defined(my $utf8_char = $generator->())) {
     my @octets = unpack("C*", $octets);
     my $display_octets = join(" ", map {sprintf "%02X", $_} @octets);
 
+    #print "\n";
     #printf "%-30s %-10s   %3s  %s\n",
-    printf "U+%04X    %-30s  %3s  %s\n",                                                             
-        ord($utf8_char),            
+    printf "U+%04X   %-15s  %5s  %3s   %-50s",
+        ord($utf8_char),
         $display_octets,
         $movement,
         $is_control ? "[C]" : "   ",
         charnames::viacode(ord($utf8_char)) || '';
+
+    if (!$is_control && $movement !~ /^Y/) {
+        #column(53);
+        print ">$utf8_char<";
+    }
+
+    print "\n";
+
 
     #last if (ord($utf8_char) > 256);
 }
@@ -70,15 +89,34 @@ while (defined(my $utf8_char = $generator->())) {
 #       returns an empty string if no, and a non-empty string describing the movement, if yes
 sub atypical_movement {
     local $_ = shift;
+
+    my $charinfo = charinfo(ord($_));
     
     return 'Y+1'    if /\v/s;
-    return 'X+2'    if /\p{East_Asian_Width: Wide}/;        # full-width characters
+
+    return 'X+2'    if /\p{East_Asian_Width: Wide}|\p{Block: Halfwidth_And_Fullwidth_Forms}/;        # full-width characters
+    return 'X+2'    if ($charinfo->{decomposition} =~ /^<wide> /);
+
     return 'X+0'    if /[\x00-\x1F\x7F-\x9F]/;              # control characters
+
     #return 'X+0'    if /\p{Diacritic}/;
+
     return 'X+0'    if /^\p{Block: Combining_Diacritical_Marks}$/;
+
     return 'X+0'    if /^\p{Line_Break: Combining_Mark}$/;    # combining marks
+
     return '';          # nope, this causes typical movement (X+1)
-}
+} 
+
+    ## If the above fails, possible things to try:
+    ##
+    ##  - Unicode::UCD::charinfo()
+    ##          - one of the pieces of data returned is:        http://www.fileformat.info/info/unicode/category/index.htm
+    ##              - which may be the same as this?    http://perldoc.perl.org/perlunicode.html#*General_Category*
+    ##
+    ##  - Unicode::Normalize?
+
+
 
 
 # turn off the UTF8 flag  (but *not* in-place)
@@ -132,6 +170,14 @@ sub criteria_C1 {
     };
     return $encoding_scanner;
 }
+
+
+# moves the cursor to the specified column on the current line
+sub column {
+    my $col = shift;
+    print  "\r\e[${col}C";
+}
+
 
 
 # display a string to the user, via `xxd`

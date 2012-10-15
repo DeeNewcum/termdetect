@@ -63,6 +63,7 @@
     use otherlibs;
     use Termdetect_Tests qw( run_test read_phase output cooked_mode do_queued_async_reads );
 
+    use Encode;
     use charnames ();
 
 
@@ -70,32 +71,63 @@
     #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
 
 
+my $encoding = shift
+    or die "Specify an encoding:  utf8, gb2312, or shiftjis.\n";
 
 
 cooked_mode();
 
-placeholder(0x2615);         # HOT BEVERAGE
-placeholder(0x1f4a9);        # PILE OF POO
-placeholder(0x5048);         # Unicode Han Character 'brave; martial; hasty; scudding' 
-placeholder(0x2e80);         # CJK RADICAL REPEAT        (full-width)
-placeholder(0x214f);         # http://en.wikipedia.org/wiki/%E2%85%8F
+
+if ($encoding eq 'utf8') {
+    binmode STDERR, ':utf8';
+
+    placeholder(0x2615,  undef);    # HOT BEVERAGE
+    placeholder(0x1f4a9, undef);    # PILE OF POO
+    placeholder(0x5048,  undef);    # Unicode Han Character 'brave; martial; hasty; scudding' 
+    placeholder(0x2e80,  undef);    # CJK RADICAL REPEAT        (full-width)
+    placeholder(0x214f,  undef);    # http://en.wikipedia.org/wiki/%E2%85%8F
+
+} elsif ($encoding eq 'gb2312') {       # AKA "euc-cn"
+    binmode STDERR, ':bytes';
+
+    placeholder(0x3000, "\xA1\xA1");        # IDEOGRAPHIC SPACE
+    placeholder(0x3013, "\xA1\xFE");        # GETA MARK
+    placeholder(0x2475, "\xA2\xC6");        # PARENTHESIZED DIGIT TWO
+    placeholder(0x2461, "\xA2\xDA");        # PARENTHESIZED DIGIT TWO
+    placeholder(0x3221, "\xA2\xE6");        # PARENTHESIZED IDEOGRAPH TWO
+}
 
 
 
 sub placeholder {
-    my $charnum = shift;
+    my ($unicode_char, $encoded_char) = @_;
 
-    printf STDERR "%04X", $charnum;
+    my $is_utf8;
+    if (@_ == 2 && !defined($encoded_char)) {
+        $is_utf8 = 1;
+        $encoded_char = chr($unicode_char);
+    } else {
+        $is_utf8 = 0;
+    }
 
-    column(10);
+    my $octets = join " ",
+                      map {sprintf "%02X", $_}
+                          unpack("C*", $encoded_char);
+
+    printf STDERR "U+%04X    %-15s",
+           ord($unicode_char),
+           $octets;
+
+    column(25);
     print STDERR ">";
-    
-    run_test( chr($charnum),
+
+    #run_test( $encoded_char . $encoded_char,
+    run_test( $encoded_char,
         sub {
             my ($test_result) = @_;
             print STDERR "<";
 
-            column(20);
+            column(35);
             if (!$test_result->{timeout}) {
                 printf STDERR "(%d, %d)",
                               $test_result->{x_delta} || 0,
@@ -104,9 +136,9 @@ sub placeholder {
                 print STDERR "timeout";
             }
 
-            column(35);
+            column(50);
             printf STDERR "%s\n",
-                          charnames::viacode($charnum) || "";
+                          charnames::viacode($unicode_char) || "";
         }, 0.5, 1);
 
     do_queued_async_reads();        # we want to do things synchronously
