@@ -44,11 +44,9 @@ There are [some request/reply ANSI sequences](https://github.com/DeeNewcum/termd
 
 ## Current status
 
-The software is pre-beta quality.  It's usable, but has some kinks that would be good to sort out.
+The software is pre-beta quality.  It's usable, but has some usability kinks that I need to resolve.
 
-A few minor features need to be completed before its initial release, and the code needs to be packaged to make it easier to install.
-
-See [here](https://github.com/DeeNewcum/termdetect/graphs/code-frequency) and [here](https://github.com/DeeNewcum/termdetect/branches) to see the recent activity level.
+See [here](https://github.com/DeeNewcum/termdetect/graphs/commit-activity) and [here](https://github.com/DeeNewcum/termdetect/branches) to see the recent activity level.
 
 ## Documentation
 

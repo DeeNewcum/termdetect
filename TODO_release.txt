@@ -1,10 +1,21 @@
 Things to do in preparation for a release:
 
 ################################################################################
-##############################[ alpha release ]#################################
+#################################[ v0.10 ]######################################
 ################################################################################
 
 The goal of this is to get some possible feedback about the use-cases.
+
+    - fix the problem of the cursor being turned off in Putty
+
+                (hopefully I can fix it by default, but at the very least, with --nose)
+
+    - implement the --bundle flag, that generates a td_bundle.txt file, to make it easy for
+      people to email me data
+
+    - rewrite README.md to be much more end-user oriented...
+            - show how to install the latest-greatest terminfo.src from ncurses, just in their home directory
+            - strongly encourage them to do that ^^^
 
     - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
       confidence
@@ -12,9 +23,6 @@ The goal of this is to get some possible feedback about the use-cases.
             - now that 'placeholder_width' has been written...  modify it to display characters for
               specific encodings:  utf8, gb2312, and shiftjis...    We SHOULD be able to discern
               these encodings now, but 'placeholder_width' will confirm this for us
-
-    - implement the --bundle flag, that generates a td_bundle.txt file, to make it easy for
-      people to email me data
 
     - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
         and have it include a setting for $LANG
@@ -31,8 +39,20 @@ The goal of this is to get some possible feedback about the use-cases.
 
 
 ################################################################################
-##############################[ beta release ]##################################
+#################################[ v0.11 ]######################################
 ################################################################################
+
+- try to address some of the "variance" issues
+
+- modularity
+
+    - pull the lower-level I/O routines out of Termdetect_Tests.pm, put them in their own module, 
+            and then integrate that into many more scripts, to fix all the DRY problems where 
+            read_ansi_reply() and run_test() have been copy-n-pasted in several different files
+
+    - it would be nice if the I/O routines could be toggled between async and synchronous, from
+            code outside the module, rather than hard-coded and requiring manual editing to toggle
+
 
 - find an install of Perl v5.6.2 to test this against, to see if it will run even on old Perls
             (building it via PerlBrew has failed on two of my machines so far)
@@ -46,4 +66,3 @@ The goal of this is to get some possible feedback about the use-cases.
         - creating locales is...  kind of complicated :|
             http://serverfault.com/questions/274163/select-locales-on-ubuntu-10-04-after-installation#answer-274194
 
-- try to address some of the "variance" issues
