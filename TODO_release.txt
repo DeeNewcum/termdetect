@@ -6,13 +6,6 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
-    - when no exact match can be found, in the error message, mention which
-      matches came closest
-
-                - this is a more user-friendly way of dealing with variance, and it's important from
-                  a user-confidence perspective, especially at the beginning when we still have a
-                  lot of variance problems
-
     - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
       confidence
         

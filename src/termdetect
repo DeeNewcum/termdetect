@@ -41,7 +41,7 @@ my $test_results = perform_all_tests();
 
 ## ... and match them together
 my $term = match_results($test_results, $termmatch_db,
-    !($ARGV{snapshot} || $ARGV{dump}));
+    !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check}));
 
 
 

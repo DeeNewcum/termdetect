@@ -19,11 +19,11 @@ package Termdetect_Match;
 sub match_results {
     my ($test_results,              # the results from running all the tests on the current terminal
         $termmatch_db,              # the contents of "termmatch.src"
-        $die_on_multiple,           # should error out when there are multiple matches?
-                                    #           (optional param, defaults to yes)
+        $die_if_not_one,            # should we error out when there are more than one matches, or
+                                    #           zero matches?   (optional param, defaults to yes)
             ) = @_;
 
-    $die_on_multiple = 1        if (!defined($die_on_multiple));
+    $die_if_not_one = 1        if (!defined($die_if_not_one));
 
     my $match_stats = calculate_match_statistics($test_results, $termmatch_db);
         #print Dumper $match_stats;
@@ -42,8 +42,10 @@ sub match_results {
         }
     }
 
+    #show_match_percentages($match_stats, 3);       exit;
+
     if (@no_mismatches > 1) {
-        if ($die_on_multiple) {
+        if ($die_if_not_one) {
             print STDERR "Error: Multiple terminals matched: ",
                         join(", ", @no_mismatches), "\n";
             print STDERR "\n\nPlease file a bug for this at https://github.com/DeeNewcum/termdetect/issues\n";
@@ -53,6 +55,13 @@ sub match_results {
             print STDERR "Error: Multiple terminals matched: ",
                         join(", ", @no_mismatches), "\n\n";
         }
+    } elsif (@no_mismatches == 0) {
+        if ($die_if_not_one) {
+            print STDERR "Error: No terminals matched exactly.  Terminals that were close:\n";
+            my $closest_match = show_match_percentages($match_stats, 5);
+            print STDERR "\nRun this for more info:\n    $0 --check=$closest_match\n";
+            exit 1;
+        }
     } elsif (@no_mismatches == 1) {
         Termdetect_Tests::calculate_derived_values_after_match($test_results, $termmatch_db, $highest_match);
     }
@@ -60,6 +69,33 @@ sub match_results {
     return $highest_match;
 }
 
+
+# show the list of terminals, ordered by match percentage
+sub show_match_percentages {
+    my ($match_stats, $limit_to) = @_;
+            # $limit_to -- the number of items to display;   undef for unlimited
+
+    my @match_percentage;       # list all terminals, sorted in order of match percentage
+    foreach my $stats (values %$match_stats) {
+        next unless ($stats->{total});          # we need a non-zero denominator
+        $stats->{percentage} = int(100 * ($stats->{y} || 0) / $stats->{total});
+    }
+    @match_percentage = sort { $match_stats->{$b}{percentage} <=> $match_stats->{$a}{percentage} }
+                             keys %$match_stats;
+        #print Dumper \@match_percentage;    exit;
+
+    my $ctr = 0;
+    foreach my $term (@match_percentage) {
+        printf STDERR "    %-15s  %3d%% match\n",
+                      $term,
+                      $match_stats->{$term}{percentage};
+        $ctr++;
+        last if (defined($limit_to) && $ctr >= $limit_to);
+    }
+
+    # return the terminal with the closest match
+    return $match_percentage[0];
+}
 
 
 sub calculate_match_statistics {
