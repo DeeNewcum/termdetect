@@ -30,11 +30,6 @@
   incorrect result  X+0 Y+0   (so far, all the ones I have should be X+1)
 
 
-- in Putty, the tests turn off the cursor, even when --nose is used.  We need to find the offending
-  test, and disable it under --nose.
-
-
-
 
 ==== random stuff ====
 

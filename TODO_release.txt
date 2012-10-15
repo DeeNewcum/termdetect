@@ -6,10 +6,6 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
-    - fix the problem of the cursor being turned off in Putty
-
-                (hopefully I can fix it by default, but at the very least, with --nose)
-
     - implement the --bundle flag, that generates a td_bundle.txt file, to make it easy for
       people to email me data
 

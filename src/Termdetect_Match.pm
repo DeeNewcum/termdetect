@@ -162,7 +162,7 @@ sub match_one_field {
 
     #print ansi_escape_no_nl(Dumper $entry_cap); exit;
 
-    if (exists $entry_cap->{assign}) {
+    if (exists $entry_cap->{assign} && exists $test_result->{received}) {
         if ($entry_cap->{assign} !~ /\%/) {
             return ($test_result->{received} eq $entry_cap->{assign});
         } else {

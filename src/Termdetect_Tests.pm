@@ -74,6 +74,7 @@ sub perform_all_tests {
     run_and_store_test(r_device_attr        => "\e[c");
     run_and_store_test(r_device_attr2       => "\e[>c");
     run_and_store_test(r_device_attr3       => "\e[=c");
+    run_test("\e[=1c");         # some terminals interpret DA3 as a request to turn off the cursor, so we need to turn it back on
     run_and_store_test(r_term_param         => "\e[x");
     run_and_store_test(r_enquiry            => "\5");
 
