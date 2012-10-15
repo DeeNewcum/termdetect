@@ -1,7 +1,7 @@
-# A Perl-based parser for the terminfo source format.
+# A Perl implemntation of a terminfo source parser.
 #
-# See unit tests in parser/parser_unit_test -- we tested this somewhat well against the original
-# tic(1) parser.
+# See the unit tests in parser/parser_unit_test -- we tested this somewhat well against the
+# original tic(1) parser.
 
 
 package Terminfo_Parser;

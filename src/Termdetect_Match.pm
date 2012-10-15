@@ -1,3 +1,7 @@
+# After all the tests are run on the terminal, this module does the work of trying to find out
+# which database entry (or if things go badly: entries) match the test results most closely.
+
+
 package Termdetect_Match;
 
     use strict;

@@ -1,7 +1,8 @@
-# This module includes all routines that are either related to performing I/O, or are responsible
-# for directly performing tests on the terminal.
+# This module directly performs tests on the terminal.  Routines that deal only with the test
+# RESULTS are located elsewhere.
 #
-# Routines that deal only with the test RESULTS are located elsewhere.
+# This module also includes lower-level I/O routines.
+
 
 package Termdetect_Tests;
 

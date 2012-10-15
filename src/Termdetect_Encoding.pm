@@ -1,4 +1,6 @@
-# This tests the character-encoding of the terminal.
+# This performs tests on the terminal, to try to determine what character-encoding the terminal
+# is set to.
+
 
 package Termdetect_Encoding;
 
