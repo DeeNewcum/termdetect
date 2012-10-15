@@ -99,15 +99,40 @@ sub process_cmdline {
     GetOptions( \%ARGV,
                     map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
         "help|h|?",
-        qw( check nose t snapshot result dump ),
+        qw( check nose t snapshot result dump help-submit ),
     ) or usage();
     %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
     $ARGV{help} and usage();
+    $ARGV{'help-submit'} and help_submit();
 }
 
 
 sub usage {
     print STDERR <DATA>;
+    exit;
+}
+
+sub help_submit {
+    print STDOUT <<'EOF';
+The author doesn't have access to all terminals (or all versions of terminals).
+If termdetect doesn't detect your terminal, you can help greatly by submitting
+the test results for your particular terminal.
+
+1. Run  termdetect --dump
+
+2. Create a new issue at https://github.com/DeeNewcum/termdetect/issues
+   or contact me via any method mentioned at https://github.com/DeeNewcum
+
+3. In the information you send, include:
+
+    - the output of   termdetect --dump
+
+    - the name and version number of your terminal
+
+    - the reason for submitting the data, eg:
+            - there was no entry for this terminal
+            - there was an entry, but it didn't correctly identify your terminal
+EOF
     exit;
 }
 
@@ -185,3 +210,7 @@ termdetect
     --result=<test_id>
             Display the result of a single test.  To get a list of test_ids you can use, run
             termdetect --dump
+
+    --help-submit
+            Explain how to submit test results to the developer, to help recognize new terminal
+            types.

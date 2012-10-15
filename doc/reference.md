@@ -24,6 +24,10 @@
 Terminals:
 * http://vt100.net/ — lots of original manuals
  * VT510, [ANSI control function](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6) section
+
+Escape sequences:
+* [all-escapes.txt from bjh21 (Ben Harris)](http://bjh21.me.uk/all-escapes/all-escapes.txt)
+* [VT510 Video Terminal Programmer Information](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)
 * [Xterm Control Sequences](http://www.xfree86.org/current/ctlseqs.html)
 * [console codes(4) man page](http://www.kernel.org/doc/man-pages/online/pages/man4/console_codes.4.html), for the linux kernel VT console
 * GNU screen manual, [console sequences section](http://www.gnu.org/software/screen/manual/html_node/Control-Sequences.html)

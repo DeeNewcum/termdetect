@@ -6,9 +6,6 @@ Things to do in preparation for a release:
 
 The goal of this is to get some possible feedback about the use-cases.
 
-    - implement the --bundle flag, that generates a td_bundle.txt file, to make it easy for
-      people to email me data
-
     - rewrite README.md to be much more end-user oriented...
             - show how to install the latest-greatest terminfo.src from ncurses, just in their home directory
             - strongly encourage them to do that ^^^
@@ -27,6 +24,8 @@ The goal of this is to get some possible feedback about the use-cases.
                   complicated enough that it'll have to wait until the next release
 
     - release a fatpacked version   (using src/Makefile)
+
+            - post it like this:  http://paperlined.org/apps/github/release_files.html
 
     - distribute it somewhat widely:
             - post it on Facebook

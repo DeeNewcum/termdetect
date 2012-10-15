@@ -48,8 +48,8 @@ sub match_results {
         if ($die_if_not_one) {
             print STDERR "Error: Multiple terminals matched: ",
                         join(", ", @no_mismatches), "\n";
-            print STDERR "\n\nPlease file a bug for this at https://github.com/DeeNewcum/termdetect/issues\n";
-            print STDERR "and include the output of   termdetect --dump\n";
+            print STDERR "\n\nIt would help out greatly if you could submit data about this.\n";
+            print STDERR "See       termdetect --help-submit\n";
             exit 1;
         } else {
             print STDERR "Error: Multiple terminals matched: ",
@@ -60,6 +60,8 @@ sub match_results {
             print STDERR "Error: No terminals matched exactly.  Terminals that were close:\n";
             my $closest_match = show_match_percentages($match_stats, 5);
             print STDERR "\nRun this for more info:\n    $0 --check=$closest_match\n";
+            print STDERR "\n\nIt would help out greatly if you could submit data about this.\n";
+            print STDERR "See       termdetect --help-submit\n";
             exit 1;
         }
     } elsif (@no_mismatches == 1) {

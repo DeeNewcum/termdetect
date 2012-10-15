@@ -50,8 +50,8 @@ See [here](https://github.com/DeeNewcum/termdetect/graphs/commit-activity) and [
 
 ## Documentation
 
-* see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
 * run <tt>termdetect --help</tt>
+* see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
 
 ## Dependencies
 
