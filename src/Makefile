@@ -10,9 +10,9 @@ termdetect.fatpacked:	termdetect
 	mkdir lib
 	mkdir fatlib
 	cp *.pm lib
-	echo "#!/usr/bin/perl" > termdetect.fatpacked
-	fatpack file          >> termdetect.fatpacked
-	cat termdetect        >> termdetect.fatpacked
+	echo "$$FATPACK_HEADER" > termdetect.fatpacked
+	fatpack file           >> termdetect.fatpacked
+	cat termdetect         >> termdetect.fatpacked
 	chmod +x termdetect.fatpacked
 	rm lib/*
 	rmdir fatlib lib
@@ -21,3 +21,28 @@ clean:
 	-rm lib/*
 	-rmdir fatlib lib
 	-rm termdetect.fatpacked
+
+
+
+
+
+
+define FATPACK_HEADER
+#!/usr/bin/perl
+#
+# This file is generated code.
+# Please DO NOT EDIT or send patches for it.
+#
+# Please take a look at the source from
+#    https://github.com/DeeNewcum/termdetect
+# and submit patches against the individual files
+# that build it.
+#
+
+
+
+endef
+
+export FATPACK_HEADER
+
+
