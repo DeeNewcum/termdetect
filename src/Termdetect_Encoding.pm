@@ -49,12 +49,25 @@ our %encoding_tests = (
         'E2 99 A3'      => [1, 0],      # clubs symbol
     },
 
-    ## The below tests...  aren't that useful.  They may serve to distinguish gb2312 from utf8, but
-    ## they don't distinguish gb2312 from any other two-byte encoding.
-    #'gb2312' => {
-    #    'A1 DE'         => [1, 0],      # infinity symbol
-    #    'A6 C8',        => [1, 0],      # theta
-    #},
+    'gb2312' => {
+        'A1 A1'         => [2, 0],      # ideographic space
+        'A1 DE'         => [1, 0],      # infinity symbol
+        'A1 EA'         => [2, 0],      # fullwidth pound sign
+        'A1 FE'         => [2, 0],      # geta mark
+        'A1 EA'         => [2, 0],      # fullwidth pound sign
+        'A2 C6'         => [1, 0],      # parenthesized digit two
+        'A2 DA'         => [1, 0],      # circled digit two
+        'A6 C8'         => [1, 0],      # theta
+    },
+
+    'shift_jis' => {
+        '81 83'         => [2, 0],      # fullwidth less-than sign
+        '81 E1'         => [1, 0],      # much less-than
+        '81 CE'         => [1, 0],      # there exists
+        '81 BE'         => [1, 0],      # union
+        '81 BF'         => [1, 0],      # intersection
+        '82 81'         => [2, 0],      # fullwidth latin small letter A
+    }
 
 );
 

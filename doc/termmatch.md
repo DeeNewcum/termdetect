@@ -221,8 +221,8 @@ Some tests have custom code written for each test.  Their behavior may be more c
 <tr><td><tt>s_window_title
     <td>†
 
-<tr><td><tt>s_char_encoding
-    <td>The current character-encoding setting.
+<tr><td><tt>s_encoding
+    <td>The current character-encoding setting.  Only a few encodings are supported so far:  utf8, gb2312, and shift_jis.
 
 <tr><td><tt>s_window_size
     <td>The size of the terminal, in characters.†

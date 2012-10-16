@@ -10,13 +10,6 @@ The goal of this is to get some possible feedback about the use-cases.
             - show how to install the latest-greatest terminfo.src from ncurses, just in their home directory
             - strongly encourage them to do that ^^^
 
-    - maybe....  get at least two encodings to be detected?  That would give me a smidgin more
-      confidence
-        
-            - now that 'placeholder_width' has been written...  modify it to display characters for
-              specific encodings:  utf8, gb2312, and shiftjis...    We SHOULD be able to discern
-              these encodings now, but 'placeholder_width' will confirm this for us
-
     - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
         and have it include a setting for $LANG
 
