@@ -495,7 +495,6 @@ sub cooked_mode {
     #Term::ReadKey::ReadMode(2);
     system 'stty', '-icanon', '-echo', 'eol', "\001";
     $|++;
-    binmode(STDERR, ':utf8');
 
     eval q{
         END {

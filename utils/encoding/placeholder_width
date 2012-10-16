@@ -81,6 +81,11 @@ cooked_mode();
 if ($encoding eq 'utf8') {
     binmode STDERR, ':utf8';
 
+    placeholder(0x00A9,  undef);    # copyright symbol
+    placeholder(0x00C6,  undef);    # AE ligature
+    placeholder(0x2014,  undef);    # em-dash
+    placeholder(0x2663,  undef);    # clubs symbol
+
     placeholder(0x2615,  undef);    # HOT BEVERAGE
     placeholder(0x1f4a9, undef);    # PILE OF POO
     placeholder(0x5048,  undef);    # Unicode Han Character 'brave; martial; hasty; scudding' 
