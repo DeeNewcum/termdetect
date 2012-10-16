@@ -114,6 +114,7 @@ sub usage {
 
 sub help_submit {
     print STDOUT <<'EOF';
+
 The author doesn't have access to all terminals (or all versions of terminals).
 If termdetect doesn't detect your terminal, you can help greatly by submitting
 the test results for your particular terminal.
@@ -132,6 +133,7 @@ the test results for your particular terminal.
     - the reason for submitting the data, eg:
             - there was no entry for this terminal
             - there was an entry, but it didn't correctly identify your terminal
+
 EOF
     exit;
 }
@@ -184,33 +186,34 @@ sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wanta
 __END__
 termdetect
 
-    -t      only display the matched $TERM
+  -t    only display the matched $TERM
 
-    --check=<term>
-            Used to debug termmatch.src.  Displays extra information about how the current terminal
-            matches up to the specified entry in termmatch.src.
+  --check=<term>
+        Used to debug termmatch.src.  Displays extra information about how the
+        current terminal matches up to the specified entry in termmatch.src.
 
-    --check
-            Displays extra information about EVERY entry in termmatch.src.
+  --check
+        Displays extra information about EVERY entry in termmatch.src.
 
-    --nose
-            "No Side Effects".  Doesn't run tests that may have side-effects.
-            Gibberish may still be displayed on your screen, but they will be (mostly) erased
-            before exiting.  Most tests don't have side-effects, so using this option doesn't
-            greatly reduce the chances of correctly identifying your terminal.
+  --nose
+        "No Side Effects".  Doesn't run tests that may have side-effects.
+        Gibberish may still be displayed on your screen, but they will be
+        (mostly) erased before exiting.  Most tests don't have side-effects, so
+        using this option doesn't greatly reduce the chances of correctly
+        identifying your terminal.
 
-    --snapshot
-            Outputs the current tests results in a form that's suitable for pasting into
-            termmatch.src.
+  --snapshot
+        Outputs the current tests results in a form that's suitable for 
+        cut-n-pasting into termmatch.src.
 
-    --dump
-            Dumps the result of all tests run.
-            Similar to --snapshot, but gives a little more detailed information.
+  --dump
+        Dumps the result of all tests run.
+        Similar to --snapshot, but gives a little more detailed information.
 
-    --result=<test_id>
-            Display the result of a single test.  To get a list of test_ids you can use, run
-            termdetect --dump
+  --result=<test_id>
+        Display the result of a single test.  To get a list of test_ids you
+        can use, run   termdetect --dump
 
-    --help-submit
-            Explain how to submit test results to the developer, to help recognize new terminal
-            types.
+   --help-submit
+        A guide for submitting test results to the developer, so that more
+        terminal types will be recognized.

@@ -2,6 +2,7 @@ Reference documentation for specific encodings:
 
 ## UTF8
 
+http://codepoints.net/planes
 http://www.fileformat.info/info/unicode/index.htm
 
 
@@ -12,3 +13,5 @@ http://www.fileformat.info/info/charset/GB2312/list.htm
 
 
 ## Shift-JIS
+
+http://www.rikai.com/library/kanjitables/kanji_codes.sjis.shtml
