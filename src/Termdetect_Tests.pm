@@ -490,19 +490,40 @@ sub ansi_escape_no_nl {
 
 
 # put the terminal in cooked mode   (and make sure it gets changed back before the program exits)
+use POSIX qw(:termios_h);
 sub cooked_mode {
+    $|++;
+
     ## cooked mode, echo off
     #Term::ReadKey::ReadMode(2);
-    system 'stty', '-icanon', '-echo', 'eol', "\001";
-    $|++;
+
+    #system 'stty', '-icanon', '-echo', 'eol', "\001";
+
+    # from PerlFAQ8
+    my $term = POSIX::Termios->new();
+    $term->getattr(0);
+    our $orig_lflag = $term->getlflag();
+    $term->setlflag($orig_lflag & ~(ECHO | ECHOK | ICANON));
+    $term->setcc(VTIME, 1);
+    $term->setattr(0, TCSANOW);
+
 
     eval q{
         END {
             ## reset tty mode before exiting
             #Term::ReadKey::ReadMode(0);         
-            system 'stty', 'icanon', 'echo', 'eol', chr(0);
+
+            #system 'stty', 'icanon', 'echo', 'eol', chr(0);
+
+            # from PerlFAQ8
+            my $term = POSIX::Termios->new();
+            $term->getattr(0);
+            $term->setlflag($orig_lflag);
+            $term->setcc(VTIME, 0);
+            $term->setattr(0, TCSANOW);
         }
     };
+    die $@ if $@;
 }
 
 
