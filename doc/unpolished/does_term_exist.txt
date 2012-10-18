@@ -1,0 +1,6 @@
+possible ways to check if a terminal exists:
+
+- http://perldoc.perl.org/Term/Cap.html
+- toe -a   (or just "toe"...  not sure why this is different in Solaris 10?)
+- infocmp $TERM
+- tput -T$TERM longname;  echo $?
