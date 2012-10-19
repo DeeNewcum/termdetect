@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER=0.10
+VER=$(perl -nle 'print $1 if /constant VERSION => "(.*)"/' ../src/termdetect)
 DIR=/var/tmp/termdetect
 
 
