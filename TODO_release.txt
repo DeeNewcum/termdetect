@@ -9,8 +9,6 @@ The goal of this is to get some possible feedback about the use-cases.
     - have the script look in multiple places for termmatch.src, and if it can't find it,
       print a helpful message, mentioning where the user should place it
 
-    - add a little README.txt file
-
     - post the release tarball like this:  http://paperlined.org/apps/github/release_files.html
 
     - post it on Facebook, as a "this is what I've been working on for the last two months...  any

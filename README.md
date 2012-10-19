@@ -11,9 +11,7 @@ What if there was a way for Vim to know *for sure* if it was talking to a 256 co
 
 Fortunately, there is.
 
-    $ cd src
-
-    $ ./termdetect
+    $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
                  version:   libvte v0.32.1
                 encoding:   utf8
@@ -22,37 +20,35 @@ Fortunately, there is.
          window position:   5 x 81
              screen size:   3200 x 1080
 
-    $ export TERM=$(./termdetect -t)
+    $ export TERM=$(termdetect -t)
     $ echo $TERM
     vte
 
     ****TODO****: suggest some lines that users can put in their .vimrc to properly set things up as either 16 color or 256 color
     ****TODO****: also, if there's anything needed to get vimrc to use utf8 whenever termdetect senses that...
 
-    $ ./termping 
+    $ termping 
        1 ms    (min 1,  max 1,   avg 1.0)
        1 ms    (min 1,  max 1,   avg 1.0)
        1 ms    (min 1,  max 1,   avg 1.0)
        1 ms    (min 1,  max 1,   avg 1.0)
        1 ms    (min 1,  max 1,   avg 1.0)
 
-    # ^^ from this, a script can guess that the user's terminal is located on the same machine or in close proximity
+    # ^^ from this, a script can guess that the user's terminal is located
+    #    on the same machine or in close proximity
+
+## Installation
+
+Download the latest version [here](https://github.com/DeeNewcum/termdetect/downloads), unpack it, and read the [README.txt](https://github.com/DeeNewcum/termdetect/blob/master/release/README.txt) inside.
+
+termdetect requires only a base install of Perl.  It has been tested on Perl v5.8.6 through v5.14.2, and on Ubuntu 10.10, RHEL5, and Solaris 10.  It should work on OS/X, FreeBSD, AIX, and HPUX, but it hasn't been tested on those yet.  Bug reports for these are encouraged.
 
 ## How does it work?
 
 There are [some request/reply ANSI sequences](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) that give us bits of information about the terminal.  <tt>Termdetect</tt> looks up the responses in a database of known terminals.  Because it relies on ANSI escape sequences *only*, <tt>termdetect</tt> works across SSH and serial links.
-
-## Current status
-
-The software is pre-beta quality.  It's usable, but has some usability kinks that I need to resolve.
-
-See [here](https://github.com/DeeNewcum/termdetect/graphs/commit-activity) and [here](https://github.com/DeeNewcum/termdetect/branches) to see the recent activity level.
 
 ## Documentation
 
 * run <tt>termdetect --help</tt>
 * see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
 
-## Dependencies
-
-termdetect requires only a base install of Perl; it requires no extra libraries.  It has been tested on Perl v5.8.8.

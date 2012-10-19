@@ -1,13 +1,18 @@
 #!/bin/bash
 
 VER=$(perl -nle 'print $1 if /constant VERSION => "(.*)"/' ../src/termdetect)
-DIR=/var/tmp/termdetect
+SUBDIR=termdetect-$VER
+DIR=/var/tmp/$SUBDIR
 
 
 rm *.tar.bz2
+rm /var/tmp/termdetect-$VER.tar*
 
 mkdir -p $DIR
 rm -f $DIR/*
+
+
+cp README.txt $DIR
 
 pushd ../src
 make clean
@@ -19,12 +24,12 @@ cd ../
 cp LICENSE.txt $DIR
 cp termping $DIR
 
-cd $DIR
-tar -cvf termdetect-$VER.tar *
+cd /var/tmp
+tar -cvf termdetect-$VER.tar $SUBDIR/*
 bzip2 termdetect-$VER.tar
 
 popd
-mv $DIR/termdetect-$VER.tar.bz2 .
+mv /var/tmp/termdetect-$VER.tar.bz2 .
 
 rm -f $DIR/*
 rmdir $DIR
@@ -33,3 +38,5 @@ echo
 ls -l --si termdetect-$VER.tar.bz2
 echo
 tar -tvjf termdetect-$VER.tar.bz2
+
+perl -le 'select undef, undef, undef, 0.2'
