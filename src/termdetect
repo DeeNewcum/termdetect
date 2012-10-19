@@ -27,6 +27,10 @@
     use Getopt::Long;
     use Data::Dumper;
 
+    
+    # constants
+    use constant VERSION => "0.10";
+
 
 our %ARGV;
 process_cmdline();
@@ -99,11 +103,15 @@ sub process_cmdline {
     GetOptions( \%ARGV,
                     map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
         "help|h|?",
-        qw( check nose t snapshot result dump help-submit ),
+        qw( check nose t snapshot result dump help-submit version ),
     ) or usage();
     %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
     $ARGV{help} and usage();
     $ARGV{'help-submit'} and help_submit();
+    if ($ARGV{version}) {
+        print "termdetect, version ", VERSION, "\n";
+        exit;
+    }
 }
 
 
@@ -209,6 +217,9 @@ termdetect
   --dump
         Dumps the result of all tests run.
         Similar to --snapshot, but gives a little more detailed information.
+
+  --version
+        Show version number.
 
   --result=<test_id>
         Display the result of a single test.  To get a list of test_ids you
