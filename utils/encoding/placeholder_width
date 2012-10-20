@@ -61,7 +61,7 @@
     use warnings;
 
     use otherlibs;
-    use Termdetect_Tests qw( run_test read_phase output cooked_mode do_queued_async_reads );
+    use Termdetect_IO;
 
     use Encode;
     use charnames ();

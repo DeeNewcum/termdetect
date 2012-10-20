@@ -19,10 +19,10 @@ make clean
 make
 cp termdetect.fatpacked $DIR/termdetect
 cp termmatch.src $DIR
+cp termping $DIR
 
 cd ../
 cp LICENSE.txt $DIR
-cp termping $DIR
 
 cd /var/tmp
 tar -cvf termdetect-$VER.tar $SUBDIR/*

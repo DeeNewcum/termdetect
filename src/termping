@@ -29,22 +29,23 @@
     use strict;
     use warnings;
 
+    # improved FindBin
+    use Cwd 'abs_path';
+    use File::Basename;
+    use lib dirname( abs_path $0 );
+
+    use Termdetect_IO;
+
     use Time::HiRes qw[time sleep alarm];
 
     use Data::Dumper;
 
 
 
-## cooked mode, echo off
-#Term::ReadKey::ReadMode(2);
-system 'stty', '-icanon', '-echo', 'eol', "\001";
-$|++;
+#$Termdetect_IO::DEBUG = 1;
+#$Termdetect_IO::ASYNC = 0;
 
-END {
-    ## reset tty mode before exiting
-    #Term::ReadKey::ReadMode(0);         
-    system 'stty', 'icanon', 'echo', 'eol', chr(0);
-}
+cooked_mode();
 
 
 if (0) {
@@ -114,59 +115,6 @@ sub flood_ping_terminal {
     return sum(@rtts) / scalar(@rtts);
 }
 
-
-
-# Gets an ANSI response, reading only as many characters as necessary, and waiting only as long
-# as necessary.
-#
-# $timeout
-#       Seconds to wait for a reply.  Use 0 for no timeout.
-#
-# $response_end_character
-#       If we see this character, we know the response is finished.
-#
-#       Special values:
-#           - empty string -- means "read one buffer's worth of data".
-#           - undef -- means "there is no specific end-character...  read until timeout
-#           - regexp reference -- match several characters, not just one
-#                   (use the "qr" quote-like operator)
-sub read_ansi_reply {
-    my ($timeout,
-        $response_end_character) = @_;
-
-    $timeout = 1.0 unless defined($timeout);
-
-    my $reply = '';
-    eval {
-        local $SIG{ALRM} = sub { die "alarm\n" };
-        alarm($timeout)     if ($timeout != 0);
-
-        if (defined($response_end_character) && $response_end_character eq '') {
-            # an empty-string means "read everything that's in the buffer"...  this assumes that
-            # the response will be sent all-at-once, and that there will be a slight timegap in between
-            # the response and anything else the terminal sends to us
-            my $numchars = sysread(STDIN, $reply, 1024);
-            $reply = substr($reply, 0, $numchars);
-        } else {
-            while (1) {
-                if (defined(my $c = getc())) {
-                    #print ".";
-                    $reply .= $c;
-                    if (defined($response_end_character)) {
-                        if (ref($response_end_character) eq 'Regexp') {
-                            last if ($reply =~ $response_end_character);
-                        } else {
-                            last if ($c eq $response_end_character);
-                        }
-                    }
-                }
-            }
-        }
-    };
-    die $@ if ($@ && $@ ne "alarm\n");
-    alarm 0;
-    return $reply;
-}
 
 
 
