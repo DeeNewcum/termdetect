@@ -1,18 +1,6 @@
 Things to do in preparation for a release:
 
 ################################################################################
-#################################[ v0.10 ]######################################
-################################################################################
-
-The goal of this is to get some possible feedback about the use-cases.
-
-    - post the release tarball like this:  http://paperlined.org/apps/github/release_files.html
-
-    - post it on Facebook, as a "this is what I've been working on for the last two months...  any
-      feedback is very welcome"
-
-
-################################################################################
 #################################[ v0.11 ]######################################
 ################################################################################
 
@@ -21,6 +9,14 @@ The goal of this is to get some possible feedback about the use-cases.
             - strongly encourage them to do that ^^^
 
     - EAT YOUR OWN DOG FOOD
+
+        - have some sort of fallback mechanism to try progressively less-precise apprxoimations of
+          the suggested $TERM setting,   falling back whenever the current system doesn't support
+          a particular $TERM
+
+                - while we strongly suggest that the user install the full ncurses terminfo, this is
+                  something that many users may not want to do (at least not right away), so we shouldn't
+                  make it mandatory
 
         - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
             and have it include a setting for $LANG
