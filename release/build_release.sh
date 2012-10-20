@@ -19,7 +19,7 @@ make clean
 make
 cp termdetect.fatpacked $DIR/termdetect
 cp termmatch.src $DIR
-cp termping $DIR
+cp termping.fatpacked   $DIR/termping
 
 cd ../
 cp LICENSE.txt $DIR

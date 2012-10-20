@@ -2,7 +2,7 @@
 # create the fatpacked version of termdetect
 
 
-all:	termdetect.fatpacked
+all:	termdetect.fatpacked termping.fatpacked
 
 termdetect.fatpacked:	termdetect
 	@# we manually create lib/ and fatlib/, because we know for sure that we don't need any
@@ -11,9 +11,23 @@ termdetect.fatpacked:	termdetect
 	@mkdir fatlib
 	@cp *.pm lib
 	@echo "$$FATPACK_HEADER" > termdetect.fatpacked
-	fatpack file           >> termdetect.fatpacked
+	fatpack file            >> termdetect.fatpacked
 	@cat termdetect         >> termdetect.fatpacked
 	@chmod +x termdetect.fatpacked
+	@rm lib/*
+	@rmdir fatlib lib
+
+
+termping.fatpacked:	termping
+	@# we manually create lib/ and fatlib/, because we know for sure that we don't need any
+	@# external libraries
+	@mkdir lib
+	@mkdir fatlib
+	@cp Termdetect_IO.pm lib
+	@echo "$$FATPACK_HEADER" > termping.fatpacked
+	fatpack file            >> termping.fatpacked
+	@cat termping           >> termping.fatpacked
+	@chmod +x termping.fatpacked
 	@rm lib/*
 	@rmdir fatlib lib
 
@@ -21,6 +35,7 @@ clean:
 	@rm lib/*                  2>/dev/null    || true
 	@rmdir fatlib lib          2>/dev/null    || true
 	@rm termdetect.fatpacked   2>/dev/null    || true
+	@rm termping.fatpacked     2>/dev/null    || true
 
 
 

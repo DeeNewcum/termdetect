@@ -33,6 +33,9 @@ Things to do in preparation for a release:
                 - post it on reddit.com/r/commandline
                 - email Eads
                 - email Bec
+                - email the person that made ncurses, ask them if they know of anybody who would
+                  find this useful
+
 
 
 ################################################################################
