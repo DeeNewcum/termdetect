@@ -36,10 +36,11 @@ our %ARGV;
 process_cmdline();
 
 
-## read in the termmatch database
-my $termmatch_db = parse_terminfo(scalar(slurp("$FindBin::Bin/termmatch.src")));
-    #print ti_dump_terminal(values %$termmatch_db);      exit;
+my $termmatch_file = locate_termmatch_file();
 
+## read in the termmatch database
+my $termmatch_db = parse_terminfo(scalar(slurp($termmatch_file)));
+    #print ti_dump_terminal(values %$termmatch_db);      exit;
 
 ## read in the test results from the current terminal
 my $test_results = perform_all_tests();
@@ -144,6 +145,29 @@ the test results for your particular terminal.
 
 EOF
     exit;
+}
+
+
+# look in various places that the termmatch.src file could be, and if not found,
+# tell the user where they can go stick it
+sub locate_termmatch_file {
+    my @possible_locations = (
+        "$FindBin::Bin/termmatch.src",      # in the same directory as this script
+        "$ENV{HOME}/.termmatch.src",
+        "/etc/termmatch.src",
+        );
+    foreach my $loc (@possible_locations) {
+        return $loc if (-e $loc);
+    }
+    print STDERR <<"EOF";
+Error: File 'termmatch.src' not found.
+
+Please copy it from the installation tarball to one of these places:
+    - the same directory as this script ($FindBin::Bin)
+    - \$HOME/.termmatch.src
+    - /etc/termmatch.src
+EOF
+    exit 1;
 }
 
 
