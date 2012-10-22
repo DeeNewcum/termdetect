@@ -1,0 +1,29 @@
+- do SOME sort of automated testing....   A lot of terminals can be opened with a specific command
+  to run:
+
+        konsole --workdir $PWD -e bash -c './termdetect > /tmp/o; read';  sleep 2;  cat /tmp/o
+
+        gnome-terminal -x bash -c './termdetect > /tmp/o; read';  cat /tmp/o
+
+        pterm -e bash -c './termdetect > /tmp/o; read';  cat /tmp/o
+
+        xterm -e bash -c './termdetect > /tmp/o; read';  cat /tmp/o
+
+        rxvt -e bash -c './termdetect > /tmp/o; read';  cat /tmp/o
+
+        urxvt -e bash -c './termdetect > /tmp/o; read';  cat /tmp/o
+
+        aterm -e bash -c './termdetect > /tmp/o; read';  sleep 1;  cat /tmp/o
+
+        mrxvt -e bash -c './termdetect > /tmp/o; read';  cat /tmp/o
+
+        screen bash -c './termdetect > /tmp/o; read';  clear;  cat /tmp/o
+        
+        tmux new-session "bash -c './termdetect > /tmp/o; read'";  cat /tmp/o
+
+        mosh -- localhost bash -c "$PWD/termdetect > /tmp/o; read"; cat /tmp/o
+
+
+        in SecureCRT, the only way to do it is to create a new Session specically for this test,
+                and then specify the command in:   Connection > Logon Actions > Remote Command
+

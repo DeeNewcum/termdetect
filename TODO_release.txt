@@ -4,6 +4,9 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
+    - the encoding broke termdetect under tmux (it now hangs...  the change that triggered the problem is
+                7560c04)
+
     - rewrite README.md to be much more end-user oriented...
             - show how to install the latest-greatest terminfo.src from ncurses, just in their home directory
             - strongly encourage them to do that ^^^
