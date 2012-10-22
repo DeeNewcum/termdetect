@@ -19,6 +19,8 @@ package Termdetect_IO;
 
 
     # constants
+    our $DEBUG = 0;     # turns on lots of debugging
+
     our $ASYNC = 1;     # Should reads be done asynchronously?
                         # If things are confusing AT ALL, just set this to 0 and debug from there.
                         # In theory, both modes should act exactly the same (except synchronous
@@ -32,8 +34,11 @@ package Termdetect_IO;
                         #
                         # While testing, do NOT press any keys on the keyboard.
 
-
-    our $DEBUG = 0;
+    if ($DEBUG) {
+        # turn on maximum debugging
+        $CHECK_ALIGNMENT = 1;
+        $ASYNC = 0;
+    }
 
     # prototypes
     sub read_phase(&);
@@ -129,6 +134,7 @@ sub read_phase(&) {
         $callback->();
 
         if ($CHECK_ALIGNMENT) {
+            local $DEBUG = 0;       # don't show debugging output...  we INTEND to always timeout inside read_ansi_reply()
             my $any_more_reads = read_ansi_reply(0.1);      # the fractional number here can range from 0.1 to 2.0, depending on how slow the link between them is
             if (length($any_more_reads)) {
                 eval 'use Carp';                        # We don't want to rely on any non-core libraries unless really needed.  This will only be needed in development.
@@ -190,8 +196,11 @@ sub cooked_mode {
 
 
 sub output {
-    print "sending: ", ansi_escape(join "", @_), "\n"       if ($DEBUG);
-    print STDERR @_;
+    my $all = join "", @_;
+    if ($DEBUG && $all ne "\r" && $all ne "\n" && $all ne "\r\e[K") {
+        print "    sending: ", ansi_escape($all), "\n";
+    }
+    print STDERR $all;
 }
 
 
@@ -216,6 +225,7 @@ sub read_ansi_reply {
     $timeout = 1.0 unless defined($timeout);
 
     my $reply = '';
+    $@ = "";
     eval {
         local $SIG{ALRM} = sub { die "alarm\n" };
         alarm($timeout)     if ($timeout != 0);
@@ -244,7 +254,13 @@ sub read_ansi_reply {
     };
     die $@ if ($@ && $@ ne "alarm\n");
     alarm 0;
-    print "read response:  ", ansi_escape($reply), "\n"     if ($DEBUG);
+    if ($DEBUG) {
+        if ($@ eq "alarm\n" && (!defined($reply) || length($reply) == 0)) {
+            print "    timeout\n";
+        } else {
+            print "    read response:  ", ansi_escape($reply), "\n";
+        }
+    }
     return $reply;
 }
 
@@ -254,7 +270,7 @@ sub ansi_escape { map {(my $a = $_);
         $a =~ s/\e/\\E/g;
         $a =~ s/\x5/\\5/g;
         $a =~ s/\x9B/\\x9B/g;
-        $a =~ s/([\x00-\x1f])/"\\x" . sprintf "%02X", ord($1)/ge;
+        $a =~ s/([\x00-\x1f\x7f-\xff])/"\\x" . sprintf "%02X", ord($1)/ge;
         $a} @_ }
 
 

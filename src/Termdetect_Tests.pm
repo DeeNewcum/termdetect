@@ -129,6 +129,8 @@ sub perform_all_tests {
 sub synthetic__ff_clears {
     return if ($::ARGV{'nose'});        # side effect: clears the screen
 
+    DEBUG_test_name();
+
     output("\r\e[K");           # clear any gibberish that might be on this line, since we're dropping down a line
     output("\n");               # move a line first, to make sure we're not on the top line
     run_test("\x0c",
@@ -157,6 +159,8 @@ sub synthetic__ff_clears {
 # Figure this out before we waste a lot of time.
 sub ensure_cursor_position_supported {
 
+    DEBUG_test_name();
+
     output("\e[6n");
 
     read_phase {
@@ -171,6 +175,8 @@ sub ensure_cursor_position_supported {
 
 sub run_and_store_test {
     my ($test_id, $sequence) = @_;
+
+    DEBUG_test_name($test_id);
 
     run_test($sequence, sub {
         my ($test_result) = @_;
@@ -311,6 +317,21 @@ sub ansi_params {
 ############################[ debugging and human-readable ]##############################
 ##########################################################################################
 
+# when $Termdetect_IO::DEBUG is turned on, print out the provided test summary, before running
+# the test
+sub DEBUG_test_name {
+    if ($Termdetect_IO::DEBUG) {
+        if (!@_) {
+            # if no name is given, use the caller's subroutine name
+            my $caller_sub = (caller(1))[3];
+            $caller_sub =~ s/^.*:://;
+            @_ = ($caller_sub);
+        }
+        print "test ", @_, "\n";
+    }
+}
+
+
 sub summarize_result {
     my ($test_result) = @_;
     #print ansi_escape_no_nl(Dumper $test_result); exit;
@@ -320,7 +341,6 @@ sub summarize_result {
         return (ansi_escape($test_result->{received}))[0];
     }
 }
-
 
 
 sub debug_show_remaining_input {
