@@ -1,0 +1,205 @@
+* [31ma792958[m -[33m (HEAD, origin/master, origin/HEAD, master)[m fix hanging problem under tmux [32m(4 minutes ago) [1;34m<Dee Newcum>[m
+* [31m999e9fb[m -[33m[m add extra debugging functionality [32m(8 minutes ago) [1;34m<Dee Newcum>[m
+* [31m6c8b54a[m -[33m[m suggestions for automated testing [32m(57 minutes ago) [1;34m<Dee Newcum>[m
+* [31m27b2339[m -[33m[m fatpack termping, since it uses libs now [32m(2 days ago) [1;34m<Dee Newcum>[m
+* [31maa65a28[m -[33m[m split off Termdetect_IO.pm; move term_ping to src/ [32m(2 days ago) [1;34m<Dee Newcum>[m
+* [31m78415db[m -[33m (v0.10)[m release planning [32m(2 days ago) [1;34m<Dee Newcum>[m
+* [31m81d4a42[m -[33m[m look for termmatch.src in different places [32m(2 days ago) [1;34m<Dee Newcum>[m
+* [31mf44d5cf[m -[33m[m almost ready to release a tarball [32m(3 days ago) [1;34m<Dee Newcum>[m
+* [31m1ed658b[m -[33m[m . [32m(4 days ago) [1;34m<Dee Newcum>[m
+* [31m3e7a38d[m -[33m[m add release-builder script [32m(4 days ago) [1;34m<Dee Newcum>[m
+* [31m606ab39[m -[33m[m docs only [32m(4 days ago) [1;34m<Dee Newcum>[m
+* [31mc3236c9[m -[33m[m replace external stty with POSIX::Termios [32m(4 days ago) [1;34m<Dee Newcum>[m
+* [31m7560c04[m -[33m[m add GB2312 and shift-jis detection to main [32m(6 days ago) [1;34m<Dee Newcum>[m
+* [31m506382f[m -[33m[m bugfix -- utf8 detection stopped working in e4ba877 [32m(6 days ago) [1;34m<Dee Newcum>[m
+* [31mf6ddb67[m -[33m[m docs only [32m(6 days ago) [1;34m<Dee Newcum>[m
+* [31m9ccb3ee[m -[33m[m [placeholder_width] add shiftjis [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m58e5816[m -[33m[m add gb2312 to placeholder_width [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31mcbc102b[m -[33m[m . [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m48ab43f[m -[33m[m various [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m6c6aedd[m -[33m[m placeholder_width proved that this is 99% wrong [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31mb9da4a2[m -[33m[m docs only [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m8d3f802[m -[33m[m better fatpack header [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m4a63cec[m -[33m[m various updates [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31mc6075a5[m -[33m[m bugfix: the cursor got turned off in Putty [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m78dc28c[m -[33m[m release planning [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31mc6abf54[m -[33m[m something is really screwy with m_c1 [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31md313f3e[m -[33m[m improved FindBin [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m9ecab5f[m -[33m[m fixup xterm entries [32m(7 days ago) [1;34m<Dee Newcum>[m
+* [31m033a338[m -[33m[m show closest matches when no exact match found [32m(8 days ago) [1;34m<Dee Newcum>[m
+* [31mbfdf728[m -[33m[m docs only [32m(8 days ago) [1;34m<Dee Newcum>[m
+* [31m4778bde[m -[33m[m . [32m(9 days ago) [1;34m<Dee Newcum>[m
+* [31m4af7874[m -[33m[m docs only [32m(9 days ago) [1;34m<Dee Newcum>[m
+* [31m9fc6906[m -[33m[m release plans [32m(9 days ago) [1;34m<Dee Newcum>[m
+* [31mf8e3f18[m -[33m[m bugfix [32m(9 days ago) [1;34m<Dee Newcum>[m
+*   [31ma68aba6[m -[33m[m Merge branch 'topic_encoding_test' [32m(9 days ago) [1;34m<Dee Newcum>[m
+[32m|[m[33m\[m  
+[32m|[m * [31mb047a43[m -[33m (origin/topic_encoding_test, topic_encoding_test)[m . [32m(10 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m60c1fa2[m -[33m[m the securecrt behavior has been pinned down [32m(10 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31me4ba877[m -[33m[m new script: placeholder_width [32m(10 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m3e9bcd0[m -[33m[m fix subtle bug [32m(10 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m88e907c[m -[33m[m next step [32m(10 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m30bb0da[m -[33m[m more complaints in Perl 5.10 than 5.16 [32m(10 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m9a1a63f[m -[33m[m rename files [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m8258390[m -[33m[m rename files [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31mc382bca[m -[33m[m new script: encoding_search__nbytes.ucm [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m728d8bc[m -[33m[m . [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31mfab5a89[m -[33m[m include library utf8_generator() in all programs [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31ma406739[m -[33m[m add unit test for utf8_generator() [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m277b704[m -[33m[m indenting tweaks [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31me8773e9[m -[33m[m . [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31md70cf96[m -[33m[m +Vim encoding canonical names [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m5f315d2[m -[33m[m docs only -- remove TODOs already finished [32m(11 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31mc92eac8[m -[33m[m note to self [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m5d0f78d[m -[33m[m . [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31me168678[m -[33m[m todo [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31mc683852[m -[33m[m first semi-working version!  yay! [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m7cdf766[m -[33m[m already fixed [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m4de7ffe[m -[33m[m . [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m98a3f6c[m -[33m[m fixed the just-mentioned bug [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m9c23ff4[m -[33m[m an unfortunate bug [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31mf69db2f[m -[33m[m finished identifying perluniprops for atypical movement [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m85374b4[m -[33m[m bugfix [32m(12 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m9ea12c9[m -[33m[m +IANA Character Set registry [32m(13 days ago) [1;34m<Dee Newcum>[m
+[32m|[m * [31m0644a55[m -[33m[m start of trying to implement encoding tests [32m(13 days ago) [1;34m<Dee Newcum>[m
+* [33m|[m [31mf1b122e[m -[33m[m improvements for SecureCRT [32m(11 days ago) [1;34m<Dee Newcum>[m
+* [33m|[m [31m9285242[m -[33m[m TODO: bidi [32m(12 days ago) [1;34m<Dee Newcum>[m
+* [33m|[m [31m1fdec61[m -[33m[m woohoo!  utf8-detection kinda sorta works! [32m(12 days ago) [1;34m<Dee Newcum>[m
+* [33m|[m [31m6fca555[m -[33m[m docs only -- rewrite intro [32m(12 days ago) [1;34m<Dee Newcum>[m
+[33m|[m[33m/[m  
+* [31ma9c5d32[m -[33m[m be more precise [32m(13 days ago) [1;34m<Dee Newcum>[m
+* [31mc218461[m -[33m[m add "current status" to main readme [32m(13 days ago) [1;34m<Dee Newcum>[m
+* [31m8054c9a[m -[33m[m . [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5e8c7ae[m -[33m[m cleanup utils/encoding/ dir [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31mdb08782[m -[33m[m new script: create fatpacked version [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31m57ae43c[m -[33m[m docs only [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31md135b26[m -[33m[m I should be cleaning my place instead of this [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31mfb39ffd[m -[33m[m a workaround for the stuck-negative problem [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31m178bf6b[m -[33m[m initial version of "atypical_chars_search" script [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma9b1f72[m -[33m[m fill out missing test results [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb48b99a[m -[33m[m improve docs [32m(2 weeks ago) [1;34m<Dee Newcum>[m
+* [31m0dbf35e[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m73516a6[m -[33m[m start fleshing out encoding-detection ideas [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma4be387[m -[33m[m docs only [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mbf9a14c[m -[33m[m --result was implemented a while ago [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m4677c56[m -[33m[m calculate and display s_term_version [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mdecd66b[m -[33m[m by default, display a lot of information [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m33e93c5[m -[33m[m implement --nose, and error if multiple matches [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m12ea25e[m -[33m[m bugfix: parser was failing in Perl v5.8.8 [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31md04f844[m -[33m[m make "NOT PRESENT" lines in --check be more useful [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mad6a2ea[m -[33m[m implement s_ff_clears [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mc83c9f4[m -[33m[m xfce4-terminal has latency abnormality too [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31md77acca[m -[33m[m implement encoding_search [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m560724f[m -[33m[m oops [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m08b4063[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m9d4d109[m -[33m[m add mosh [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5e2fba7[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m38fdf75[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mf3e9500[m -[33m[m some investigation into urxvt issue [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m46261fe[m -[33m[m uxrvt's version is fixed [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m063c5d6[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma74e693[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m4cc755e[m -[33m[m improve database [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m303e049[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5ddafc1[m -[33m[m Putty version explainted -- it's fixed [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m05bb8a9[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m0d93ca7[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m21d3569[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m3594c27[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m2a2d313[m -[33m[m . [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mebadfef[m -[33m[m add konsole [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mdd8fa39[m -[33m[m improved --snapshot [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mf1aed7a[m -[33m[m empty string shouldn't match if cursor moves [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m31d4de7[m -[33m[m add dtterm and notes about Solaris xterm [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m9a3dd74[m -[33m[m oops [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mcff7e64[m -[33m[m an explanation for that odd DA3 [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m1bbec31[m -[33m[m oops [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m85a0ee0[m -[33m[m improve --snapshot, add several entries [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb431515[m -[33m[m several random things [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5601456[m -[33m[m implement --snapshot [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m50ecfc9[m -[33m[m calculate some derived values [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m8086ecd[m -[33m[m add basic command-line processing [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31mc3dc7e4[m -[33m[m rename terminfo_parser -> parser_unit_test [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m45c26b3[m -[33m[m unit-test should use the working version of parser [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m3da69d5[m -[33m[m handle unsupported % codes better [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31md9a0014[m -[33m[m remove %! -- it's superfluous [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m27e30cb[m -[33m (priv/master)[m implement matching [32m(3 weeks ago) [1;34m<Dee Newcum>[m
+* [31m0ea9104[m -[33m[m . [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5f74700[m -[33m[m . [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31m938948f[m -[33m[m add license information (GPL2) [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31meba05ef[m -[33m[m . [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31m232de89[m -[33m[m . [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31mfeefc4b[m -[33m[m . [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31mee505ab[m -[33m[m . [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31mab9d707[m -[33m[m reorganize things a bit [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31m119eda0[m -[33m[m proposed termmatch format [32m(4 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb07dc7a[m -[33m[m . [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m4c6c889[m -[33m[m add more tests [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m4b2d019[m -[33m[m cleanup [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m1cc4f5f[m -[33m[m more thorough testing [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m6544952[m -[33m[m ding ding!  precedence finally works! [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m46a1e25[m -[33m[m a more refined merge procedure [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m3b77b4c[m -[33m[m make it easier to debug precedence issues [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m65080a6[m -[33m[m some cleanup [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m4e32a05[m -[33m[m untested implementation of flatten [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb21bdd1[m -[33m[m separate testing code from production code (partially completed [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m49c69c9[m -[33m[m bug report: doesn't work in Perl 5.8 [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb16b0f1[m -[33m[m okay, I understand now, all "baffling" issues are resolved [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m945ef37[m -[33m[m try parser on ESR's version [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m84ee9c9[m -[33m[m closer to official [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m64f0e94[m -[33m[m some changes to bring our parser closer to the official one [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31mfa135bf[m -[33m[m add code to check against the official parser [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m742f9c4[m -[33m[m finish unescape() function [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m65450b3[m -[33m[m add unescape function [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31mabf0a6c[m -[33m[m combine all regexps into one [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31mc6a9d66[m -[33m[m more complete lexer [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5904f78[m -[33m[m collapse the lexing down to one subroutine [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m631a1b5[m -[33m[m the start of a terminfo parser [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m210bf81[m -[33m[m . [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31m0b9b696[m -[33m[m . [32m(5 weeks ago) [1;34m<Dee Newcum>[m
+* [31med16f67[m -[33m[m add terminfo_summarize [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m3b08e66[m -[33m[m . [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma155ce7[m -[33m[m . [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma3a3cdc[m -[33m[m reorganize / cleanup [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m1081213[m -[33m[m oops [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m4b15461[m -[33m[m split off flood-ping routine to be used in other programs [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mdd9f833[m -[33m[m [ping] implement sequence numbers [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m3e4013c[m -[33m[m docs only [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m509d0ba[m -[33m[m oops [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31md56ba11[m -[33m[m add min/max/avg to ping [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m04dd760[m -[33m[m add caveat [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma8c1b37[m -[33m[m new script: termping [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mef7dd5e[m -[33m[m add several Mosh references [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m6c3fb55[m -[33m[m . [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mca0ebf8[m -[33m[m flesh out the user scenarios more [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m50b7400[m -[33m[m docs only; start fleshing out user scenarios [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mbf321a3[m -[33m[m docs only [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m3aa1a00[m -[33m[m add more tests [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mf46dbf3[m -[33m[m bugfix:tolerate chars already in buffer [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31md2b18ea[m -[33m[m implement async feature in mainline [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m543e910[m -[33m[m remove unused [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31ma652cdc[m -[33m[m doc only [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5a4065a[m -[33m[m oops [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5953531[m -[33m[m . [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m87a6ab6[m -[33m[m wow, prepending CPR doesn't slow things down [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mc6209a6[m -[33m[m possible optimization -- yes, asynchrous is good [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m695ebb5[m -[33m[m improve documentation [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m94db819[m -[33m[m tweak docs [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31md0c4629[m -[33m[m bring things to a good stopping point, in case we need to mothball this [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m9005aac[m -[33m[m . [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb3158de[m -[33m[m various improvements [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m5a1ec63[m -[33m[m add ability to do CPR in run_test() [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m61dbb4d[m -[33m[m putty supports C1 [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m9d055d1[m -[33m[m add test for C1 codes [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m493227a[m -[33m[m more succinct explanation for no-CPR [32m(6 weeks ago) [1;34m<Dee Newcum>[m
+* [31m7e6c7ca[m -[33m[m various improvements [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m832007b[m -[33m[m make output pretty [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m0126aeb[m -[33m[m run_test() really can't do CPR queries [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31mb3dade6[m -[33m[m output() is unneeded [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m6514887[m -[33m[m improve readability [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31mf1708eb[m -[33m[m parsing is unnecessary -- regexp is sufficient [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m6ea2564[m -[33m[m run_test() doesn't need to know the end character [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m6f12774[m -[33m[m tdect's run_test() is minimally working [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31mc3fd703[m -[33m[m oops [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m9591bb2[m -[33m[m reorganize [32m(7 weeks ago) [1;34m<Dee Newcum>[m
+* [31m0c2cd38[m -[33m[m initial version, split off from https://github.com/DeeNewcum/individual_scripts [32m(7 weeks ago) [1;34m<Dee Newcum>[m

@@ -14,6 +14,24 @@ range of Perl versions and Un*x variants.
 
 
 
+Terminfo files
+==============
+You are encouraged to install the full set of terminfo files.  Many OS's do not come with this by
+default.  Packages for various systems exist:
+
+        OS                      package name
+        ------------------      ---------------
+        debian / ubuntu         ncurses-term
+        RHEL                    ncurses     << installed by default >>
+
+Installing it without a package is easy though:
+
+    TMP=$(mktemp)
+    curl http://invisible-island.net/datafiles/current/terminfo.src.gz | gzip -dc > $TMP
+    sudo tic $TMP
+    rm $TMP
+
+
 Documentation
 =============
 
