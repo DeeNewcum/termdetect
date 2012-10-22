@@ -84,7 +84,7 @@ sub do_encoding_tests {
                     map {bytes::chr(hex($_))}
                         split ' ', $encoding_test;
         output("\r");
-        run_test($bytes,
+        run_test($bytes . "K",
                  sub {
                     my ($test_result) = @_;
                     process_encoding_results($encoding_test, $test_result, \%still_matching);
@@ -107,6 +107,9 @@ sub process_encoding_results {
     foreach my $encoding (keys %$still_matching) {
         next unless exists $encoding_tests{$encoding}{$encoding_test};
         my $expected = $encoding_tests{$encoding}{$encoding_test};
+
+        # backup one, since we printed an extra character ("K") at the end
+        $test_result->{x_delta} = ($test_result->{x_delta} || 0) - 1;       
 
         # for newlines, we only care about delta-Y, we ignore delta-X
         if ($expected->[1] && $expected->[1] != ($test_result->{y_delta} || 0)
