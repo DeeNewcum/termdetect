@@ -18,6 +18,9 @@ Things to do in preparation for a release:
                   something that many users may not want to do (at least not right away), so we shouldn't
                   make it mandatory
 
+                - at the VERY least, we should notify the user if termdetect suggests a $TERM that
+                  the user doesn't have installed...  warn them of the problem, and suggest ways to fix
+
         - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
             and have it include a setting for $LANG
 
