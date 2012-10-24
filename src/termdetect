@@ -79,8 +79,9 @@ if ($ARGV{snapshot}) {
                 help_install_terminfos();
             }
         } else {
+            my $all_aliases = join " / ", @{ $termmatch_db->{$term}{termnames}};
             my @fields = (
-                    ['terminal',            $term],
+                    ['terminal',            $all_aliases],
                     ['version',             $test_results->{s_term_version}],
                     ['encoding',            $test_results->{s_encoding}],
                     ['terminal size',       $test_results->{s_window_size}],
