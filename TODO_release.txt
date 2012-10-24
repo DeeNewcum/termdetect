@@ -5,21 +5,12 @@ Things to do in preparation for a release:
 ################################################################################
 
     - rewrite README.md to be much more end-user oriented...
-            - show how to install the latest-greatest terminfo.src from ncurses, just in their home directory
-            - strongly encourage them to do that ^^^
+        (give good examples of how to integrate it into .bashrc and .vimrc)
 
     - EAT YOUR OWN DOG FOOD
 
-        - have some sort of fallback mechanism to try progressively less-precise apprxoimations of
-          the suggested $TERM setting,   falling back whenever the current system doesn't support
-          a particular $TERM
-
-                - while we strongly suggest that the user install the full ncurses terminfo, this is
-                  something that many users may not want to do (at least not right away), so we shouldn't
-                  make it mandatory
-
-                - at the VERY least, we should notify the user if termdetect suggests a $TERM that
-                  the user doesn't have installed...  warn them of the problem, and suggest ways to fix
+        - have a way to specify that termmatch.src entries that don't line up with terminfo.src
+          (such as 'tmux') will have a designated fallback that *does* line up with terminfo.src
 
         - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
             and have it include a setting for $LANG

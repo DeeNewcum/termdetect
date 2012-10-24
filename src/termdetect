@@ -71,7 +71,13 @@ if ($ARGV{snapshot}) {
 } elsif (!$ARGV{check}) {
     if (defined($term)) {
         if ($ARGV{t}) {
-            print "$term\n";
+            if (does_terminfo_exist($term)) {
+                print "$term\n";
+            } else {
+                print STDERR "The suggested \$TERM '$term' wasn't found.\n";
+                print STDERR "        \n";
+                help_install_terminfos();
+            }
         } else {
             my @fields = (
                     ['terminal',            $term],
@@ -90,6 +96,11 @@ if ($ARGV{snapshot}) {
                 }
                 printf "%20s:   %s\n", $field->[0], $disp;
             }
+
+            if (!does_terminfo_exist("vt100-putty")) {
+                print "\nThe full set of terminfo entries haven't been installed,\n",
+                        "see --help-terminfo for info on installing them.\n";
+            }
         }
     } else {
         print STDERR "No \$TERM matched.  Run again with --check for more information.\n";
@@ -104,11 +115,12 @@ sub process_cmdline {
     GetOptions( \%ARGV,
                     map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
         "help|h|?",
-        qw( check nose t snapshot result dump help-submit version ),
+        qw( check nose t snapshot result dump help-submit help-terminfo version ),
     ) or usage();
     %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
     $ARGV{help} and usage();
     $ARGV{'help-submit'} and help_submit();
+    $ARGV{'help-terminfo'} and help_install_terminfos();
     if ($ARGV{version}) {
         print "termdetect, version ", VERSION, "\n";
         exit;
@@ -168,6 +180,46 @@ Please copy it from the installation tarball to one of these places:
     - /etc/termmatch.src
 EOF
     exit 1;
+}
+
+
+# check the local computer's terminfo information to see if the proposed $TERM
+# is found there
+sub does_terminfo_exist {
+    my ($term) = @_;
+    # there are many ways to do this:
+    #   - toe -a    (or just `toe` in Solaris)
+    #   - infocmp $TERM
+    #   - tput -T$TERM longname;  echo $?
+
+    # for now, we just implement the tput one
+    my $pid = fork();
+    defined($pid)   or die $!;
+    if (!$pid) {
+        open STDOUT, '>', '/dev/null';
+        open STDERR, '>', '/dev/null';
+        exec "tput", "-T$term", "longname";
+    }
+    waitpid($pid, 0);
+    my $error_value = ($? >> 8);
+    return ($error_value == 0);
+}
+
+
+sub help_install_terminfos {
+    die <<'EOF';
+Instructions for installing the full set of terminfo entries:
+
+On Debian or Ubuntu:
+    sudo apt-get install ncurses-term
+                        
+Otherwise:
+    TMP=$(mktemp);
+    curl http://invisible-island.net/datafiles/current/terminfo.src.gz | gzip -dc > $TMP;
+    tic $TMP; rm $TMP
+            (run that as root if you want, otherwise it will install things
+             in ~/.terminfo/ )
+EOF
 }
 
 
@@ -249,6 +301,6 @@ termdetect
         Display the result of a single test.  To get a list of test_ids you
         can use, run   termdetect --dump
 
-   --help-submit
+  --help-submit
         A guide for submitting test results to the developer, so that more
         terminal types will be recognized.
