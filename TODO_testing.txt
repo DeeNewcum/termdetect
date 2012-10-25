@@ -1,5 +1,8 @@
-- do SOME sort of automated testing....   A lot of terminals can be opened with a specific command
-  to run:
+- terminfo parser -- we need to test to make sure that when duplicate terminal names are used,
+  that the parser errors out on this    (I think it maybe doesn't currently)
+
+- do some automated testing across terminals....   A lot of terminals can be opened with a specific
+  command to run:
 
         konsole --workdir $PWD -e bash -c './termdetect > /tmp/o; read';  sleep 2;  cat /tmp/o
 

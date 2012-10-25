@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 
+# TODO:
+#   - convert this to use TAP / Test::More  (or Test::Simple)
+#   - make it run the tests on BOTH files, in one run
+#   - keep the copious debugging output, but make it togglable by a flag, and have it disabled
+#     by default
+
 # unit tests for Terminfo_Parser.pm
 
     use strict;
@@ -18,8 +24,8 @@
 
 our %num_dependencies;
 
-my $terminfo = "terminfo.src";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
-#my $terminfo = "termtypes.ti";          # http://www.catb.org/~esr/terminfo/
+my $terminfo = "terminfo.ncurses";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
+#my $terminfo = "terminfo.ESR";          # http://www.catb.org/~esr/terminfo/
 
 my $terminfo_contents = slurp($terminfo);
 my $parsed = Terminfo_Parser::_parse_terminfo($terminfo_contents);

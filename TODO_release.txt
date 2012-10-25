@@ -36,6 +36,9 @@ Things to do in preparation for a release:
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- improve the contents of t/
+        (see TODO_testing.txt)
+
 - try to address some of the "variance" issues
 
 - find an install of Perl v5.6.2 to test this against, to see if it will run even on old Perls
