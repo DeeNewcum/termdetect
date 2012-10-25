@@ -16,15 +16,15 @@ range of Perl versions and Un*x variants.
 
 Terminfo files
 ==============
-You are encouraged to install the full set of terminfo files.  Many OS's do not come with this by
-default.  Packages for various systems exist:
+You are encouraged to install the full set of terminfo files.  Some OS's do not come with this by
+default.  Packages for various systems:
 
         OS                      package name
         ------------------      ---------------
         debian / ubuntu         ncurses-term
         RHEL                    ncurses     << installed by default >>
 
-Installing it without a package is easy though:
+Or you can install them manually:
 
     TMP=$(mktemp)
     curl http://invisible-island.net/datafiles/current/terminfo.src.gz | gzip -dc > $TMP
@@ -45,5 +45,5 @@ There's more documentation available at:
 Development
 ===========
 
-For the unpacked source code and issue tracker, see:
+For the full source code and bug tracker, see:
     https://github.com/DeeNewcum/termdetect
