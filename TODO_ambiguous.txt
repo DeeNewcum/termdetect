@@ -1,0 +1,14 @@
+I use the term "ambiguous" to mean a very specific thing -- when one escape-code  (or one
+encoded-character) gets interpretted by two different terminals as two very different things.
+
+This can a serious problem if one of the two meanings has serious side-effects.
+
+    (this is reminiscent of how ISA cards used to be configured back in the day...  hardware would
+     probed for auto-detection, but if you tried to test for card A at IRQ 7, but card B was
+     there instead, sometimes this probing would cause a system crash because the probe meant
+     something VERY different, depending on what card was there
+         http://en.wikipedia.org/wiki/Plug_and_play#ISA_and_PCI_self-configuration
+     )
+
+- 
+
