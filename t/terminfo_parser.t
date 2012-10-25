@@ -1,43 +1,46 @@
 #!/usr/bin/perl
 
-# TODO:
-#   - convert this to use TAP / Test::More  (or Test::Simple)
-#   - make it run the tests on BOTH files, in one run
-#   - keep the copious debugging output, but make it togglable by a flag, and have it disabled
-#     by default
-
 # unit tests for Terminfo_Parser.pm
 
     use strict;
     use warnings;
 
-    use constant UNIT_TEST => 1;     # set to true to validate our results against the official parser
+    use Cwd 'abs_path';
+    use File::Basename;
+    use lib ($FindBin::Bin = dirname( abs_path $0 )) . "/../src";
 
-    use lib '../src/';
     use Terminfo_Parser;
 
+    use Test::More;
     use Data::Dumper;
 
+    use constant VERBOSE => 0;          # show verbose debugging info
 
 
+my $debug = \*STDOUT;
+open $debug, '>', '/dev/null'       unless VERBOSE;
+
+chdir($FindBin::Bin);
 
 
-our %num_dependencies;
+my @terminfo_files = (
+        "terminfo.ncurses",         # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
+        "terminfo.ESR",             # http://www.catb.org/~esr/terminfo/
+        );
 
-my $terminfo = "terminfo.ncurses";          # http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo
-#my $terminfo = "terminfo.ESR";          # http://www.catb.org/~esr/terminfo/
+Test::More::plan(tests => scalar(@terminfo_files));
+foreach my $terminfo_filename (@terminfo_files) {
+    our %num_dependencies;
 
-my $terminfo_contents = slurp($terminfo);
-my $parsed = Terminfo_Parser::_parse_terminfo($terminfo_contents);
-#print dump_terminal(@$parsed); exit;
-$parsed = Terminfo_Parser::flatten_terminfo($parsed);
-#print Dumper $parsed; exit;
-#print dump_terminal(values %$parsed); exit;
-if (UNIT_TEST) {
-    unittest__prepare_TERMINFO($terminfo);
-    unittest_terminfo($parsed);
+    my $terminfo_contents = slurp($terminfo_filename);
+    my $parsed = Terminfo_Parser::_parse_terminfo($terminfo_contents);
+    #print dump_terminal(@$parsed); exit;
+    $parsed = Terminfo_Parser::flatten_terminfo($parsed);
+    #print Dumper $parsed; exit;
+    #print dump_terminal(values %$parsed); exit;
+    unittest__prepare_TERMINFO($terminfo_filename);
+    ok(!unittest_terminfo($parsed), $terminfo_filename);
 }
-
 
 
 # point $ENV{TERMINFO} to the right place
@@ -74,7 +77,7 @@ sub unittest_terminfo {
         next if ($entry->{fields}{gn});     # Term::Terminfo doesn't like generic entries
 
 
-        print "================[ ", join(" -- ", @{$entry->{termnames}}, $entry->{term_descr} || ''),
+        print $debug "================[ ", join(" -- ", @{$entry->{termnames}}, $entry->{term_descr} || ''),
                     " ]================\n";
     
         #print "dependencies:  $num_dependencies{$entry->{termnames}[0]}\n";
@@ -92,43 +95,43 @@ sub unittest_terminfo {
             my $cap = $field->{capability};
 
             do {        # modified version of dump_field($field)
-                printf "%20s", $field->{capability};
+                printf $debug "%20s", $field->{capability};
                 if ($field->{assign}) {
-                    print " = ", qquote($field->{assign});
+                    print $debug " = ", qquote($field->{assign});
                 } elsif ($field->{num}) {
-                    print " # ", qquote($field->{num});
+                    print $debug " # ", qquote($field->{num});
                 }
             };
 
             if (!exists $supported_caps{$cap}) {
-                print " "x40, "unsupported\n";
+                print $debug " "x40, "unsupported\n";
                 next;
             } elsif ($field->{assign}) {
                 my $actual = $terminfo->getstr($cap) || '';
                 if ($actual ne $field->{assign}) {
-                    print "\t\tERROR\n";
-                    printf "%-20s   %s\n", "", qquote($actual);
+                    print $debug "\t\tERROR\n";
+                    print $debug "%-20s   %s\n", "", qquote($actual);
                     $num_errors++;
                 }
             } elsif ($field->{num}) {
                 if ($cap eq 'lines' || $cap eq 'cols') {
-                    print "\n";
+                    print $debug "\n";
                     next;
                 }
                 my $actual = $terminfo->getnum($cap) || '';
                 if ($actual <=> $field->{num}) {
-                    print "\t\tERROR\n";
-                    printf "%-20s   %s\n", "", qquote($actual);
+                    print $debug "\t\tERROR\n";
+                    printf $debug "%-20s   %s\n", "", qquote($actual);
                     $num_errors++;
                 }
             }
-            print "\n";
+            print $debug "\n";
         }
 
         foreach my $nothere ($terminfo->flag_capnames()) {
             next if ($entry->{fields}{$nothere});
             if ($terminfo->getflag($nothere)) {
-                printf "%20s   false       ERROR -- tic(1) reports true\n", $nothere;
+                printf $debug "%20s   false       ERROR -- tic(1) reports true\n", $nothere;
                 $num_errors++;
             }
         }
@@ -136,29 +139,31 @@ sub unittest_terminfo {
             next if ($entry->{fields}{$nothere});
             next if ($nothere eq 'cols' || $nothere eq 'lines');
             if (defined(my $actual = $terminfo->getnum($nothere))) {
-                printf "%20s # undef       ERROR -- tic(1) reports $actual\n", $nothere;
+                printf $debug "%20s # undef       ERROR -- tic(1) reports $actual\n", $nothere;
                 $num_errors++;
             }
         }
         foreach my $nothere ($terminfo->str_capnames()) {
             next if ($entry->{fields}{$nothere});
             if (defined(my $actual = $terminfo->getstr($nothere))) {
-                printf "%20s = undef       ERROR -- tic(1) reports %s\n",
+                printf $debug "%20s = undef       ERROR -- tic(1) reports %s\n",
                         $nothere,
                         qquote($actual);
                 $num_errors++;
             }
         }
 
-        print "\n";
+        print $debug "\n";
     }
 
     # report the final status of the testing
     if ($num_errors) {
-        print STDERR "Total number of errors: $num_errors\n";
+        print $debug "Total number of errors: $num_errors\n";
     } else {
-        print STDERR "No errors!  All tests passed.\n"
+        print $debug "No errors!  All tests passed.\n"
     }
+
+    return $num_errors;
 }
 
 
@@ -169,7 +174,7 @@ sub dump_terminal {
         $return .= "================[ " . join(" -- ", @{$terminal->{termnames}}, $terminal->{term_descr} || '') .
                     " ]================\n";
         if ($terminal->{alias}) {
-            #printf "%20s   %s\n\n", "alias of", $terminal->{alias};
+            #printf $debug "%20s   %s\n\n", "alias of", $terminal->{alias};
             next;
         }
 
