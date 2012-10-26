@@ -87,7 +87,7 @@ sub _parse_terminfo  {
     for (our $lineno=0; $lineno<@lines; $lineno++) {
         our %field = (lineno => $lineno);
         our @fields = ();
-        our $is_continuation;
+        our $is_continuation = 1;
         $lines[$lineno] =~ m{
               ^ \# .*           # ignore comment lines
             | ^ \s* $           # ignore blank lines
