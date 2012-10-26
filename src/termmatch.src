@@ -56,7 +56,7 @@ linux|Linux console,
 
 # The xterm from http://invisible-island.net/ (specifically version #271)
 xterm,
-    m_c1=%x+2,
+#    m_c1=%x+2,
     m_cancel=,
     m_esc=,
     m_null_inside=,
@@ -273,6 +273,8 @@ securecrt,
     s_ff_clears=false,
 
 xterm+tmux,
+    fallback=screen-256color|screen,
+#       tmux really prefers one of these
     m_c1=%x+3,
     m_cancel=,
     m_esc=,

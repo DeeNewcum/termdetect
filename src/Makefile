@@ -4,7 +4,7 @@
 
 all:	termdetect.fatpacked termping.fatpacked
 
-termdetect.fatpacked:	termdetect
+termdetect.fatpacked:	termdetect *.pm
 	@# we manually create lib/ and fatlib/, because we know for sure that we don't need any
 	@# external libraries
 	@mkdir lib
@@ -18,7 +18,7 @@ termdetect.fatpacked:	termdetect
 	@rmdir fatlib lib
 
 
-termping.fatpacked:	termping
+termping.fatpacked:	termping Termdetect_IO.pm
 	@# we manually create lib/ and fatlib/, because we know for sure that we don't need any
 	@# external libraries
 	@mkdir lib
