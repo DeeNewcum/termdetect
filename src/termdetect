@@ -71,10 +71,11 @@ if ($ARGV{snapshot}) {
 } elsif (!$ARGV{check}) {
     if (defined($term)) {
         if ($ARGV{t}) {
-            if (does_terminfo_exist($term)) {
-                print "$term\n";
+            my $final_term = TERM_fallback($term, $termmatch_db);
+            if ($final_term) {
+                print "$final_term\n";
             } else {
-                print STDERR "The suggested \$TERM '$term' wasn't found.\n";
+               print STDERR "The suggested \$TERM \"$term\" wasn't found.\n";
                 print STDERR "        \n";
                 help_install_terminfos();
             }
@@ -181,6 +182,28 @@ Please copy it from the installation tarball to one of these places:
     - /etc/termmatch.src
 EOF
     exit 1;
+}
+
+
+sub TERM_fallback {
+    my ($proposed_term, $termmatch_db) = @_;
+
+    my $termmatch_entry = $termmatch_db->{$proposed_term};
+    my @fallback_list = @{$termmatch_entry->{termnames}};
+    if ($termmatch_entry->{fields}{fallback}) {
+        push @fallback_list,
+             split /\|/,
+                   $termmatch_entry->{fields}{fallback}{assign};
+    }
+        #print Dumper \@fallback_list; exit;
+
+    foreach my $fallback (@fallback_list) {
+        if (does_terminfo_exist($fallback)) {
+            return $fallback;
+        }
+    }
+
+    return undef;
 }
 
 

@@ -4,10 +4,19 @@ The 'termmatch.src' file is the database of known terminals that termdetect uses
 
 Termmatch files have the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
 
+* there's a special "fallback" capability entry
+* the percent syntax is entirely different
 * capability names are different  (and often longer)
-* percent syntax is entirely different
 
 The terminal names used in termmatch files should be the exact same as is used in terminfo files.  The $TERM names in the built-in termmatch files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
+
+## "fallback" field
+
+Once termdetect runs its tests and decides that a specific terminal entry matches the current terminal, it then looks for a $TERM value to set.  Often this will be one of the terminal names given on the first line.
+
+However, sometimes a more general value for $TERM is needed.  That's where <tt>fallback</tt> fields come in.  <tt>Fallback</tt> lets you give other values to set $TERM to.  Multiple $TERM values can be specified, separated by "|".
+
+The difference between fallback entries and terminal aliases is that terminal aliases have to be unique within a termdetect file, while many different terminals may have eg. "vt100" listed as a fallback.
 
 ## Percent codes
 

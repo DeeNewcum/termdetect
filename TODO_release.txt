@@ -9,8 +9,8 @@ Things to do in preparation for a release:
 
     - EAT YOUR OWN DOG FOOD
 
-        - have a way to specify that termmatch.src entries that don't line up with terminfo.src
-          (such as 'tmux') will have a designated fallback that *does* line up with terminfo.src
+        - we've implemented the "fallback" field now, but we need a decent way to determine what
+          the CLOSEST matching terminfo entry is...   currently, we use wildly random choices
 
         - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
             and have it include a setting for $LANG
