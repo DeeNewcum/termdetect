@@ -167,8 +167,7 @@ aterm,
     r_window_title=\E]l%*\E\\,
     use=rxvt-256color,
 
-urxvt,
-    fallback=rxvt,
+rxvt-unicode,
     m_c1=%x+2,
     m_cancel=,
     m_esc=,
@@ -247,6 +246,9 @@ securecrt,
     fallback=vt100,
 #    ^^ this REALLY varies, based on what its "emulation" setting is
 #    ^^ TODO: do some work to see what the closest match actually is
+#
+#   online suggestions:
+#       - http://tech.groups.yahoo.com/group/mutt-users/message/37609
     m_cancel=,
     m_esc=,
     m_null_inside=,
@@ -296,8 +298,8 @@ xterm+tmux,
     s_ff_clears=false,
 
 mosh,
-    fallback=vt100,
-#    ^^ TODO: do some work to see what the closest match actually is
+    fallback=xterm-256color,
+#            ^^ this is the value that's automatically set by the Mosh server
     m_c1=%x+3,
     m_cancel=,
     m_esc=,
