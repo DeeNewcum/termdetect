@@ -312,6 +312,9 @@ sub merge_tree {
     my $merged = {};
     my %terms_seen = (%$terms_seen, $term => 1);
     foreach my $use (reverse @{$first_level_uses->{$term} || []}) {
+        if (! exists $all_term_names->{$use}) {
+            die "Terminal not found in line:    use=$use,\n";
+        }
         $use = $all_term_names->{$use};         # canonicalize
         next if ($terms_seen{$use});            # avoid infinite loops
         my $subtree = merge_tree($use, \%terms_seen, @passthru);          # recursion step -- call ourselves
