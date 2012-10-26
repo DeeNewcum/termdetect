@@ -168,6 +168,7 @@ aterm,
     use=rxvt-256color,
 
 urxvt,
+    fallback=rxvt,
     m_c1=%x+2,
     m_cancel=,
     m_esc=,
@@ -191,7 +192,6 @@ urxvt,
     r_window_state=\E[1t,
     r_window_title=%+,
     s_ff_clears=false,
-    fallback=rxvt,
 
 mrxvt,
     m_c1=%x+3,
@@ -244,6 +244,9 @@ screen,
     s_ff_clears=false,
 
 securecrt,
+    fallback=vt100,
+#    ^^ this REALLY varies, based on what its "emulation" setting is
+#    ^^ TODO: do some work to see what the closest match actually is
     m_cancel=,
     m_esc=,
     m_null_inside=,
@@ -266,9 +269,6 @@ securecrt,
     r_window_state=,
     r_window_title=,
     s_ff_clears=false,
-    fallback=vt100,
-#    ^^ this REALLY varies, based on what its "emulation" setting is
-#    ^^ TODO: do some work to see what the closest match actually is
 
 xterm+tmux,
     m_c1=%x+3,
@@ -296,6 +296,8 @@ xterm+tmux,
     s_ff_clears=false,
 
 mosh,
+    fallback=vt100,
+#    ^^ TODO: do some work to see what the closest match actually is
     m_c1=%x+3,
     m_cancel=,
     m_esc=,
@@ -319,8 +321,6 @@ mosh,
     r_window_state=,
     r_window_title=,
     s_ff_clears=false,
-    fallback=vt100,
-#    ^^ TODO: do some work to see what the closest match actually is
 
 teraterm,
     m_c1=%x+1,
