@@ -5,6 +5,7 @@
 # See termmatch.md for more info.
 
 vte|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
+    fallback=gnome-256color,
     m_c1=%x+3,
     m_cancel=%x+4,
     m_esc=%x+5,
