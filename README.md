@@ -1,4 +1,4 @@
-If you use multiple server OS's or multiple terminal emulators, there isn't a good way to automatically set the $TERM variable.
+There isn't a good way to automatically set the $TERM variable, particularly if you use more than one server OS or more than one terminal emulator.
 
 The terminal-emulator doesn't know what terminfo entries are available on the remote machine, and the remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
 
