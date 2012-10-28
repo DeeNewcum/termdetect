@@ -1,0 +1,20 @@
+termdetect requires only a base install of Perl, and it has been tested on a
+wide variety of Perls and operating systems.
+
+Perl versions it has been tested on include:
+    - Perl v5.8.6
+    - Perl v5.10.1
+    - Perl v5.14.2
+
+Operating systems it has been tested on include:
+    - Ubuntu 10.10 and 12.04
+    - RHEL 5
+    - Solaris 10
+
+Termdetect is also expected to work on OS/X, FreeBSD, AIX, and HPUX, but it
+hasn't been tested on those yet.
+
+If there are any problems running on different versions of Perl or Un*x, I'm
+interested in having bug reports filed for these.
+
+    https://github.com/DeeNewcum/termdetect/issues

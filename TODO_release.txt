@@ -4,37 +4,46 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
-    - rewrite README.md to be much more end-user oriented...
-        (give good examples of how to integrate it into .bashrc and .vimrc)
+- EAT YOUR OWN DOG FOOD
 
-    - EAT YOUR OWN DOG FOOD
+- in run_test(), whenever it detects that delta-Y has happened, have it move back up
+  to the original line...    this should ensure we avoid printing jibberish to anything other
+  than the original line
+            (and, less importantly, it should ensure we avoid printing extra blank lines)
 
-        - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
-            and have it include a setting for $LANG
+- on release:
 
-                    - but ONLY if the character coding was detected -- trying to make a new locale is...
-                      complicated enough that it'll have to wait until the next release
-
-                    - I don't know if  Encode::Locale  could help with this at all?
-
-    - on release:
-
-        - distribute it somewhat widely:
-                - post it on Facebook
-                - post it on reddit.com/r/commandline
-                - email Eads
-                - email Bec
-                - email the person that made ncurses, ask them if they know of anybody who would
-                  find this useful
-
+    - distribute it somewhat widely:
+            - post it on Facebook
+            - post it on reddit.com/r/commandline
+            - email Eads
+            - email Bec
+            - email the person that made ncurses, ask them if they know of anybody who would
+              find this useful
 
 
 ################################################################################
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
+    and have it include a setting for $LANG
+
+            - but ONLY if the character coding was detected -- trying to make a new locale is...
+              complicated enough that it'll have to wait until the next release
+
+            - I don't know if  Encode::Locale  could help with this at all?
+
+            - add a good example to README.md of how to integrate termdetect into
+              .vimrc
+
+
+################################################################################
+#################################[ v0.13 ]######################################
+################################################################################
+
 - improve the contents of t/
-        (see TODO_testing.txt)
+        (see t/TODO.txt)
 
 - try to address some of the "variance" issues
 

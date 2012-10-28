@@ -1,7 +1,4 @@
 
-- for terminal entries that don't match up exactly with the $TERM names in the ncurses terminfo,
-  we need a way to specify which "fallback" $TERM setting to use, that *does* match ncuses terminfo
-
 
 - m_c1 causes problems across several terminals  (Putty, SecureCRT, probably more):
 
@@ -19,12 +16,6 @@
 
 
 ==== small or medium problems with specific terminals ====
-
-- with rxvt-unicode, there is uningested data that gets dumped out at the command-line afterwards...
-  we need to figure out what's going on here
-
-        - it appears to be happening on the 'm_sub' test
-
 
 - with rxvt-unicode, the encoding tests fail to detect that it's utf8 -- all test fail, with the
   incorrect result  X+0 Y+0   (so far, all the ones I have should be X+1)
