@@ -62,3 +62,8 @@ Urxvt
 
 Mosh
             - src/terminal/terminalfunctions.cc, search for CSI_SDA
+
+GNU Screen
+            - src/ansi.c, search for "secondary DA"
+            - 'nversion' is calculated in  src/screen.c
+            - the original values for nversion are defined in src/patchlevel.h

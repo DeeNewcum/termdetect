@@ -279,11 +279,13 @@ sub calculate_version {
     # This is the only place in the code that we have terminal-specific code.  This really
     # out to be moved to termmatch.src in some way.
     if ($matched_term eq 'vte') {
-        my ($lasttwo) = ($da2 =~ s/(\d\d)$//);
-        $all_results->{s_term_version}{received} = sprintf "libvte v%0.2f.%d", $da2 / 100, $lasttwo;
-    } elsif ($matched_term eq 'screen') {
-        my ($lasttwo) = ($da2 =~ s/(\d\d)$//);
-        $all_results->{s_term_version}{received} = sprintf "v%0.2f.%02d", $da2 / 100, $lasttwo;
+        $da2 =~ s/(\d\d)$//;
+        my $last2digits = $1;
+        $all_results->{s_term_version}{received} = sprintf "libvte v%0.2f.%d", $da2 / 100, $last2digits;
+    } elsif ($matched_term =~ /^screen(?:_.*)?$/) {
+        $da2 =~ s/(\d\d)$//;
+        my $last2digits = $1;
+        $all_results->{s_term_version}{received} = sprintf "v%0.2f.%02d", $da2 / 100, $last2digits;
     } elsif ($matched_term eq 'mrxvt') {
         # mrxvt's version number already has dots in it, which is a total violation of the spec
         $all_results->{s_term_version}{received} = "v$da2";     
