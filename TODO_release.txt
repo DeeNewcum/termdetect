@@ -37,10 +37,22 @@ Things to do in preparation for a release:
 #################################[ v0.13 ]######################################
 ################################################################################
 
+- add the ability to have "suffixes" on terminal names
+    - these suffixes would be entirely confined to termdetect; once the terminal was going
+      to be used for terminfo, the suffix would be removed
+    - the suffix is only to keep track of unique termmatch entries (eg. because of version variations),
+      but for which those minor differences ONLY matter to termdetect, and don't matter to terminfo
+    - one example where we need this already is  screen_4.00.02  vs  screen_4.00.03jw4,
+      where the terminfo entry is just   screen
+
 - improve the contents of t/
         (see t/TODO.txt)
 
 - try to address some of the "variance" issues
+    see TODO_variance.txt
+
+- try to address some of the "ambiguous" issues
+    see TODO_ambiguous.txt
 
 - find an install of Perl v5.6.2 to test this against, to see if it will run even on old Perls
             (building it via PerlBrew has failed on two of my machines so far)
