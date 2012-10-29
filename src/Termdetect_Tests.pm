@@ -144,7 +144,8 @@ sub synthetic__ff_clears {
 
             if ($all_results{s_ff_clears}{received} eq 'false') {
                 # if the screen wasn't cleared, move back up one line
-                output("\e[A");
+                output("\r\e[K"         # clear current line
+                     . "\e[A");         # move up one line
             }
         });
 }
