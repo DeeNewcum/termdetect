@@ -101,9 +101,18 @@ sub run_test {
             $replies .=  $reply;
 
             if ($replies =~ /.*\e\[(\d+);(\d+)R(.*)\e\[(\d+);(\d+)R/s) {
-                $test_result->{x_delta}  = $5 - $2     if ($5 - $2);
-                $test_result->{y_delta}  = $4 - $1     if ($4 - $1);
+                $test_result->{x_delta}  = $5 - $2;
+                $test_result->{y_delta}  = $4 - $1;
                 $test_result->{received} = $3;
+
+                if ($test_result->{y_delta} > 0) {
+                    # if this test caused us to move down some lines, then
+                    # move back up, to ensure that all "gibberish" is confined to a single line
+                    output(("\r"        # move to the beginning of the line
+                          . "\e[K"      # erase to end of line
+                          . "\e[A")     # move up one line
+                                x $test_result->{y_delta});
+                }
 
                 @_ = $test_result;  goto &$cps;    # continuation-passing style
             }
