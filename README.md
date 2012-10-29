@@ -15,7 +15,7 @@ termdetect solves this problem by [running a series of ANSI queries](https://git
 
     $ export TERM=$(termdetect -t)
     $ echo $TERM
-    vte
+    vte-256color
 
     $ termping 
        1 ms    (min 1,  max 1,   avg 1.0)

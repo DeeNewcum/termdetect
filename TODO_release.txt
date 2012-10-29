@@ -6,6 +6,14 @@ Things to do in preparation for a release:
 
 - EAT YOUR OWN DOG FOOD
 
+- set the number of colors correctly...   we *shouldn't* hard-code 256 colors in 
+    ~/.vimrc, because that breaks when we don't have 256 colors
+    (eg. in Linux Console [16] or urxvt [88])
+
+            - terminfo.ncurses doesn't have a 256 variant for:
+                    - SecureCRT
+                    - tmux      (which terminfo.ncurses reads as "xterm-new")
+
 - on release:
 
     - distribute it somewhat widely:
@@ -44,6 +52,7 @@ Things to do in preparation for a release:
       but for which those minor differences ONLY matter to termdetect, and don't matter to terminfo
     - one example where we need this already is  screen_4.00.02  vs  screen_4.00.03jw4,
       where the terminfo entry is just   screen
+            - note: terminfo.ncurses already does this...  it uses the "+" character for internal-only purposes
 
 - improve the contents of t/
         (see t/TODO.txt)
