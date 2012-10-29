@@ -79,7 +79,7 @@ sub do_encoding_tests {
     my %still_matching = map {$_ => 1}
                              keys %encoding_tests;
     foreach my $encoding_test (@encoding_tests) {
-        print "encoding $encoding_test\n"       if ($Termdetect_IO::DEBUG);
+        debug_log("encoding $encoding_test\n");
         my $bytes = join "",
                     map {bytes::chr(hex($_))}
                         split ' ', $encoding_test;

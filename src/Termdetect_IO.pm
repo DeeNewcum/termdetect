@@ -15,11 +15,14 @@ package Termdetect_IO;
     use Exporter 'import';
 
     our @EXPORT = qw(   run_test  read_phase  read_ansi_reply  output  cooked_mode
-                        do_queued_async_reads  );
+                        do_queued_async_reads debug_log );
 
 
     # constants
     our $DEBUG = 0;     # turns on lots of debugging
+
+        # To watch the debug logs, run this command in another window:
+        #     tail -fs0 --retry /var/tmp/termdetect.debug\n";
 
     our $ASYNC = 1;     # Should reads be done asynchronously?
                         # If things are confusing AT ALL, just set this to 0 and debug from there.
@@ -34,6 +37,11 @@ package Termdetect_IO;
                         #
                         # While testing, do NOT press any keys on the keyboard.
 
+    our $EXTRA_DELAY = 0.20;            # (seconds)
+                        # Add this much extra delay in between each test.
+                        # Good choices range from 0.1 to 2.0.
+                        # This is inactive unless $DEBUG is true.
+
     if ($DEBUG) {
         # turn on maximum debugging
         $CHECK_ALIGNMENT = 1;
@@ -45,7 +53,10 @@ package Termdetect_IO;
 
     # globals
     our @read_queue;
+    our $debug_fh;
 
+
+debug__open_log();
 
 
 # From the outside, this routine merely sends an ANSI query, and reads the reply.
@@ -207,7 +218,7 @@ sub cooked_mode {
 sub output {
     my $all = join "", @_;
     if ($DEBUG && $all ne "\r" && $all ne "\n" && $all ne "\r\e[K") {
-        print "    sending: ", ansi_escape($all), "\n";
+        print $debug_fh "    sending: ", ansi_escape($all), "\n";
     }
     print STDERR $all;
 }
@@ -265,9 +276,9 @@ sub read_ansi_reply {
     alarm 0;
     if ($DEBUG) {
         if ($@ eq "alarm\n" && (!defined($reply) || length($reply) == 0)) {
-            print "    timeout\n";
+            print $debug_fh "    timeout\n";
         } else {
-            print "    read response:  ", ansi_escape($reply), "\n";
+            print $debug_fh "    read response:  ", ansi_escape($reply), "\n";
         }
     }
     return $reply;
@@ -281,6 +292,45 @@ sub ansi_escape { map {(my $a = $_);
         $a =~ s/\x9B/\\x9B/g;
         $a =~ s/([\x00-\x1f\x7f-\xff])/"\\x" . sprintf "%02X", ord($1)/ge;
         $a} @_ }
+
+##########################################################################################
+#####################################[ debugging ]########################################
+##########################################################################################
+            # this code should maybe be split off into its own package?
+
+# public method -- used by other modules to print to the debug log
+sub debug_log {
+    if ($DEBUG) {
+        # add extra delay in between each test
+        select undef, undef, undef, $EXTRA_DELAY;
+
+        print $debug_fh @_;
+    }
+}
+
+
+sub debug__open_log {
+    if ($DEBUG) {
+        open $debug_fh, '>', '/var/tmp/termdetect.debug'        or die $!;
+        print $debug_fh "\n" x 10;
+
+        # autoflush
+        my $prev_fh = select $debug_fh;
+        $| = 1;
+        select $prev_fh;
+    } else {
+        open $debug_fh, '>', '/dev/null';
+    }
+}
+
+
+END {
+    if ($DEBUG) {
+        # indicate that the program is finished
+        print $debug_fh "-"x80, "\n";
+    }
+}
+
 
 
 

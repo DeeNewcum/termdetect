@@ -329,7 +329,7 @@ sub DEBUG_test_name {
             $caller_sub =~ s/^.*:://;
             @_ = ($caller_sub);
         }
-        print "test ", @_, "\n";
+        debug_log("test ", @_, "\n");
     }
 }
 
