@@ -31,7 +31,7 @@ termdetect solves this problem by [running a series of ANSI queries](https://git
 
 Download the latest version [here](https://github.com/DeeNewcum/termdetect/downloads), unpack it, and read the [README.txt](https://github.com/DeeNewcum/termdetect/blob/master/release/README.txt) inside.
 
-termdetect requires only a base install of Perl.  It has been tested on a [variety of Perl versions and operating systems](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
+termdetect has no dependencies other than a default installation of Perl.  It has been tested on a [variety of Unix OS's and Perl versions](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
 
 ## Documentation
 

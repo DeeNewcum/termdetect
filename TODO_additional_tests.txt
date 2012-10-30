@@ -7,6 +7,9 @@
 ################################################################################
 
 
+- m_256colors -- try to display one of the colors above 88 colors, and see if it causes cursor movement.
+    Most terminals hide this, but at least one (Linux console) displays it.
+
 - add a "K" on to the end of MOST m_* tests, and then subtract one from the final result....
     this allows us to detect cases where an escape code is "dangling"...  that the terminal is still
     processing the preceding characters as an escape sequence.  A "dangling escape sequence" would
