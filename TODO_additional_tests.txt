@@ -7,6 +7,11 @@
 ################################################################################
 
 
+- experiment with the color reporting...  this could potentially open up whole new avenues for us
+            http://rtfm.etla.org/xterm/ctlseq.html
+            echo -e "\eP\$qm\e\\"; xxd
+    - it seems to work in xterm and urxvt
+
 - m_256colors -- try to display one of the colors above 88 colors, and see if it causes cursor movement.
     Most terminals hide this, but at least one (Linux console) displays it.
 
