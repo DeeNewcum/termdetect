@@ -304,11 +304,12 @@ termdetect
         Displays extra information about EVERY entry in termmatch.src.
 
   --nose
-        "No Side Effects".  Doesn't run tests that may have side-effects.
-        Gibberish may still be displayed on your screen, but they will be
-        (mostly) erased before exiting.  Most tests don't have side-effects, so
-        using this option doesn't greatly reduce the chances of correctly
-        identifying your terminal.
+        "No Side Effects".  Doesn't run tests that have significant side-effects.
+        Most tests don't have side-effects, so using this option doesn't greatly
+        reduce the chances of correctly identifying your terminal.
+        Note that there are some smaller side-effects that are unavoidable,
+        even when --nose is used.  Read more at:
+            https://github.com/DeeNewcum/termdetect/blob/master/doc/side-effects.md
 
   --snapshot
         Outputs the current tests results in a form that's suitable for 

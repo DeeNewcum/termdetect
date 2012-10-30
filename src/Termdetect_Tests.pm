@@ -127,7 +127,7 @@ sub perform_all_tests {
 #
 #       See:  http://www.aivosto.com/vbtips/control-characters.html#FF
 sub synthetic__ff_clears {
-    return if ($::ARGV{'nose'});        # side effect: clears the screen
+    return if ($::ARGV{nose});        # side effect: clears the screen
 
     DEBUG_test_name();
 
