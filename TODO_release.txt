@@ -6,23 +6,43 @@ Things to do in preparation for a release:
 
 - EAT YOUR OWN DOG FOOD
 
-- set the number of colors correctly...   we *shouldn't* hard-code 256 colors in 
-    ~/.vimrc, because that breaks when we don't have 256 colors
-    (eg. in Linux Console [16] or urxvt [88])
+- move this bug elsewhere:
+    - set the number of colors correctly...   we *shouldn't* hard-code 256 colors in 
+        ~/.vimrc, because that breaks when we don't have 256 colors
+        (eg. in Linux Console [16] or urxvt [88])
 
-            - terminfo.ncurses doesn't have a 256 variant for:
-                    - SecureCRT
-                    - tmux      (which terminfo.ncurses reads as "xterm-new")
+                - terminfo.ncurses doesn't have a 256 variant for:
+                        - SecureCRT
+                        - tmux      (which terminfo.ncurses reads as "xterm-new")
+
+- make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
+
+    - when searching for termmatch.src, have the last location be included in the fatpack bundle
+            - figure out a way to bundle it in the fatpack file
+            - note in the manual that if the user wants to modify the database, they should
+              download a copy, and modify that....  just adding overrides in ~/.termmatch.src isn't enough
+
+    - is there any way to make terminfo installation easier?
+
+            - have termdetect be able to do it, itself?  (only when requested, of course)
+
 
 - on release:
 
     - distribute it somewhat widely:
+            - post it on Freshmeat
+            - post it on http://opencode.us/
             - post it on Facebook
             - post it on reddit.com/r/commandline
             - email Eads
             - email Bec
             - email the person that made ncurses, ask them if they know of anybody who would
               find this useful
+            - more ideas:
+                    - http://stackoverflow.com/questions/95710/how-do-you-promote-advertise-evangelize-your-open-source-project
+                    - http://gsoc-wiki.osuosl.org/index.php/Promoting_Your_Open_Source_Project
+                    - listen to Tribes by Seth Godin    http://stackoverflow.com/questions/95710/how-do-you-promote-advertise-evangelize-your-open-source-project/441859#441859
+                    - ask Eads how to get a few initial eyeballs
 
 
 ################################################################################

@@ -30,3 +30,12 @@
         in SecureCRT, the only way to do it is to create a new Session specically for this test,
                 and then specify the command in:   Connection > Logon Actions > Remote Command
 
+
+- is there any way we can do the cross-terminal testing on one of the hosted-testing sites?
+
+    - Travis-CI
+        - they allow ubuntu packages to be installed, as well as third-party PPAs
+
+    - various IaaS:
+        - http://en.wikipedia.org/wiki/Category:Infrastructure_as_a_service
+
