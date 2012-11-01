@@ -15,16 +15,17 @@ Things to do in preparation for a release:
 
     - create a single-file version of termdtect that includes the above
         - have a canonical URL that points to this file
-                - (we'll implement this via gh-pages, presumably)
+                http://paperlined.org/tmp/mutable_shortlinks.txt
+
         - include a curl-based installation line in README.md
 
     - is there any way to make terminfo installation easier?
 
             - have termdetect be able to do it, itself?  (only when requested, of course)
 
+- see if I can get one of my friends to test it on OS/X
 
-- is there a way to add an image-tracker to the github page?
-
+- find a version of FreeBSD to test this on
 
 - [usability/polish]  sporadic failures happen when the user types something exactly when
             termdetect is running.  While this happens maybe 0.5 - 1.0% of the time, it would
@@ -36,9 +37,14 @@ Things to do in preparation for a release:
 
                     - see Github Issue #3 for thoughts on possible ways to recover
 
+- promotion
+
+    - is there a way to add an image-tracker to the github page?
+
 - on release:
 
     - distribute it somewhat widely:
+            - post it here:  http://serverfault.com/questions/350401/detect-terminal-type-with-tput
             - post it on Freshmeat
             - post it on http://opencode.us/
             - post it on Facebook

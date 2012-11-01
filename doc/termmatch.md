@@ -159,11 +159,11 @@ Within termmatch files, "capabilities" can also be called "tests" — each refer
 
 ### m_* capabilities — tests whose only goal is to detect cursor Movement
 
-There are three main ways that a terminal emulator chooses to respond to an ANSI code:
+There are three main ways that a terminal emulator chooses to respond to an ANSI escape sequence:
 
-1. SUPPORTED.  The code is at least minimally supported — the terminal changes a setting or moves the cursor, or does *something* in response.
-2. HIDDEN.  The code isn't supported at all, but at least the terminal recognizes it as ANSI code that another terminal would support, so it hides the escape sequence from the user, but does nothing else with it.
-3. DISPLAYED.  The code isn't supported.  Further, the terminal doesn't even recognize it as a legitimate ANSI code, and it displays some or all of the sequences's characters to the user.
+1. SUPPORTED.  The sequence is at least minimally supported — the terminal changes a setting or moves the cursor, or does *something* in response.
+2. HIDDEN.  The sequence isn't supported at all, but at least the terminal recognizes it as ANSI code that another terminal would support, so it hides the escape sequence from the user, but does nothing else with it.
+3. DISPLAYED.  The sequence isn't supported.  Further, the terminal doesn't even recognize it as a legitimate ANSI code, and it displays some or all of the sequences's characters to the user.
 
 We can detect group #3 by watching for cursor movement, using the CPR (cursor position report) sequence.
 

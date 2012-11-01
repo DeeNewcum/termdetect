@@ -2,7 +2,8 @@
 #
 # This file's syntax is exactly the same as terminfo's in most places, with a few slight changes.
 #
-# See termmatch.md for more info.
+# For more info, see:
+#       https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md
 
 vte-256color|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
     fallback=gnome-256color,
