@@ -30,6 +30,20 @@ Things to do in preparation for a release:
 - is there a way to add an image-tracker to the github page?
 
 
+- [usability/polish]  sporadic failures happen when the user types something exactly when
+            termdetect is running.  While this happens maybe 0.5 - 1.0% of the time, it would
+            be good to deal with this in a better way.
+
+                    - if we can't recover, we should at the bare minimum print a one-line
+                      warning on STDERR    (so that when they install it on .bashrc, they know
+                      they should log back in)
+
+                    - is it possible to detect this problem and recover?  We could run the tests
+                      a second time, for instance.
+
+                    - is there a way to set up an automated test case to cause this problem to happen,
+                      so we can study it in a little more detail?
+
 - on release:
 
     - distribute it somewhat widely:

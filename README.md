@@ -17,21 +17,23 @@ termdetect solves this problem by [running a series of ANSI queries](https://git
     $ echo $TERM
     vte-256color
 
-    $ termping 
-       1 ms    (min 1,  max 1,   avg 1.0)
-       1 ms    (min 1,  max 1,   avg 1.0)
-       1 ms    (min 1,  max 1,   avg 1.0)
-       1 ms    (min 1,  max 1,   avg 1.0)
-       1 ms    (min 1,  max 1,   avg 1.0)
-
-    # ^^ from this, a script can guess that the user's terminal is located
-    #    on the same machine or in close proximity
-
 ## Installation
 
 Download the latest version [here](https://github.com/DeeNewcum/termdetect/downloads), unpack it, and read the [README.txt](https://github.com/DeeNewcum/termdetect/blob/master/release/README.txt) inside.
 
-termdetect has no dependencies other than a default installation of Perl.  It has been tested on a [variety of Unix OS's and Perl versions](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
+termdetect [works on most Unixes](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt), and requires nothing more than a standard installation of Perl.
+
+### .vimrc
+
+    syntax on
+    if &t_Co >= 256 || has('gui_running')
+        " your prefered colorscheme when the terminal supports 256 colors
+        let g:solarized_termcolors=&t_Co
+        colorscheme solarized
+    else
+        " your prefered colorscheme when the terminal supports 16 colors
+        colorscheme pablo
+    endif
 
 ## Documentation
 
