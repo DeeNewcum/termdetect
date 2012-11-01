@@ -35,6 +35,10 @@
 our %ARGV;
 process_cmdline();
 
+# we can't detect the terminal type if there's no terminal connected in the first place
+if (!-t STDERR || !-t STDIN) {       # isatty(3)
+    die "Not connected to a terminal.\n";
+}
 
 my $termmatch_file = locate_termmatch_file();
 
