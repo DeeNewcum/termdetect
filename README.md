@@ -1,8 +1,6 @@
-There isn't a good way to automatically set the $TERM variable, particularly if you use more than one server OS or more than one terminal emulator.
+Until now, there hasn't been a good way to automatically set the $TERM variable, particularly if you use more than one terminal emulator.  The terminal emulator doesn't know what terminfo entries are available on the remote machine, and the remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
 
-The terminal-emulator doesn't know what terminfo entries are available on the remote machine, and the remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
-
-termdetect solves this problem by [running a series of ANSI queries](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) on the terminal, and looking up the responses in a table of known terminals.  This allows the remote machine to know *exactly* what terminal it's talking to.
+Termdetect solves this.  By running [various ANSI queries](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) and looking up the replies in a table of known terminal responses, it can know *exactly* which terminal it's talking to.
 
     $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
@@ -13,27 +11,30 @@ termdetect solves this problem by [running a series of ANSI queries](https://git
          window position:   5 x 81
              screen size:   3200 x 1080
 
-    $ export TERM=$(termdetect -t)
-    $ echo $TERM
-    vte-256color
-
 ## Installation
 
 Download the latest version [here](https://github.com/DeeNewcum/termdetect/downloads), unpack it, and read the [README.txt](https://github.com/DeeNewcum/termdetect/blob/master/release/README.txt) inside.
 
-termdetect [works on most Unixes](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt), and requires nothing more than a standard installation of Perl.
+Add to your startup script (eg. .bashrc):   <tt>export TERM=$(termdetect -t)</tt>
 
-### .vimrc
+Requirements: [Any Un*x](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt), and a standard installation of Perl.
 
-    syntax on
-    if &t_Co >= 256 || has('gui_running')
-        " your prefered colorscheme when the terminal supports 256 colors
-        let g:solarized_termcolors=&t_Co
-        colorscheme solarized
-    else
-        " your prefered colorscheme when the terminal supports 16 colors
-        colorscheme pablo
-    endif
+## Other uses
+
+termdetect data can be used in many ways.  People are used to mistrusting $TERM and terminfo, but once you're able to trust them, your configuration can become more adaptive and flexible.
+
+````vim
+" ~/.vimrc
+syntax on
+if &t_Co >= 256 || has('gui_running')
+    " your prefered colorscheme when the current terminal supports 256 colors
+    let g:solarized_termcolors=&t_Co
+    colorscheme solarized
+else
+    " your prefered colorscheme when the current terminal supports 16 colors
+    colorscheme pablo
+endif
+````
 
 ## Documentation
 

@@ -6,6 +6,9 @@ Things to do in preparation for a release:
 
 - EAT YOUR OWN DOG FOOD
 
+- add a CHANGES file, akin to this project:
+            http://cwrapper.sourceforge.net/
+
 - move this bug elsewhere:
     - set the number of colors correctly...   we *shouldn't* hard-code 256 colors in 
         ~/.vimrc, because that breaks when we don't have 256 colors
@@ -112,3 +115,8 @@ Things to do in preparation for a release:
         - creating locales is...  kind of complicated :|
             http://serverfault.com/questions/274163/select-locales-on-ubuntu-10-04-after-installation#answer-274194
 
+- on release:
+    - consider learning how to make it available as a Debian package:
+            http://www.debian.org/doc/manuals/maint-guide/
+            http://www.debian.org/devel/join/newmaint
+            http://www.debian.org/doc/debian-policy/
