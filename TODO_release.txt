@@ -27,6 +27,9 @@ Things to do in preparation for a release:
             - have termdetect be able to do it, itself?  (only when requested, of course)
 
 
+- is there a way to add an image-tracker to the github page?
+
+
 - on release:
 
     - distribute it somewhat widely:
