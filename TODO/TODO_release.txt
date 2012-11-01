@@ -6,24 +6,17 @@ Things to do in preparation for a release:
 
 - EAT YOUR OWN DOG FOOD
 
-- add a CHANGES file, akin to this project:
-            http://cwrapper.sourceforge.net/
-
-- move this bug elsewhere:
-    - set the number of colors correctly...   we *shouldn't* hard-code 256 colors in 
-        ~/.vimrc, because that breaks when we don't have 256 colors
-        (eg. in Linux Console [16] or urxvt [88])
-
-                - terminfo.ncurses doesn't have a 256 variant for:
-                        - SecureCRT
-                        - tmux      (which terminfo.ncurses reads as "xterm-new")
-
 - make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
 
     - when searching for termmatch.src, have the last location be included in the fatpack bundle
             - figure out a way to bundle it in the fatpack file
             - note in the manual that if the user wants to modify the database, they should
               download a copy, and modify that....  just adding overrides in ~/.termmatch.src isn't enough
+
+    - create a single-file version of termdtect that includes the above
+        - have a canonical URL that points to this file
+                - (we'll implement this via gh-pages, presumably)
+        - include a curl-based installation line in README.md
 
     - is there any way to make terminfo installation easier?
 
@@ -38,14 +31,10 @@ Things to do in preparation for a release:
             be good to deal with this in a better way.
 
                     - if we can't recover, we should at the bare minimum print a one-line
-                      warning on STDERR    (so that when they install it on .bashrc, they know
-                      they should log back in)
+                      warning on STDERR    (so that when they see this while .bashrc is running,
+                      they at least get the heads-up ASAP that they should log back in)
 
-                    - is it possible to detect this problem and recover?  We could run the tests
-                      a second time, for instance.
-
-                    - is there a way to set up an automated test case to cause this problem to happen,
-                      so we can study it in a little more detail?
+                    - see Github Issue #3 for thoughts on possible ways to recover
 
 - on release:
 
@@ -68,6 +57,9 @@ Things to do in preparation for a release:
 ################################################################################
 #################################[ v0.12 ]######################################
 ################################################################################
+
+- add a CHANGES file, akin to this project:
+            http://cwrapper.sourceforge.net/
 
 - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
     and have it include a setting for $LANG

@@ -1,6 +1,8 @@
-Until now, there hasn't been a good way to automatically set the $TERM variable, particularly if you use more than one terminal emulator.  The terminal emulator doesn't know what terminfo entries are available on the remote machine, and the remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
+## termdetect
 
-Termdetect solves this.  By running [various ANSI queries](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) and looking up the replies in a table of known terminal responses, it can know *exactly* which terminal it's talking to.
+There hasn't been a good way to automatically set the $TERM variable, particularly if you use more than one terminal emulator.  The terminal emulator doesn't know what terminfo entries are available on the remote machine, and the remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
+
+Termdetect solves this.  By running [various ANSI queries](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) and looking up the replies in a table of known terminal responses, scripts can know *exactly* which terminal it's talking to.
 
     $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
@@ -15,7 +17,7 @@ Termdetect solves this.  By running [various ANSI queries](https://github.com/De
 
 Download the latest version [here](https://github.com/DeeNewcum/termdetect/downloads), unpack it, and read the [README.txt](https://github.com/DeeNewcum/termdetect/blob/master/release/README.txt) inside.
 
-Add to your startup script (eg. .bashrc):   <tt>export TERM=$(termdetect -t)</tt>
+Add to your startup script, eg. .bashrc:   <tt>export TERM=$(termdetect -t)</tt>
 
 Requirements: [Any Un*x](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt), and a standard installation of Perl.
 
