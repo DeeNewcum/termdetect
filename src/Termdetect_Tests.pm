@@ -338,7 +338,7 @@ sub DEBUG_test_name {
 sub summarize_result {
     my ($test_result) = @_;
     #print ansi_escape_no_nl(Dumper $test_result); exit;
-    if (exists $test_result->{x_delta}) {
+    if ($test_result->{x_delta}) {
         return "%x+$test_result->{x_delta}";
     } else {
         return (ansi_escape($test_result->{received}))[0];
