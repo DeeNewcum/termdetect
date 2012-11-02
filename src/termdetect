@@ -298,14 +298,12 @@ sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wanta
 __END__
 termdetect
 
-  -t    only display the matched $TERM
+  -t    Display only the matched $TERM.  Intended to be used like this:
+                export TERM=$(termdetect -t)
 
-  --check=<term>
-        Used to debug termmatch.src.  Displays extra information about how the
-        current terminal matches up to the specified entry in termmatch.src.
-
-  --check
-        Displays extra information about EVERY entry in termmatch.src.
+  --result=<test_id>
+        Display the result of a single test.  To get a list of test_ids you
+        can use, run      termdetect --dump
 
   --nose
         "No Side Effects".  Doesn't run tests that have significant side-effects.
@@ -315,20 +313,25 @@ termdetect
         even when --nose is used.  Read more at:
             https://github.com/DeeNewcum/termdetect/blob/master/doc/side-effects.md
 
+  --dump
+        Dumps the result of all tests run.
+        Similar to --snapshot, but gives a little more detailed information.
+        See here for details on what each line means:
+            https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md
+
+  --check=<term>
+        In the case of a mismatch, this tells you which specific tests gave
+        different answers than were expected.  This helps suggest changes that
+        may need to be made to the termmatch.src database.
+        If no terminal name is given, it displays information about EVERY entry
+        in the database.
+
   --snapshot
         Outputs the current tests results in a form that's suitable for 
         cut-n-pasting into termmatch.src.
 
-  --dump
-        Dumps the result of all tests run.
-        Similar to --snapshot, but gives a little more detailed information.
-
   --version
         Show version number.
-
-  --result=<test_id>
-        Display the result of a single test.  To get a list of test_ids you
-        can use, run   termdetect --dump
 
   --help-submit
         A guide for submitting test results to the developer, so that more
