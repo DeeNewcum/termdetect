@@ -1,8 +1,8 @@
 ## termdetect
 
-There hasn't been a good way to automatically set the $TERM variable.  The terminal emulator doesn't know what terminfo entries are available on the remote machine, and the remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
+There hasn't been a good way to automatically set the $TERM variable.  Your terminal emulator doesn't know what terminfo entries are available on your remote machine, and your remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
 
-Termdetect solves this.  By sending [various ANSI queries](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests) and looking up the replies in a table of known responses, scripts can know *exactly* which terminal they're talking to.
+Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests)</sup> and looking up the replies in a table of known responses,<sup>[(2)](https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src)</sup> scripts on the remote machine can know *exactly* which terminal they're talking to.
 
     $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
