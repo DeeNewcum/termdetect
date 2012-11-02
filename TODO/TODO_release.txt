@@ -6,16 +6,16 @@ Things to do in preparation for a release:
 
 - EAT YOUR OWN DOG FOOD
 
-- make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
+- point out in the manual or somewhere that if the user wants to customize termmatch.src,
+    they have to download their own copy and modify that, rather than starting with a blank file
 
-    - when searching for termmatch.src, have the last location be included in the fatpack bundle
-            - figure out a way to bundle it in the fatpack file
-            - note in the manual that if the user wants to modify the database, they should
-              download a copy, and modify that....  just adding overrides in ~/.termmatch.src isn't enough
+- make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
 
     - create a single-file version of termdtect that includes the above
         - have a canonical URL that points to this file
                 http://paperlined.org/tmp/mutable_shortlinks.txt
+
+        - modify the release process so we check this in to a standardized place
 
         - include a curl-based installation line in README.md
 

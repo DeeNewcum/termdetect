@@ -43,7 +43,7 @@ if (!-t STDERR || !-t STDIN) {       # isatty(3)
 my $termmatch_file = locate_termmatch_file();
 
 ## read in the termmatch database
-my $termmatch_db = parse_terminfo(scalar(slurp($termmatch_file)));
+my $termmatch_db = parse_terminfo($termmatch_file);
     #print ti_dump_terminal(values %$termmatch_db);      exit;
 
 ## read in the test results from the current terminal
@@ -173,9 +173,19 @@ sub locate_termmatch_file {
         "$FindBin::Bin/termmatch.src",      # in the same directory as this script
         "$ENV{HOME}/.termmatch.src",
         "/etc/termmatch.src",
+        "<internal>",
         );
     foreach my $loc (@possible_locations) {
-        return $loc if (-e $loc);
+        if ($loc eq '<internal>') {
+            # When fatpacked, we include the termmatch file as Termmatch.pm.
+            # But it's not available when we're not fatpacked.
+            my $internal = eval q{
+                use Termmatch;
+                Termmatch::termmatch();
+            };
+            return $internal if (defined $internal);
+        }
+        return scalar(slurp($loc)) if (-e $loc);
     }
     print STDERR <<"EOF";
 Error: File 'termmatch.src' not found.
