@@ -67,6 +67,7 @@ sub perform_all_tests {
     run_and_store_test(m_esc                => "\e[?\eK");
 
     synthetic__ff_clears();
+    synthetic__window_size();
 
     Termdetect_Encoding::do_encoding_tests(\%all_results);
 
@@ -148,6 +149,27 @@ sub synthetic__ff_clears {
                      . "\e[A");         # move up one line
             }
         });
+}
+
+
+# figure out the window size by moving the cursor all the way to the right, and then all the
+# way down
+sub synthetic__window_size {
+    DEBUG_test_name();
+
+    output("\e7");          # save cursor position
+    output("\e[9999C");     # move all the way right
+    output("\e[9999B");     # move all the way down
+    output("\e[6n");        # request cursor position
+    output("\e8");          # restore cursor
+
+    read_phase {
+        our %all_results;           # pull this in from the 'local'ized copy in perform_all_tests()
+        my $reply = read_ansi_reply(1.0, 'R');
+        if (defined($reply) && $reply =~ /\e\[(\d+);(\d+)R$/s) {
+            $all_results{s_window_size}{received} = "$2 x $1";
+        }
+    };
 }
 
 
