@@ -13,13 +13,13 @@ Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://githu
          window position:   5 x 81
              screen size:   3200 x 1080
 
-This information is determined solely by communicating *directly* with the terminal, none of it comes from the local OS.
+This information is determined solely by communicating directly with the terminal, none of it comes from the local OS.
 
 ## Installation
 
-Download the latest version [here](https://github.com/DeeNewcum/termdetect/downloads), unpack it, and read the [README.txt](https://github.com/DeeNewcum/termdetect/blob/master/release/README.txt) inside.
+    curl -L http://is.gd/termdet -o termdetect; chmod +x termdetect
 
-Add this to your startup script, eg. .bashrc:   <tt>export TERM=$(termdetect -t)</tt>
+Add to your startup script, eg. .bashrc:   <tt>export TERM=$(termdetect -t)</tt>
 
 Requirements: [Any Un*x](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt), and a standard installation of Perl.
 

@@ -11,14 +11,6 @@ Things to do in preparation for a release:
 
 - make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
 
-    - create a single-file version of termdtect that includes the above
-        - have a canonical URL that points to this file
-                http://paperlined.org/tmp/mutable_shortlinks.txt
-
-        - modify the release process so we check this in to a standardized place
-
-        - include a curl-based installation line in README.md
-
     - is there any way to make terminfo installation easier?
 
             - have termdetect be able to do it, itself?  (only when requested, of course)
