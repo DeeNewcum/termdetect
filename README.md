@@ -49,4 +49,3 @@ Most people have learned to mistrust $TERM and terminfo, and so hard-code everyt
 
 * run <tt>termdetect --help</tt>
 * see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
-

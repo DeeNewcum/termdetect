@@ -5,9 +5,10 @@ Things to do in preparation for a release:
 ################################################################################
 
 - promotion
-    - is there a way to add an image-tracker to the github page?  Although a full-fledged analytics
-      isn't possible, we could do a an invisible-image tracker, which will give a *tiny* bit of
-      information
+    - it doesn't look like there's any way to do an image-tracker or any sort of analytics on the
+      main github page...   Perhaps we'll put off developing a nice gh-pages page until later?
+            - ask Eads for advice...  he's done a lot of analytics, and will know the value of that
+            - also, he may have some other suggestions for OSS promotion
 
 - on release:
 
@@ -37,6 +38,10 @@ Things to do in preparation for a release:
 
 - find a version of FreeBSD to test this on
 
+- (maybe)  should we implement a "canonical name" feature, distinct from the suggested $TERM?
+  While one of our obvious use-cases is suggesting a $TERM value, there ARE other use-cases, and
+  those may be interested in triggering off of a more stable name
+
 - [usability/polish]  sporadic failures happen when the user types something exactly when
             termdetect is running.  While this happens maybe 0.5 - 1.0% of the time, it would
             be good to deal with this in a better way.
@@ -47,7 +52,7 @@ Things to do in preparation for a release:
 
                     - see Github Issue #3 for thoughts on possible ways to recover
 
-- add a CHANGES file, akin to this project:
+- (maybe)  add a CHANGES file, akin to this project:
             http://cwrapper.sourceforge.net/
 
 - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
@@ -65,6 +70,11 @@ Things to do in preparation for a release:
 ################################################################################
 #################################[ v0.13 ]######################################
 ################################################################################
+
+- integrate the termping functionality directly into termdetect --ping.  The reasoning for this:
+        1. the more info we pack into the default screen, the more impressive this program is
+        2. we want the program to be as easy to install as possible, and having two separate
+           programs makes it much harder to install
 
 - should we create a slightly more streamlined way to install the terminfo file, other
     than the mktemp/.../rm method that's currently suggested?
