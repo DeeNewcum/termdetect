@@ -4,40 +4,10 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
-- EAT YOUR OWN DOG FOOD
-
-- point out in the manual or somewhere that if the user wants to customize termmatch.src,
-    they have to download their own copy and modify that, rather than starting with a blank file
-
-- make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
-
-    - create a single-file version of termdtect that includes the above
-        - have a canonical URL that points to this file
-                http://paperlined.org/tmp/mutable_shortlinks.txt
-
-        - modify the release process so we check this in to a standardized place
-
-        - include a curl-based installation line in README.md
-
-    - is there any way to make terminfo installation easier?
-
-            - have termdetect be able to do it, itself?  (only when requested, of course)
-
-- find a version of FreeBSD to test this on
-
-- [usability/polish]  sporadic failures happen when the user types something exactly when
-            termdetect is running.  While this happens maybe 0.5 - 1.0% of the time, it would
-            be good to deal with this in a better way.
-
-                    - if we can't recover, we should at the bare minimum print a one-line
-                      warning on STDERR    (so that when they see this while .bashrc is running,
-                      they at least get the heads-up ASAP that they should log back in)
-
-                    - see Github Issue #3 for thoughts on possible ways to recover
-
 - promotion
-
-    - is there a way to add an image-tracker to the github page?
+    - is there a way to add an image-tracker to the github page?  Although a full-fledged analytics
+      isn't possible, we could do a an invisible-image tracker, which will give a *tiny* bit of
+      information
 
 - on release:
 
@@ -62,6 +32,21 @@ Things to do in preparation for a release:
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- point out in the manual or somewhere that if the user wants to customize termmatch.src,
+    they have to download their own copy and modify that, rather than starting with a blank file
+
+- find a version of FreeBSD to test this on
+
+- [usability/polish]  sporadic failures happen when the user types something exactly when
+            termdetect is running.  While this happens maybe 0.5 - 1.0% of the time, it would
+            be good to deal with this in a better way.
+
+                    - if we can't recover, we should at the bare minimum print a one-line
+                      warning on STDERR    (so that when they see this while .bashrc is running,
+                      they at least get the heads-up ASAP that they should log back in)
+
+                    - see Github Issue #3 for thoughts on possible ways to recover
+
 - add a CHANGES file, akin to this project:
             http://cwrapper.sourceforge.net/
 
@@ -80,6 +65,9 @@ Things to do in preparation for a release:
 ################################################################################
 #################################[ v0.13 ]######################################
 ################################################################################
+
+- should we create a slightly more streamlined way to install the terminfo file, other
+    than the mktemp/.../rm method that's currently suggested?
 
 - add the ability to have "suffixes" on terminal names
     - these suffixes would be entirely confined to termdetect; once the terminal was going
@@ -102,7 +90,7 @@ Things to do in preparation for a release:
 - find an install of Perl v5.6.2 to test this against, to see if it will run even on old Perls
             (building it via PerlBrew has failed on two of my machines so far)
 
-- add more terminals to the termmatch database, particularly some OS/X ones
+- add more terminals to the termmatch database
 
 - see if I can detect more character encodings
 
