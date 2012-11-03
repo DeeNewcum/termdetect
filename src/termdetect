@@ -79,8 +79,9 @@ if ($ARGV{snapshot}) {
             if ($final_term) {
                 print "$final_term\n";
             } else {
-               print STDERR "The suggested \$TERM \"$term\" wasn't found.\n";
+                print STDERR "The suggested \$TERM \"$term\" wasn't found.\n";
                 print STDERR "        \n";
+                print STDERR "\nTo install the full set of terminfo files:\n";
                 help_install_terminfos();
             }
         } else {
@@ -104,8 +105,9 @@ if ($ARGV{snapshot}) {
             }
 
             if (!does_terminfo_exist("vt100-putty")) {
-                print "\nThe full set of terminfo entries haven't been installed,\n",
-                        "see --help-terminfo for info on installing them.\n";
+                print STDERR "\nThe full set of terminfo entries haven't been installed.\n",
+                               "To install them:\n";
+                help_install_terminfos();
             }
         }
     } else {
@@ -121,12 +123,11 @@ sub process_cmdline {
     GetOptions( \%ARGV,
                     map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
         "help|h|?",
-        qw( check nose t snapshot result dump help-submit help-terminfo version ),
+        qw( check nose t snapshot result dump help-submit version ),
     ) or usage();
     %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
     $ARGV{help} and usage();
     $ARGV{'help-submit'} and help_submit();
-    $ARGV{'help-terminfo'} and help_install_terminfos();
     if ($ARGV{version}) {
         print "termdetect, version ", VERSION, "\n";
         exit;
@@ -245,19 +246,20 @@ sub does_terminfo_exist {
 
 
 sub help_install_terminfos {
-    die <<'EOF';
-Instructions for installing the full set of terminfo entries:
+    if (`which apt-get`) {
+        # Debian/Ubuntu/et al don't come with the full set of terminfo entries
+        # installed by default, but they're easy to install
+        die "    sudo apt-get install ncurses-term\n";
+    } else {
+        die <<'EOF';
 
-On Debian or Ubuntu:
-    sudo apt-get install ncurses-term
-                        
-Otherwise:
     TMP=$(mktemp);
     curl http://invisible-island.net/datafiles/current/terminfo.src.gz | gzip -dc > $TMP;
     tic $TMP; rm $TMP
-            (run that as root if you want, otherwise it will install things
-             in ~/.terminfo/ )
+
+Run this as root if you can, but running as a normal user is fine, files will go in ~/.terminfo/
 EOF
+    }
 }
 
 

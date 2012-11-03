@@ -4,15 +4,10 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
-- make it easier to install, per many suggestions:  http://stackoverflow.com/questions/95710
-
-    - is there any way to make terminfo installation easier?
-
-            - have termdetect be able to do it, itself?  (only when requested, of course)
-
 - promotion
-    - is there a way to add an image-tracker to the github page?
-            > no.... I don't think so...  not without creating a gh-pages page
+    - is there a way to add an image-tracker to the github page?  Although a full-fledged analytics
+      isn't possible, we could do a an invisible-image tracker, which will give a *tiny* bit of
+      information
 
 - on release:
 
@@ -70,6 +65,9 @@ Things to do in preparation for a release:
 ################################################################################
 #################################[ v0.13 ]######################################
 ################################################################################
+
+- should we create a slightly more streamlined way to install the terminfo file, other
+    than the mktemp/.../rm method that's currently suggested?
 
 - add the ability to have "suffixes" on terminal names
     - these suffixes would be entirely confined to termdetect; once the terminal was going
