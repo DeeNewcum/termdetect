@@ -1,6 +1,9 @@
 Things to do to do a release:
 
 
+- Eat your own dogfood -- TEST THE VERSION ON YOUR OWN COMPUTERS for a day or three before
+  releasing it, to ensure there weren't any last-minute breakages. 
+
 - update the $VERSION at the top of src/termdetect
 
 - do all this:
@@ -11,10 +14,12 @@ Things to do to do a release:
     git add ../termdetect.release
     git commit 
     git push origin release
+    git checkout master
 
 - check that the new version actually shows up at http://is.gd/termdet
 
 
 
 
-http://is.gd/stats.php?url=termdet
+you can check the stats here:
+        http://is.gd/stats.php?url=termdet

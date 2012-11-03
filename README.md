@@ -1,8 +1,8 @@
 ## termdetect
 
-There hasn't been a good way to automatically set the $TERM variable.  Your terminal emulator doesn't know what terminfo entries are available on your remote machine, and your remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses.
+There hasn't been a good way to automatically set the $TERM variable.  Your terminal emulator doesn't know what terminfo entries are available on your remote machine, and your remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses about the other.
 
-Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests)</sup> and looking up the replies in a table of known responses,<sup>[(2)](https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src)</sup> scripts on the remote machine can know *exactly* which terminal they're talking to.
+Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests)</sup> and looking up the replies in a table of known responses,<sup>[(2)](https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src)</sup> termdetect can know *exactly* which terminal it's talking to.
 
     $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
@@ -13,19 +13,22 @@ Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://githu
          window position:   5 x 81
              screen size:   3200 x 1080
 
-This information is determined solely by communicating directly with the terminal, none of it comes from the local OS.
+This information is determined solely by communicating directly with the remote terminal, none of it comes from the local OS.
 
 ## Installation
 
-    curl -L http://is.gd/termdet -o termdetect; chmod +x termdetect
+    curl -L http://is.gd/termdet -o termdetect;  chmod +x termdetect
 
-Add to your startup script, eg. .bashrc:   <tt>export TERM=$(termdetect -t)</tt>
+Requirements: A base installation of Perl, and [any Un*x or OS/X](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
 
-Requirements: [Any Un*x](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt), and a standard installation of Perl.
+## Ways to use it
 
-## Other uses
+Some possible ways to use termdetect:
 
-termdetect data can be used in many ways.  People are used to mistrusting $TERM and terminfo, but once you're able to trust them, your configuration can become more adaptive and flexible.
+````bash
+# ~/.bashrc
+export TERM=$(termdetect -t)
+````
 
 ````vim
 " ~/.vimrc
@@ -39,6 +42,8 @@ else
     colorscheme pablo
 endif
 ````
+
+Most people have learned to mistrust $TERM and terminfo, and so hard-code everything.  Once you're able to trust them again, your configuration can be much more flexible and adaptive.
 
 ## Documentation
 
