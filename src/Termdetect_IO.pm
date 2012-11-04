@@ -293,6 +293,18 @@ sub ansi_escape { map {(my $a = $_);
         $a =~ s/([\x00-\x1f\x7f-\xff])/"\\x" . sprintf "%02X", ord($1)/ge;
         $a} @_ }
 
+# like ansi_escape, but don't escape newlines
+sub ansi_escape_no_nl {
+    my $text = join('', @_);
+    my @lines = split /[\n\r]+/, $text;
+    @lines = map {ansi_escape($_)} @lines;
+    return join("\n", @lines), "\n";
+}
+
+
+
+
+
 ##########################################################################################
 #####################################[ debugging ]########################################
 ##########################################################################################

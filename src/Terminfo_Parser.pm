@@ -12,6 +12,7 @@ package Terminfo_Parser;
     use Exporter 'import';
 
     our @EXPORT = qw( parse_terminfo ti_dump_terminal );
+    our @EXPORT_OK = qw( terminfo_unescape );
 
 
 # terminfo(5) says of terminfo's syntax:
