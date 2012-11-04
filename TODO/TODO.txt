@@ -8,13 +8,6 @@
 
 
 
-- possibly calculate the s_window_size in other ways:
-        - Term::ReadKey::GetTerminalSize()
-        - see "TIOCGWINSZ" in the source for IO::Tty
-        - `stty size`
-
-
-
 ==== small or medium problems with specific terminals ====
 
 - with rxvt-unicode, the encoding tests fail to detect that it's utf8 -- all test fail, with the
