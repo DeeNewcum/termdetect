@@ -103,7 +103,7 @@ if ($ARGV{snapshot}) {
                 }
                 printf "%20s:   %s", $field->[0], $disp;
                 if (@$field == 3) {         # print the suffix, if any
-                    print "   ", $field->[2];
+                    print "  ", $field->[2];
                 }
                 print "\n";
             }
@@ -140,7 +140,7 @@ sub process_cmdline {
 
 
 sub usage {
-    print STDERR <DATA>;
+    print <DATA>;
     exit;
 }
 
