@@ -6,58 +6,58 @@
 
 
 echo "======== CPR - cursor position report ========"
-./ansi_reply.pl  '\e[6n' R
+./ansi_reply2.pl  '\e[6n' R
 echo
 
 
 echo "======== query extended cursor position ========"
-./ansi_reply.pl  '\e[?6n' R
+./ansi_reply2.pl  '\e[?6n' R
 echo
 
 
 echo "======== DSR - device status report ========"
-./ansi_reply.pl  '\e[5n' n
+./ansi_reply2.pl  '\e[5n' n
 echo
 
 
 echo "======== query printer status ========"
-./ansi_reply.pl  '\e[?15n' n
+./ansi_reply2.pl  '\e[?15n' n
 echo
 
 
 echo "======== DA - device attributes ========"
-./ansi_reply.pl  '\e[c' c
+./ansi_reply2.pl  '\e[c' c
 echo
 
 
 echo "======== DA - device attributes ========"
-./ansi_reply.pl  '\e[6c' c
+./ansi_reply2.pl  '\e[6c' c
 echo
 
 
 echo "======== DECID - identify terminal ========"
-./ansi_reply.pl  '\eZ' ''
+./ansi_reply2.pl  '\eZ' ''
 echo
 
 
 echo "======== query secondary device attributes ========"
-./ansi_reply.pl  '\e[>c' ''
+./ansi_reply2.pl  '\e[>c' ''
 echo
 
 
 echo "======== query tertiary device attributes ========"
-./ansi_reply.pl  '\e[=c' ''
+./ansi_reply2.pl  '\e[=c' ''
 echo
 
 
 echo "======== ENQ (enquire) / answerback ========"
-./ansi_reply.pl  '\005' ''
+./ansi_reply2.pl  '\005' ''
 echo
 
 
 
 echo "======== query terminal parameters ========"
-./ansi_reply.pl  '\e[x' ''
+./ansi_reply2.pl  '\e[x' ''
 
 cat <<EOF
 

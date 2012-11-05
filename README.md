@@ -8,10 +8,10 @@ Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://githu
                 terminal:   vte / gnome-terminal / xfce4-terminal
                  version:   libvte v0.32.1
                 encoding:   utf8
-           terminal size:   318 x 74
-               font size:   6 x 13
-         window position:   5 x 81
-             screen size:   3200 x 1080
+           terminal size:   318 x 74   (characters)
+               font size:   6 x 13   (pixels)
+         window position:   5 x 81   (pixels)
+             screen size:   3200 x 1080   (pixels)
 
 This information is determined solely by communicating directly with the remote terminal, none of it comes from the local OS.
 
@@ -49,4 +49,3 @@ Most people have learned to mistrust $TERM and terminfo, and so hard-code everyt
 
 * run <tt>termdetect --help</tt>
 * see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
-
