@@ -17,7 +17,9 @@ This information is determined solely by communicating directly with the remote 
 
 ## Installation
 
-    curl -L http://is.gd/termdet -o termdetect;  chmod +x termdetect
+    curl -L http://is.gd/termdetect -o termdetect;  chmod +x termdetect
+        or
+    wget http://is.gd/termdetect;  chmod +x termdetect
 
 Requirements: A base installation of Perl, and [any Un*x or OS/X](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
 

@@ -4,9 +4,6 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
-- make it work fully and completely with wget -- there's enough computers out there that don't
-  have curl by default  (OS/X, XUbuntu, etc...) that it really MUST work properly
-
 - promotion
     - it doesn't look like there's any way to do an image-tracker or any sort of analytics on the
       main github page...   Perhaps we'll put off developing a nice gh-pages page until later?
