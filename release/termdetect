@@ -467,6 +467,18 @@ $fatpacked{"Termdetect_IO.pm"} = <<'TERMDETECT_IO';
           $a =~ s/([\x00-\x1f\x7f-\xff])/"\\x" . sprintf "%02X", ord($1)/ge;
           $a} @_ }
   
+  # like ansi_escape, but don't escape newlines
+  sub ansi_escape_no_nl {
+      my $text = join('', @_);
+      my @lines = split /[\n\r]+/, $text;
+      @lines = map {ansi_escape($_)} @lines;
+      return join("\n", @lines), "\n";
+  }
+  
+  
+  
+  
+  
   ##########################################################################################
   #####################################[ debugging ]########################################
   ##########################################################################################
@@ -1171,6 +1183,7 @@ $fatpacked{"Terminfo_Parser.pm"} = <<'TERMINFO_PARSER';
       use Exporter 'import';
   
       our @EXPORT = qw( parse_terminfo ti_dump_terminal );
+      our @EXPORT_OK = qw( terminfo_unescape );
   
   
   # terminfo(5) says of terminfo's syntax:
@@ -2167,10 +2180,10 @@ if ($ARGV{snapshot}) {
                     ['terminal',            $all_aliases],
                     ['version',             $test_results->{s_term_version}],
                     ['encoding',            $test_results->{s_encoding}],
-                    ['terminal size',       $test_results->{s_window_size}],
-                    ['font size',           $test_results->{s_font_size}],
-                    ['window position',     $test_results->{s_window_pos}],
-                    ['screen size',         $test_results->{s_screen_size}],
+                    ['terminal size',       $test_results->{s_window_size},         '(characters)'  ],
+                    ['font size',           $test_results->{s_font_size},           '(pixels)'  ],
+                    ['window position',     $test_results->{s_window_pos},          '(pixels)'  ],
+                    ['screen size',         $test_results->{s_screen_size},         '(pixels)'  ],
             );
             foreach my $field (@fields) {
                 next unless defined($field->[1]);
@@ -2178,7 +2191,11 @@ if ($ARGV{snapshot}) {
                 if (ref($disp) eq 'HASH' && exists $disp->{received}) {
                     $disp = $disp->{received};
                 }
-                printf "%20s:   %s\n", $field->[0], $disp;
+                printf "%20s:   %s", $field->[0], $disp;
+                if (@$field == 3) {         # print the suffix, if any
+                    print "  ", $field->[2];
+                }
+                print "\n";
             }
 
             if (!does_terminfo_exist("vt100-putty")) {
@@ -2213,7 +2230,7 @@ sub process_cmdline {
 
 
 sub usage {
-    print STDERR <DATA>;
+    print <DATA>;
     exit;
 }
 
