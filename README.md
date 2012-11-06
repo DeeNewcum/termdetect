@@ -56,7 +56,6 @@ Most people have learned to mistrust $TERM and terminfo, and so hard-code everyt
 
 termdetect is in beta.  The code is working and in regular use on at least a handful of computers.  Next steps:
 
-* Improve the test cases.
 * I'm interested in getting feedback from users to see which [use-cases](https://github.com/DeeNewcum/termdetect/blob/master/doc/user_scenarios.md) people find most useful.
 * There is data for a lot of terminals that need to be added.  But this may be guided somewhat based on which use-cases are most popular.
 
