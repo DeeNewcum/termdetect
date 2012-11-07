@@ -62,9 +62,12 @@ if ($ARGV{snapshot}) {
     show_snapshot($test_results);
 
 } elsif ($ARGV{dump}) {
-    # Does this overlap with --snapshot too much?  If so, then we'll get rid of this.
     foreach my $cap (sort keys %$test_results) {
-        printf "%25s  %s\n", $cap, summarize_result($test_results->{$cap});
+        if (-t STDOUT) {
+            printf "%25s  %s\n", $cap, summarize_result($test_results->{$cap});
+        } else {
+            print "$cap\t", summarize_result($test_results->{$cap}), "\n";
+        }
     }
 
 } elsif ($ARGV{result}) {
