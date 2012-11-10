@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Termdetect by DeeNewcum</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Termdetect</h1>
+        <h2>auto-detect which terminal emulator we're talking to</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/DeeNewcum/termdetect/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/DeeNewcum/termdetect/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/DeeNewcum/termdetect" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h2>termdetect</h2>
+
+<p>There hasn't been a good way to automatically set the $TERM variable.  Your terminal emulator doesn't know what terminfo entries are available on your remote machine, and your remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses about the other.</p>
+
+<p>Termdetect solves this.  By sending various ANSI queries<sup><a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests">(1)</a></sup> and looking up the replies in a table of known responses,<sup><a href="https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src">(2)</a></sup> termdetect can know <em>exactly</em> which terminal it's talking to.</p>
+
+<pre><code>$ termdetect
+            terminal:   vte / gnome-terminal / xfce4-terminal
+             version:   libvte v0.32.1
+            encoding:   utf8
+       terminal size:   318 x 74   (characters)
+           font size:   6 x 13   (pixels)
+     window position:   5 x 81   (pixels)
+         screen size:   3200 x 1080   (pixels)
+</code></pre>
+
+<p>This information is determined solely by communicating directly with the remote terminal, none of it comes from the local OS.</p>
+
+<h2>Installation</h2>
+
+<pre><code>curl -L http://is.gd/termdetect -o termdetect;  chmod +x termdetect
+    or
+wget http://is.gd/termdetect;  chmod +x termdetect
+</code></pre>
+
+<p>Requirements: A base installation of Perl, and <a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt">any Un*x or OS/X</a>.</p>
+
+<h2>Ways to use it</h2>
+
+<p>Some possible ways to use termdetect:</p>
+
+<div class="highlight"><pre><span class="c"># ~/.bashrc</span>
+<span class="nb">export </span><span class="nv">TERM</span><span class="o">=</span><span class="k">$(</span>termdetect -t<span class="k">)</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c">" ~/.vimrc</span>
+<span class="nb">syntax</span> <span class="k">on</span>
+<span class="k">if</span> &amp;<span class="nb">t_Co</span> <span class="p">&gt;=</span> <span class="m">256</span> <span class="p">||</span> has<span class="p">(</span><span class="s1">'gui_running'</span><span class="p">)</span>
+<span class="c">    " your prefered colorscheme when the current terminal supports 256 colors</span>
+    <span class="k">let</span> <span class="k">g</span>:solarized_termcolors<span class="p">=</span>&amp;<span class="nb">t_Co</span>
+    <span class="k">colorscheme</span> solarized
+<span class="k">else</span>
+<span class="c">    " your prefered colorscheme when the current terminal supports 16 colors</span>
+    <span class="k">colorscheme</span> pablo
+<span class="k">endif</span>
+</pre></div>
+
+<p>Most people have learned to mistrust $TERM and terminfo, and so hard-code everything.  Once you're able to trust them again, your configuration can be much more flexible and adaptive.</p>
+
+<h2>Documentation</h2>
+
+<ul>
+<li>run <tt>termdetect --help</tt>
+</li>
+<li>see <a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md">doc/termmatch.md</a>
+</li>
+</ul><h2>Development status</h2>
+
+<p>termdetect is in beta.  The code is working and in regular use on at least a handful of computers.  Next steps:</p>
+
+<ul>
+<li>I'm interested in getting feedback from users to see which <a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/user_scenarios.md">use-cases</a> people find most useful.</li>
+<li>There is data for a lot of terminals that need to be added.  But this may be guided somewhat based on which use-cases are most popular.</li>
+</ul>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
