@@ -8,7 +8,7 @@ How she uses this information is up to her — she might set the shell prompt di
 
 ### Implementation
 
-In this case, she doesn't necessarily need a global database to recognize her terminals.  She just wants to recognize the one, so she uses the "snapshot" function to record the one outlier, and tags it with her own custom name.
+In this case, she doesn't necessarily need a global database to recognize her terminals.  She just wants to recognize the one, so she uses the <tt>--snapshot</tt> function to record the one terminal she's interested in, names the terminal with her own name, and triggers her extra functionality based on that.
 
 
 ## Single exception, already in the global database
@@ -17,7 +17,7 @@ Same as above, but in this case, the one exception she's interested in has alrea
 
 ### Implementation
 
-She just needs SOME identifier that uniquely identifies the one outlier.  It doesn't matter what it is, we can totally make it up if we want.
+She just needs SOME identifier that uniquely identifies the one outlier.  She  doesn't care what it's name, we can totally make it up if we want.
 
 
 ## The results of one test
@@ -27,6 +27,8 @@ The user just wants to know whether the current terminal supports one capability
 ### Implementation
 
 If there's a specific test that termdetect has, we can just run that one test and return the results.  If there's NOT a test, then we'd have to do the complicated 1) run all termdetect tests, 2) find a matching terminfo entry, 3) look for that specific capability within that terminfo entry.  Because that's much more complicated, we would like to provide the shortcut to the user if possible.
+
+This has been implemented via the <tt>--result</tt> option.
 
 
 ## Match a bundled terminfo database

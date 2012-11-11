@@ -4,27 +4,35 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
-- make it work fully and completely with wget -- there's enough computers out there that don't
-  have curl by default  (OS/X, XUbuntu, etc...) that it really MUST work properly
-
 - promotion
     - it doesn't look like there's any way to do an image-tracker or any sort of analytics on the
       main github page...   Perhaps we'll put off developing a nice gh-pages page until later?
             - ask Eads for advice...  he's done a lot of analytics, and will know the value of that
             - also, he may have some other suggestions for OSS promotion
 
+    - create a list of terminal-emulators that we currently support
+            - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
+              handy.
+
 - on release:
 
     - distribute it somewhat widely:
             - post it here:  http://serverfault.com/questions/350401/detect-terminal-type-with-tput
-            - post it on Freshmeat
-            - post it on http://opencode.us/
             - post it on Facebook
             - post it on reddit.com/r/commandline
+            - post it on Freecode  (formerly Freshmeat)
+            - post it on Ohloh
+            - post it to Softpedia
+            - post it on http://opencode.us/
+            - post it on PerlMonks
             - email Eads
             - email Bec
             - email the person that made ncurses, ask them if they know of anybody who would
               find this useful
+            - post it as a CPAN module
+            - talk about it at local user groups
+                - Pumping Station: One
+                - FreeGeek Chicago
             - more ideas:
                     - http://stackoverflow.com/questions/95710/how-do-you-promote-advertise-evangelize-your-open-source-project
                     - http://gsoc-wiki.osuosl.org/index.php/Promoting_Your_Open_Source_Project
@@ -36,14 +44,23 @@ Things to do in preparation for a release:
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- boot up an AWS AMI image of FreeBSD, and test it on that
+        http://www.daemonology.net/freebsd-on-ec2/
+
+- auto-detect the terminfo available  (eg. "ncurses", "ESR", "solaris", "os/x", etc)
+    - then change termmatch.src:
+            - remove fallback=
+            - replace it with TERM=
+            - most entries in TERM= should have a prefix indicating that they should only match
+              if the specific terminfo is detected
+    - change the top-line name to be a "canonical name"
+    - change the documentation to say "termdetect works best with ncurses' terminfo, but it will
+                        work acceptably with others"
+
 - point out in the manual or somewhere that if the user wants to customize termmatch.src,
     they have to download their own copy and modify that, rather than starting with a blank file
 
 - find a version of FreeBSD to test this on
-
-- (maybe)  should we implement a "canonical name" feature, distinct from the suggested $TERM?
-  While one of our obvious use-cases is suggesting a $TERM value, there ARE other use-cases, and
-  those may be interested in triggering off of a more stable name
 
 - [usability/polish]  sporadic failures happen when the user types something exactly when
             termdetect is running.  While this happens maybe 0.5 - 1.0% of the time, it would

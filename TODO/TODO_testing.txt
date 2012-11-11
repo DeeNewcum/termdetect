@@ -1,5 +1,13 @@
+========================================[ unit testing ]========================================
+
 - terminfo parser -- we need to test to make sure that when duplicate terminal names are used,
   that the parser errors out on this    (I think it maybe doesn't currently)
+
+- a decent percentage of the bugs so far have been related to the terminfo parser....  it would
+  be good to write more unit tests for it
+
+
+================================[ integration testing, automated ]=================================
 
 - do some automated testing across terminals....   A lot of terminals can be opened with a specific
   command to run:
@@ -31,11 +39,19 @@
                 and then specify the command in:   Connection > Logon Actions > Remote Command
 
 
-- is there any way we can do the cross-terminal testing on one of the hosted-testing sites?
+- is there any way we can do the cross-terminal testing (designed to catch problems that are termed
+  "ambiguous") on one of the hosted-testing sites?
 
     - Travis-CI
         - they allow ubuntu packages to be installed, as well as third-party PPAs
 
-    - various IaaS:
-        - http://en.wikipedia.org/wiki/Category:Infrastructure_as_a_service
+    - EC2?  They're pretty cheap, and I'd like a little experience using them.
+            - OS's you can run on ECR2 include:   Linux (various), FreeBSD, Windows (various),
+            - OS/X won't run on EC2 due to hardware licensing issues
+            - Ubuntu Cloud-Init looks awwwwesome
+                    http://www.slideshare.net/XebiaFrance/cloudinit-introduction
 
+
+=================================[ integration testing, manual ]==================================
+
+- do more testing!

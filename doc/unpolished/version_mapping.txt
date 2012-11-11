@@ -40,6 +40,13 @@ xterm (Solaris 10)
 
 =========================================== source code locations
 
+dtterm  (http://sourceforge.net/projects/cdesktopenv/files/src/)
+            - cde/lib/DtTerm/Term/TermParseTable.c
+            - cde/lib/DtTerm/Term/TermParse.c
+            - TODO: ask the folks at http://devio.us/~kpedersen/index.php if they've been able to
+              get it compiled for any x86 machine
+            
+
 Putty (linux)
             - terminal.c, search for "report xterm version"
             - it ALWAYS reports 136
