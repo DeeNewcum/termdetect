@@ -50,8 +50,7 @@ Most people have learned to mistrust $TERM and terminfo, and so hard-code everyt
 ## Documentation
 
 * run <tt>termdetect --help</tt>
-* [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
-* [doc/*](https://github.com/DeeNewcum/termdetect/tree/master/doc)
+* [online documentation](https://github.com/DeeNewcum/termdetect/blob/master/doc/README.md)
 
 ## Development status
 
