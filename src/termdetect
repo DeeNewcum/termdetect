@@ -81,6 +81,9 @@ if ($ARGV{snapshot}) {
             my $final_term = TERM_fallback($term, $termmatch_db);
             if ($final_term) {
                 print "$final_term\n";
+                # to deal with the problem of the keyboard-buffer being cleared, we indicate to the
+                # user when it's safe to start typing   (see doc/side-effects.md)
+                print STDERR "-\n";     
             } else {
                 print STDERR "The suggested \$TERM \"$term\" wasn't found.\n";
                 print STDERR "        \n";
