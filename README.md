@@ -50,7 +50,8 @@ Most people have learned to mistrust $TERM and terminfo, and so hard-code everyt
 ## Documentation
 
 * run <tt>termdetect --help</tt>
-* see [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
+* [doc/termmatch.md](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md)
+* [doc/*](https://github.com/DeeNewcum/termdetect/tree/master/doc)
 
 ## Development status
 
@@ -59,4 +60,6 @@ termdetect is in beta.  The code is working and in regular use on at least a han
 * I'm interested in getting feedback from users to see which [use-cases](https://github.com/DeeNewcum/termdetect/blob/master/doc/user_scenarios.md) people find most useful.
 * There is data for a lot of terminals that need to be added.  But this may be guided somewhat based on which use-cases are most popular.
 
+## License
 
+GPL 2

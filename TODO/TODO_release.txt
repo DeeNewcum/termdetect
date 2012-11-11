@@ -44,6 +44,9 @@ Things to do in preparation for a release:
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- boot up an AWS AMI image of FreeBSD, and test it on that
+        http://www.daemonology.net/freebsd-on-ec2/
+
 - auto-detect the terminfo available  (eg. "ncurses", "ESR", "solaris", "os/x", etc)
     - then change termmatch.src:
             - remove fallback=
