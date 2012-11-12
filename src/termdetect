@@ -83,7 +83,8 @@ if ($ARGV{snapshot}) {
                 print "$final_term\n";
                 # to deal with the problem of the keyboard-buffer being cleared, we indicate to the
                 # user when it's safe to start typing   (see doc/side-effects.md)
-                print STDERR "-\n";     
+                print STDERR "-\n"
+                        unless (-t STDOUT);
             } else {
                 print STDERR "The suggested \$TERM \"$term\" wasn't found.\n";
                 print STDERR "        \n";
