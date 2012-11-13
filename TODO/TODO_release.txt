@@ -5,10 +5,7 @@ Things to do in preparation for a release:
 ################################################################################
 
 - promotion
-    - it doesn't look like there's any way to do an image-tracker or any sort of analytics on the
-      main github page...   Perhaps we'll put off developing a nice gh-pages page until later?
-            - ask Eads for advice...  he's done a lot of analytics, and will know the value of that
-            - also, he may have some other suggestions for OSS promotion
+    - transfer main page to gh-pages, so that we can do Google Analytics on it
 
     - create a list of terminal-emulators that we currently support
             - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
@@ -44,6 +41,26 @@ Things to do in preparation for a release:
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
+    and have it include a setting for $LANG
+
+            - but ONLY if the character coding was detected -- trying to make a new locale is...
+              complicated enough that it'll have to wait until the next release
+
+            - I don't know if  Encode::Locale  could help with this at all?
+
+            - add a good example to README.md of how to integrate termdetect into
+              .vimrc
+
+
+- record a screencast of termdetect working on various terminals, and after each is started,
+    the user displaying the auto-detected $TERM and $LANG
+
+
+################################################################################
+#################################[ v0.13 ]######################################
+################################################################################
+
 - boot up an AWS AMI image of FreeBSD, and test it on that
         http://www.daemonology.net/freebsd-on-ec2/
 
@@ -75,20 +92,9 @@ Things to do in preparation for a release:
 - (maybe)  add a CHANGES file, akin to this project:
             http://cwrapper.sourceforge.net/
 
-- change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
-    and have it include a setting for $LANG
-
-            - but ONLY if the character coding was detected -- trying to make a new locale is...
-              complicated enough that it'll have to wait until the next release
-
-            - I don't know if  Encode::Locale  could help with this at all?
-
-            - add a good example to README.md of how to integrate termdetect into
-              .vimrc
-
 
 ################################################################################
-#################################[ v0.13 ]######################################
+#################################[ v0.14 ]######################################
 ################################################################################
 
 - integrate the termping functionality directly into termdetect --ping.  The reasoning for this:
