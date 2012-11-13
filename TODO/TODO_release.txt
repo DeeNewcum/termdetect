@@ -11,6 +11,10 @@ Things to do in preparation for a release:
             - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
               handy.
 
+- if we're going to let the project simmer unattended for a while, it may be good to make a decision
+        about whether to use internal canonical names
+                (and ignorable suffixes)
+
 - on release:
 
     - distribute it somewhat widely:
