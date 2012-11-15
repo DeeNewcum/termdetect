@@ -11,13 +11,10 @@ Things to do in preparation for a release:
             - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
               handy.
 
-- if we're going to let the project simmer unattended for a while, it may be good to make a decision
-        about whether to use internal canonical names
-                (and ignorable suffixes)
-
 - on release:
 
     - distribute it somewhat widely:
+            - post it to reddit.com/r/ScriptSwap
             - post it here:  http://serverfault.com/questions/350401/detect-terminal-type-with-tput
             - post it on Facebook
             - post it on reddit.com/r/commandline
@@ -44,6 +41,12 @@ Things to do in preparation for a release:
 ################################################################################
 #################################[ v0.12 ]######################################
 ################################################################################
+
+(context:  this would be the final version before letting the project simmer for a bit)
+
+- if we're going to let the project simmer unattended for a while, it may be good to make a decision
+        about whether to use internal canonical names
+                (and ignorable suffixes)
 
 - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
     and have it include a setting for $LANG
