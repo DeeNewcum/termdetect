@@ -47,32 +47,32 @@ my $termmatch_db = parse_terminfo($termmatch_file);
     #print ti_dump_terminal(values %$termmatch_db);      exit;
 
 ## read in the test results from the current terminal
-my $test_results = perform_all_tests();
-    #print Dumper $test_results;     exit;
-    #print ansi_escape_no_nl(Dumper $test_results);      exit;
+my $fingerprint = perform_all_tests();
+    #print Dumper $fingerprint;     exit;
+    #print ansi_escape_no_nl(Dumper $fingerprint);      exit;
 
 ## ... and match them together
-my $term = match_results($test_results, $termmatch_db,
+my $term = match_fingerprint($fingerprint, $termmatch_db,
     !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check}));
 
 
 
 ## generate the desired output
 if ($ARGV{snapshot}) {
-    show_snapshot($test_results);
+    show_snapshot($fingerprint);
 
 } elsif ($ARGV{dump}) {
-    foreach my $cap (sort keys %$test_results) {
+    foreach my $cap (sort keys %$fingerprint) {
         if (-t STDOUT) {
-            printf "%25s  %s\n", $cap, summarize_result($test_results->{$cap});
+            printf "%25s  %s\n", $cap, summarize_result($fingerprint->{$cap});
         } else {
-            print "$cap\t", summarize_result($test_results->{$cap}), "\n";
+            print "$cap\t", summarize_result($fingerprint->{$cap}), "\n";
         }
     }
 
 } elsif ($ARGV{result}) {
-    if (exists $test_results->{$ARGV{result}}) {
-        print summarize_result($test_results->{$ARGV{result}}), "\n";
+    if (exists $fingerprint->{$ARGV{result}}) {
+        print summarize_result($fingerprint->{$ARGV{result}}), "\n";
     }
 
 } elsif (!$ARGV{check}) {
@@ -95,12 +95,12 @@ if ($ARGV{snapshot}) {
             my $all_aliases = join " / ", @{ $termmatch_db->{$term}{termnames}};
             my @fields = (
                     ['terminal',            $all_aliases],
-                    ['version',             $test_results->{s_term_version}],
-                    ['encoding',            $test_results->{s_encoding}],
-                    ['terminal size',       $test_results->{s_window_size},         '(characters)'  ],
-                    ['font size',           $test_results->{s_font_size},           '(pixels)'  ],
-                    ['window position',     $test_results->{s_window_pos},          '(pixels)'  ],
-                    ['screen size',         $test_results->{s_screen_size},         '(pixels)'  ],
+                    ['version',             $fingerprint->{s_term_version}],
+                    ['encoding',            $fingerprint->{s_encoding}],
+                    ['terminal size',       $fingerprint->{s_window_size},         '(characters)'  ],
+                    ['font size',           $fingerprint->{s_font_size},           '(pixels)'  ],
+                    ['window position',     $fingerprint->{s_window_pos},          '(pixels)'  ],
+                    ['screen size',         $fingerprint->{s_screen_size},         '(pixels)'  ],
             );
             foreach my $field (@fields) {
                 next unless defined($field->[1]);
@@ -156,7 +156,7 @@ sub help_submit {
 
 The author doesn't have access to all terminals (or all versions of terminals).
 If termdetect doesn't detect your terminal, you can help greatly by submitting
-the test results for your particular terminal.
+the fingerprint for your particular terminal.
 
 1. Run  termdetect --dump
 
@@ -169,7 +169,7 @@ the test results for your particular terminal.
 
     - the name and version number of your terminal
 
-    - the reason for submitting the data, eg:
+    - the reason for submitting the data:
             - there was no entry for this terminal
             - there was an entry, but it didn't correctly identify your terminal
 
@@ -275,9 +275,10 @@ EOF
 
 
 sub show_snapshot {
-    my ($test_results) = @_;
+    my ($fingerprint) = @_;
 
-    # Patterns that may potentionally match the current results.
+    # Ways to generalize the current result by using a pattern that matches
+    # multiple results.
     # If one of these patterns matches, then that's really good, because it increases the 
     # chances that we'll match other results.
     #
@@ -295,16 +296,16 @@ sub show_snapshot {
         unshift @$list, '';         # highest priority:  match an empty string
         push    @$list, '%+';       # lowest priority:  match a non-empty string
     }
-    foreach my $cap (sort keys %$test_results) {
+    foreach my $cap (sort keys %$fingerprint) {
         next if $Termdetect_Tests::rarely_tested_synthetics{$cap};
-        my $r = summarize_result($test_results->{$cap});
+        my $r = summarize_result($fingerprint->{$cap});
         foreach my $gen (@{ $generalizations{$cap} }) {
-            if (Termdetect_Match::match_one_field($test_results->{$cap}, {assign => $gen})) {
+            if (Termdetect_Match::match_one_field($fingerprint->{$cap}, {assign => $gen})) {
                 ($r) = ansi_escape($gen);
                 last;
             }
         }
-        if ($cap eq 'r_device_attr2' && $test_results->{$cap}{received} =~ /^\e(\[>[^;]*;)[^;]*(;.*c)$/) {
+        if ($cap eq 'r_device_attr2' && $fingerprint->{$cap}{received} =~ /^\e(\[>[^;]*;)[^;]*(;.*c)$/) {
             $r = "\\E$1\%+$2";
         }
         printf "    %s=%s,\n", $cap, $r;
@@ -337,25 +338,26 @@ termdetect
             https://github.com/DeeNewcum/termdetect/blob/master/doc/side-effects.md
 
   --dump
-        Dumps the result of all tests run.
+        Dumps the current terminal's fingerprint.
         Similar to --snapshot, but gives a little more detailed information.
         See here for details on what each line means:
             https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md
 
   --check=<term>
-        In the case of a mismatch, this tells you which specific tests gave
-        different answers than were expected.  This helps suggest changes that
-        may need to be made to the termmatch.src database.
-        If no terminal name is given, it displays information about EVERY entry
-        in the database.
+        In cases that a fingerprint can't be identified, this gives you
+        information about the closest matches, including differences between the
+        entries in the database and the current terminal's fingerprint.
+
+        If no terminal name is given, it displays information about EVERY
+        fingerprint in the database.
 
   --snapshot
-        Outputs the current tests results in a form that's suitable for 
+        Outputs the current fingerprint in a form that's suitable for
         cut-n-pasting into termmatch.src.
 
   --version
         Show version number.
 
   --help-submit
-        A guide for submitting test results to the developer, so that more
+        A guide for submitting a fingerprint to the developer, so that more
         terminal types will be recognized.

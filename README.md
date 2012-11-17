@@ -1,9 +1,5 @@
 ## termdetect
 
-There hasn't been a good way to automatically set the $TERM variable.  Your terminal emulator doesn't know what terminfo entries are available on your remote machine, and your remote machine doesn't know exactly what your terminal is actually capable of, so both sides make blind guesses about the other.
-
-Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#capability-names-tests)</sup> and looking up the replies in a table of known responses,<sup>[(2)](https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src)</sup> termdetect can know *exactly* which terminal it's talking to.
-
     $ termdetect
                 terminal:   vte / gnome-terminal / xfce4-terminal
                  version:   libvte v0.32.1
@@ -13,7 +9,17 @@ Termdetect solves this.  By sending various ANSI queries<sup>[(1)](https://githu
          window position:   5 x 81   (pixels)
              screen size:   3200 x 1080   (pixels)
 
-This information is determined solely by communicating directly with the remote terminal, none of it comes from the local OS.
+termdetect is a tool that determine which terminal you're using (eg. Putty, Xterm, Konsole).  It does this by communicating directly with the terminal via escape codes, it doesn't use any other information.  Thus, it's much more reliable than $TERM.
+
+There are various ways to use it, but one thing it can do is automatically set your $TERM:
+
+````bash
+export TERM=$(termdetect -t)
+````
+
+## How does it work?
+
+Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a database of known terminal fingerprints, and reports which terminal matches the fingerprint.
 
 ## Installation
 
@@ -23,14 +29,7 @@ This information is determined solely by communicating directly with the remote 
 
 Requirements: A base installation of Perl, and [any Un*x or OS/X](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
 
-## Ways to use it
-
-Some possible ways to use termdetect:
-
-````bash
-# ~/.bashrc
-export TERM=$(termdetect -t)
-````
+## Other ways to use it
 
 ````vim
 " ~/.vimrc
