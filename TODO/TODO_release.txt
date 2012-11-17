@@ -4,6 +4,8 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
+- rename "termmatch.src" to "fingerprint_db.src"
+
 - promotion
     - transfer main page to gh-pages, so that we can do Google Analytics on it
 
@@ -37,6 +39,8 @@ Things to do in preparation for a release:
                     - listen to Tribes by Seth Godin    http://stackoverflow.com/questions/95710/how-do-you-promote-advertise-evangelize-your-open-source-project/441859#441859
                     - ask Eads how to get a few initial eyeballs
 
+    - create a PPA install package for it, as a preliminary step towards getting a .deb integrated
+      into Ubuntu and/or Debian
 
 ################################################################################
 #################################[ v0.12 ]######################################

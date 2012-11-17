@@ -165,7 +165,7 @@ There are three main ways that a terminal emulator chooses to respond to an ANSI
 2. HIDDEN.  The sequence isn't supported at all, but at least the terminal recognizes it as ANSI code that another terminal would support, so it hides the escape sequence from the user, but does nothing else with it.
 3. DISPLAYED.  The sequence isn't supported.  Further, the terminal doesn't even recognize it as a legitimate ANSI code, and it displays some or all of the sequences's characters to the user.
 
-We can detect group #3 by watching for cursor movement, using the CPR (cursor position report) sequence.
+We can't always tell the difference between #1 and #2.  However, we *can* tell the difference between #1/2 and #3, by watching for cursor movement using the CPR (cursor position report) sequence.
 
 Group #3 happens because there is no standard or agreement on the format of all possible ANSI sequences.  Terminal programmers want to be conservative and not hide anything that was intended to be displayed.  (actually, there is [this carefully-researched document describing the DEC VT500 behavior](http://www.vt100.net/emu/dec_ansi_parser), but not enough people know about it)
 

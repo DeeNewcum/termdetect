@@ -9,7 +9,7 @@
          window position:   5 x 81   (pixels)
              screen size:   3200 x 1080   (pixels)
 
-termdetect is a tool that determine which terminal you're using (eg. Putty, Xterm, Konsole).  It does this by communicating directly with the terminal via escape codes, it doesn't use any other information.  Thus, it's much more reliable than $TERM.
+termdetect is a tool that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole).  It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, and doesn't use any other information, so it's much more reliable than $TERM.
 
 There are various ways to use it, but one thing it can do is automatically set your $TERM:
 
@@ -19,7 +19,7 @@ export TERM=$(termdetect -t)
 
 ## How does it work?
 
-Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a database of known terminal fingerprints, and reports which terminal matches the fingerprint.
+Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a [database of known terminal fingerprints](https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src), and reports which terminal matches the fingerprint.
 
 ## Installation
 
