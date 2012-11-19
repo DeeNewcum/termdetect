@@ -19,7 +19,7 @@ export TERM=$(termdetect -t)
 
 ## How does it work?
 
-Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a [database of known terminal fingerprints](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src), and reports which terminal matches the fingerprint.
+Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a [database of known terminal fingerprints](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src), and reports which terminal matches the fingerprint.
 
 ## Installation
 
@@ -27,7 +27,7 @@ Terdetect figures out a "fingerprint" of the current terminal by sending [variou
         or
     wget http://is.gd/termdetect;  chmod +x termdetect
 
-Requirements: A base installation of Perl, and [any Un*x or OS/X](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt).
+Requirements: A base installation of Perl, and [any Un*x or OS/X](https://raw.github.com/DeeNewcum/termdetect/master/doc/tested_on.txt).
 
 ## Other ways to use it
 

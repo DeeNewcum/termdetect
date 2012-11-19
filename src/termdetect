@@ -341,7 +341,7 @@ termdetect
         Dumps the current terminal's fingerprint.
         Similar to --snapshot, but gives a little more detailed information.
         See here for details on what each line means:
-            https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md
+            https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md
 
   --check=<term>
         In cases that a fingerprint can't be identified, this gives you

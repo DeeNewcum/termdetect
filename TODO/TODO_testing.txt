@@ -55,3 +55,8 @@
 =================================[ integration testing, manual ]==================================
 
 - do more testing!
+
+- test on various *BSDs, HP-UX, AIX
+
+    - omg omg: snakebite.net
+                http://www.snakebite.net/

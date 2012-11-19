@@ -74,7 +74,7 @@ Things to do in preparation for a release:
         http://www.daemonology.net/freebsd-on-ec2/
 
 - auto-detect the terminfo available  (eg. "ncurses", "ESR", "solaris", "os/x", etc)
-    - then change termmatch.src:
+    - then change fingerprints.src:
             - remove fallback=
             - replace it with TERM=
             - most entries in TERM= should have a prefix indicating that they should only match
@@ -83,7 +83,7 @@ Things to do in preparation for a release:
     - change the documentation to say "termdetect works best with ncurses' terminfo, but it will
                         work acceptably with others"
 
-- point out in the manual or somewhere that if the user wants to customize termmatch.src,
+- point out in the manual or somewhere that if the user wants to customize fingerprints.src,
     they have to download their own copy and modify that, rather than starting with a blank file
 
 - find a version of FreeBSD to test this on
@@ -117,7 +117,7 @@ Things to do in preparation for a release:
 - add the ability to have "suffixes" on terminal names
     - these suffixes would be entirely confined to termdetect; once the terminal was going
       to be used for terminfo, the suffix would be removed
-    - the suffix is only to keep track of unique termmatch entries (eg. because of version variations),
+    - the suffix is only to keep track of unique fingerprint_db entries (eg. because of version variations),
       but for which those minor differences ONLY matter to termdetect, and don't matter to terminfo
     - one example where we need this already is  screen_4.00.02  vs  screen_4.00.03jw4,
       where the terminfo entry is just   screen
@@ -135,7 +135,7 @@ Things to do in preparation for a release:
 - find an install of Perl v5.6.2 to test this against, to see if it will run even on old Perls
             (building it via PerlBrew has failed on two of my machines so far)
 
-- add more terminals to the termmatch database
+- add more terminals to the fingerprint_db database
 
 - see if I can detect more character encodings
 

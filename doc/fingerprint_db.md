@@ -1,14 +1,14 @@
-The 'fingerprints.src' file is the database of known terminals that termdetect uses to determine what the current terminal is.
+The 'fingerprints.src' file is the database of known fingerprints.  It is the core of how termdetect does its job.
 
 ## Syntax
 
-Termmatch files have the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
+The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
 
 * there's a special "fallback" capability entry
 * the percent syntax is entirely different
 * capability names are different  (and often longer)
 
-The terminal names used in termmatch files should be the exact same as is used in terminfo files.  The $TERM names in the built-in termmatch files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
+The terminal names used in fingerprints.src files should be the exact same as is used in terminfo files.  The $TERM names in the built-in fingerprints.src files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
 
 ## "fallback" field
 
@@ -45,9 +45,9 @@ The empty string means that nothing happened — no characters were received, an
 
 ## Capability names (tests)
 
-Unfortunately, there is very little overlap between terminfo capabilities and termmatch capabilities, so these names are unique to termmatch files.
+Unfortunately, there is very little overlap between terminfo capabilities and fingerprints.src capabilities, so these names are unique to fingerprints.src files.
 
-Within termmatch files, "capabilities" can also be called "tests" — each refers to a specific test performed on the terminal.
+Within fingerprints.src files, "capabilities" can also be called "tests" — each refers to a specific test performed on the terminal.
 
 ### r_* capabilities — Request/Reply tests
 

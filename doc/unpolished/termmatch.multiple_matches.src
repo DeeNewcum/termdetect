@@ -1,4 +1,4 @@
-# This is a version of the termmatch.src that is used for testing termdetect's behavior when
+# This is a version of the fingerprints.src that is used for testing termdetect's behavior when
 # it has multiple terminals match the current results.
 
 vte|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
