@@ -4,8 +4,6 @@ Things to do in preparation for a release:
 #################################[ v0.11 ]######################################
 ################################################################################
 
-- rename "termmatch.src" to "fingerprint_db.src"
-
 - promotion
     - transfer main page to gh-pages, so that we can do Google Analytics on it
 

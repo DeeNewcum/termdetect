@@ -286,7 +286,7 @@ sub calculate_derived_values {
 }
 
 sub calculate_derived_values_after_match {
-    my ($all_results, $termmatch_db, $matched_term) = @_;
+    my ($all_results, $fingerprint_db, $matched_term) = @_;
 
     calculate_version($all_results, $matched_term);
 }
@@ -300,7 +300,7 @@ sub calculate_version {
 
     # The exact interpretation of the second argument of DA2 varies based on terminal.
     # This is the only place in the code that we have terminal-specific code.  This really
-    # out to be moved to termmatch.src in some way.
+    # out to be moved to fingerprints.src in some way.
     if ($matched_term eq 'vte') {
         $da2 =~ s/(\d\d)$//;
         my $last2digits = $1;

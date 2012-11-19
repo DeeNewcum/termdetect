@@ -1,4 +1,4 @@
-The 'termmatch.src' file is the database of known terminals that termdetect uses to determine what the current terminal is.
+The 'fingerprints.src' file is the database of known terminals that termdetect uses to determine what the current terminal is.
 
 ## Syntax
 

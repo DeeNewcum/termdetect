@@ -10,9 +10,9 @@ termdetect.fatpacked:	termdetect *.pm
 	@mkdir lib
 	@mkdir fatlib
 	@cp *.pm lib
-	@echo "package Termmatch; sub termmatch {join '', <DATA>}; 1" > lib/Termmatch.pm
-	@echo "__DATA__"                                             >> lib/Termmatch.pm
-	@cat termmatch.src                                           >> lib/Termmatch.pm
+	@echo "package FingerprintDB; sub fingerprint_db {join '', <DATA>}; 1" > lib/FingerprintDB.pm
+	@echo "__DATA__"                                                      >> lib/FingerprintDB.pm
+	@cat fingerprints.src                                                 >> lib/FingerprintDB.pm
 	@echo "$$FATPACK_HEADER" > termdetect.fatpacked
 	fatpack file            >> termdetect.fatpacked
 	@cat termdetect         >> termdetect.fatpacked

@@ -1,4 +1,4 @@
-# The database of known fingerprints, that is the core of termdetect.
+# The database of known fingerprints.  This is the core of termdetect.
 #
 # This file's syntax is exactly the same as terminfo's in most places, with a few slight changes.
 #

@@ -24,14 +24,14 @@ package Termdetect_Match;
 #  error out)
 sub match_fingerprint {
     my ($current_fingerprint,       # the results from running all the tests on the current terminal
-        $termmatch_db,              # the contents of "termmatch.src"
+        $fingerprint_db,            # the contents of "fingerprints.src"
         $die_if_not_one,            # should we error out when there are more than one matches, or
                                     #           zero matches?   (optional param, defaults to yes)
             ) = @_;
 
     $die_if_not_one = 1        if (!defined($die_if_not_one));
 
-    my $match_stats = calculate_match_statistics($current_fingerprint, $termmatch_db);
+    my $match_stats = calculate_match_statistics($current_fingerprint, $fingerprint_db);
         #print Dumper $match_stats;
 
 
@@ -71,11 +71,11 @@ sub match_fingerprint {
                 print STDERR "See       termdetect --help-submit\n";
                 exit 1;
             } else {
-                die "Error: Termmatch.src is blank; there are no entries to match to.\n";
+                die "Error: fingerprints.src is blank; there are no entries to match to.\n";
             }
         }
     } elsif (@no_mismatches == 1) {
-        Termdetect_Tests::calculate_derived_values_after_match($current_fingerprint, $termmatch_db, $highest_match);
+        Termdetect_Tests::calculate_derived_values_after_match($current_fingerprint, $fingerprint_db, $highest_match);
     }
 
     return $highest_match;
@@ -112,18 +112,18 @@ sub show_match_percentages {
 
 sub calculate_match_statistics {
     my ($current_fingerprint,       # the test results from the current terminal
-        $termmatch_db               # the contents of "termmatch.src"
+        $fingerprint_db             # the contents of "fingerprints.src"
             ) = @_;
 
     #print ansi_escape_no_nl(Dumper $current_fingerprint);      exit;
-    #print ansi_escape_no_nl(Dumper $termmatch_db);      exit;
+    #print ansi_escape_no_nl(Dumper $fingerprint_db);      exit;
     
     my %pass_fail_count;
 
-    foreach my $termmatch_entry (values %$termmatch_db) {
-        my $termname = $termmatch_entry->{termnames}[0];
+    foreach my $fingerprint_entry (values %$fingerprint_db) {
+        my $termname = $fingerprint_entry->{termnames}[0];
 
-        next if (exists $termmatch_entry->{alias});     # skip aliases, we'll only process canonical names
+        next if (exists $fingerprint_entry->{alias});     # skip aliases, we'll only process canonical names
 
         my $check_this = (exists $::ARGV{check} &&
                 ($::ARGV{check} eq '1' || $::ARGV{check} eq $termname));
@@ -135,18 +135,18 @@ sub calculate_match_statistics {
 
             next if ($cap =~ /^c_/);
             next if ($Termdetect_Tests::rarely_tested_synthetics{$cap} &&
-                        !exists $termmatch_entry->{fields}{$cap});
+                        !exists $fingerprint_entry->{fields}{$cap});
             
             printf "\t%-20s  ", $cap            if $check_this;
             $pass_fail_count{$termname}{total}++;
-            if (exists $termmatch_entry->{fields}{$cap}) {
-                my $yn = match_one_field($test_result, $termmatch_entry->{fields}{$cap});
+            if (exists $fingerprint_entry->{fields}{$cap}) {
+                my $yn = match_one_field($test_result, $fingerprint_entry->{fields}{$cap});
                 if ($yn) {
                     print "match\n"         if $check_this;
                 } else {
                     printf "MISMATCH -- got: %-25s  wanted: %s\n",
                             quote(summarize_result($test_result)), 
-                            quote(ansi_escape($termmatch_entry->{fields}{$cap}{assign}))
+                            quote(ansi_escape($fingerprint_entry->{fields}{$cap}{assign}))
                                 if $check_this;
                 }
                 $pass_fail_count{$termname}{$yn ? 'y' : 'n'} ++;
@@ -167,7 +167,7 @@ sub calculate_match_statistics {
         }
 
 
-# Match one test-result against a capability in one termmatch entry.
+# Match one test-result against a capability in one fingerprint entry.
 # Returns true/false, regarding whether it matched.
 sub match_one_field {
     my ($test_result, $entry_cap) = @_;

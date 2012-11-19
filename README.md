@@ -19,7 +19,7 @@ export TERM=$(termdetect -t)
 
 ## How does it work?
 
-Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a [database of known terminal fingerprints](https://github.com/DeeNewcum/termdetect/blob/master/src/termmatch.src), and reports which terminal matches the fingerprint.
+Terdetect figures out a "fingerprint" of the current terminal by sending [various ANSI escape codes](https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md#r_-capabilities-%E2%80%94-requestreply-tests) to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a [database of known terminal fingerprints](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src), and reports which terminal matches the fingerprint.
 
 ## Installation
 
