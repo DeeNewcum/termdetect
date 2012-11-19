@@ -1,13 +1,8 @@
 ## termdetect
 
-    $ termdetect
-                terminal:   vte / gnome-terminal / xfce4-terminal
-                 version:   libvte v0.32.1
-                encoding:   utf8
-           terminal size:   318 x 74   (characters)
-               font size:   6 x 13   (pixels)
-         window position:   5 x 81   (pixels)
-             screen size:   3200 x 1080   (pixels)
+<p align="center">
+  <img src="http://deenewcum.github.com/termdetect/images/termdetect_putty.png"/>
+</p>
 
 termdetect is a tool that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole).  It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, and doesn't use any other information, so it's much more reliable than $TERM.
 
