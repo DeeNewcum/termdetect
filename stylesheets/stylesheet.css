@@ -166,6 +166,10 @@ pre {
   overflow-y: hidden;
 }
 
+pre.nomargin {
+    margin:0;
+}
+
 table {
   width: 100%;
   margin: 0 0 20px 0;

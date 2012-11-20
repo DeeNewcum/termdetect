@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
+    <!-- http://relshorturl.appspot.com/ -->
+    <link rel="shorturl" href="http://bit.ly/termdetect" />
+    <link rel="shorturl" href="http://git.io/termd" />
+
     <title>Termdetect by DeeNewcum</title>
   </head>
 
@@ -30,9 +34,9 @@
         <p align="center">
   <img src="http://deenewcum.github.com/termdetect/images/termdetect_putty.png"></p>
 
-<p>termdetect is a tool that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole).  It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, and doesn't use any other information, so it's much more reliable than $TERM.</p>
+<p>termdetect is a tool that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole).  It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, so it's much more reliable than $TERM.</p>
 
-<p>There are various ways to use it, but one thing it can do is automatically set your $TERM:</p>
+<p>There are various ways to use it, but one way to use it is to automatically set your $TERM:</p>
 
 <div class="highlight"><pre><span class="nb">export </span><span class="nv">TERM</span><span class="o">=</span><span class="k">$(</span>termdetect -t<span class="k">)</span>
 </pre></div>
@@ -43,12 +47,11 @@
 
 <h2>Installation</h2>
 
-<pre><code>curl -L http://is.gd/termdetect -o termdetect;  chmod +x termdetect
-    or
-wget http://is.gd/termdetect;  chmod +x termdetect
-</code></pre>
+<pre class=nomargin><code>curl -L http://is.gd/termdetect -o termdetect;  chmod +x termdetect</code></pre>
+&nbsp; &nbsp; &nbsp; or
+<pre class=nomargin><code>wget http://is.gd/termdetect;  chmod +x termdetect</code></pre>
 
-<p>Requirements: A base installation of Perl, and <a href="https://raw.github.com/DeeNewcum/termdetect/master/doc/tested_on.txt">any Un*x or OS/X</a>.</p>
+<p>Requirements: A base installation of Perl, and <a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt">any Un*x or OS/X</a>.</p>
 
 <h2>Other ways to use it</h2>
 
