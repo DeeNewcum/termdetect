@@ -43,8 +43,7 @@ Most people have learned to mistrust $TERM and terminfo, and so hard-code everyt
 
 ## Documentation
 
-* run <tt>termdetect --help</tt>
-* [online documentation](https://github.com/DeeNewcum/termdetect/blob/master/doc/README.md)
+[online documentation](https://github.com/DeeNewcum/termdetect/blob/master/doc/README.md)
 
 ## License
 
