@@ -5,8 +5,6 @@ Things to do in preparation for a release:
 ################################################################################
 
 - promotion
-    - transfer main page to gh-pages, so that we can do Google Analytics on it
-
     - create a list of terminal-emulators that we currently support
             - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
               handy.
