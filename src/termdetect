@@ -55,6 +55,8 @@ my $fingerprint = perform_all_tests();
 my $term = match_fingerprint($fingerprint, $fingerprint_db,
     !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check}));
 
+$fingerprint->{s_fingerprint_name}{received} = $term;
+
 
 
 ## generate the desired output
@@ -92,10 +94,11 @@ if ($ARGV{snapshot}) {
                 help_install_terminfos();
             }
         } else {
-            my $all_aliases = join " / ", @{ $fingerprint_db->{$term}{termnames}};
+            (my $fingerprint_name_short = $term) =~ s/\*.*//;
+            my $suggested_term = TERM_fallback($term, $fingerprint_db);
             my @fields = (
-                    ['terminal',            $all_aliases],
-                    ['version',             $fingerprint->{s_term_version}],
+                    ['terminal',            $fingerprint_name_short],
+                    ['terminal version',    $fingerprint->{s_term_version}],
                     ['encoding',            $fingerprint->{s_encoding}],
                     ['terminal size',       $fingerprint->{s_window_size},         '(characters)'  ],
                     ['font size',           $fingerprint->{s_font_size},           '(pixels)'  ],
@@ -215,12 +218,10 @@ sub TERM_fallback {
     my ($proposed_term, $fingerprint_db) = @_;
 
     my $fingerprint = $fingerprint_db->{$proposed_term};
-    my @fallback_list = @{$fingerprint->{termnames}};
-    if ($fingerprint->{fields}{fallback}) {
-        push @fallback_list,
-             split /\|/,
-                   $fingerprint->{fields}{fallback}{assign};
-    }
+    my @fallback_list = 
+            (exists $fingerprint->{fields}{TERM})
+            ? (split '\|', $fingerprint->{fields}{TERM}{assign})
+            : ($proposed_term);
         #print Dumper \@fallback_list; exit;
 
     foreach my $fallback (@fallback_list) {

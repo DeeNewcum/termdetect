@@ -8,15 +8,6 @@ The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](http
 * the percent syntax is entirely different
 * capability names are different  (and often longer)
 
-The terminal names used in fingerprints.src files should be the exact same as is used in terminfo files.  The $TERM names in the built-in fingerprints.src files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
-
-## "fallback" field
-
-Once termdetect runs its tests and decides that a specific terminal entry matches the current terminal, it then looks for a $TERM value to set.  Often this will be one of the terminal names given on the first line.
-
-However, sometimes a more general value for $TERM is needed.  That's where <tt>fallback</tt> fields come in.  <tt>Fallback</tt> lets you give other values to set $TERM to.  Multiple $TERM values can be specified, separated by "|".
-
-The difference between fallback entries and terminal aliases is that terminal aliases have to be unique within a termdetect file, while many different terminals may have eg. "vt100" listed as a fallback.
 
 ## Percent codes
 
@@ -42,6 +33,12 @@ Percent codes may sometimes look like termcap entries, but they have completely 
 </table>
 
 The empty string means that nothing happened — no characters were received, and no cursor movement occurred.
+
+## How the $TERM value is determined
+
+Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.
+
+When no TERM field is given, the main fingerprint name is used.  A TERM field is often used, however, because the main fingerprint name shoudl be a stable identifier.
 
 ## Capability names (tests)
 
