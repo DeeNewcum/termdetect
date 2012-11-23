@@ -1,0 +1,3 @@
+Problems with the latest version of ncurses' terminfo:
+
+- the entry for "xterm+256color" doesn't have the ability to clear the screen

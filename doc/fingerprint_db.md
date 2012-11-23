@@ -1,14 +1,14 @@
-The 'termmatch.src' file is the database of known terminals that termdetect uses to determine what the current terminal is.
+The 'fingerprints.src' file is the database of known fingerprints.  It is the core of how termdetect does its job.
 
 ## Syntax
 
-Termmatch files have the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
+The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
 
 * there's a special "fallback" capability entry
 * the percent syntax is entirely different
 * capability names are different  (and often longer)
 
-The terminal names used in termmatch files should be the exact same as is used in terminfo files.  The $TERM names in the built-in termmatch files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
+The terminal names used in fingerprints.src files should be the exact same as is used in terminfo files.  The $TERM names in the built-in fingerprints.src files are designed to correspond to the $TERM names in the [terminfo database that comes with ncurses](http://invisible-island.net/ncurses/ncurses.faq.html#which_terminfo), because it's one of the most up-to-date terminfo files.
 
 ## "fallback" field
 
@@ -45,9 +45,9 @@ The empty string means that nothing happened — no characters were received, an
 
 ## Capability names (tests)
 
-Unfortunately, there is very little overlap between terminfo capabilities and termmatch capabilities, so these names are unique to termmatch files.
+Unfortunately, there is very little overlap between terminfo capabilities and fingerprints.src capabilities, so these names are unique to fingerprints.src files.
 
-Within termmatch files, "capabilities" can also be called "tests" — each refers to a specific test performed on the terminal.
+Within fingerprints.src files, "capabilities" can also be called "tests" — each refers to a specific test performed on the terminal.
 
 ### r_* capabilities — Request/Reply tests
 
@@ -165,7 +165,7 @@ There are three main ways that a terminal emulator chooses to respond to an ANSI
 2. HIDDEN.  The sequence isn't supported at all, but at least the terminal recognizes it as ANSI code that another terminal would support, so it hides the escape sequence from the user, but does nothing else with it.
 3. DISPLAYED.  The sequence isn't supported.  Further, the terminal doesn't even recognize it as a legitimate ANSI code, and it displays some or all of the sequences's characters to the user.
 
-We can detect group #3 by watching for cursor movement, using the CPR (cursor position report) sequence.
+We can't always tell the difference between #1 and #2.  However, we *can* tell the difference between #1/2 and #3, by watching for cursor movement using the CPR (cursor position report) sequence.
 
 Group #3 happens because there is no standard or agreement on the format of all possible ANSI sequences.  Terminal programmers want to be conservative and not hide anything that was intended to be displayed.  (actually, there is [this carefully-researched document describing the DEC VT500 behavior](http://www.vt100.net/emu/dec_ansi_parser), but not enough people know about it)
 

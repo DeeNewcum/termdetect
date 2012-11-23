@@ -1,9 +1,9 @@
-# The database that termdetect is built around.
+# The database of known fingerprints.  This is the core of termdetect.
 #
 # This file's syntax is exactly the same as terminfo's in most places, with a few slight changes.
 #
 # For more info, see:
-#       https://github.com/DeeNewcum/termdetect/blob/master/doc/termmatch.md
+#       https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md
 
 vte-256color|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
     fallback=gnome-256color,

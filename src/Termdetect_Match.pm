@@ -1,5 +1,5 @@
-# After all the tests are run on the terminal, this module does the work of trying to find out
-# which database entry (or if things go badly: entries) match the test results most closely.
+# After we get a fingerprint from the current terminal, this module does the work of figuring 
+# out which database entries most closely match the fingerprint.
 
 
 package Termdetect_Match;
@@ -14,22 +14,24 @@ package Termdetect_Match;
 
     use Exporter 'import';
 
-    our @EXPORT = qw( match_results );
+    our @EXPORT = qw( match_fingerprint );
 
     use constant DEBUG_MATCHES => 1;
 
 
 # returns the name of the $TERM that best matches
-sub match_results {
-    my ($test_results,              # the results from running all the tests on the current terminal
-        $termmatch_db,              # the contents of "termmatch.src"
+# (as long as there's only one entry.... if there are more than one, we can be instructed to
+#  error out)
+sub match_fingerprint {
+    my ($current_fingerprint,       # the results from running all the tests on the current terminal
+        $fingerprint_db,            # the contents of "fingerprints.src"
         $die_if_not_one,            # should we error out when there are more than one matches, or
                                     #           zero matches?   (optional param, defaults to yes)
             ) = @_;
 
     $die_if_not_one = 1        if (!defined($die_if_not_one));
 
-    my $match_stats = calculate_match_statistics($test_results, $termmatch_db);
+    my $match_stats = calculate_match_statistics($current_fingerprint, $fingerprint_db);
         #print Dumper $match_stats;
 
 
@@ -69,18 +71,18 @@ sub match_results {
                 print STDERR "See       termdetect --help-submit\n";
                 exit 1;
             } else {
-                die "Error: Termmatch.src is blank; there are no entries to match to.\n";
+                die "Error: fingerprints.src is blank; there are no entries to match to.\n";
             }
         }
     } elsif (@no_mismatches == 1) {
-        Termdetect_Tests::calculate_derived_values_after_match($test_results, $termmatch_db, $highest_match);
+        Termdetect_Tests::calculate_derived_values_after_match($current_fingerprint, $fingerprint_db, $highest_match);
     }
 
     return $highest_match;
 }
 
 
-# show the list of terminals, ordered by match percentage
+# for debugging, show the list of terminals, ordered by match percentage
 sub show_match_percentages {
     my ($match_stats, $limit_to) = @_;
             # $limit_to -- the number of items to display;   undef for unlimited
@@ -109,42 +111,42 @@ sub show_match_percentages {
 
 
 sub calculate_match_statistics {
-    my ($test_results,              # the results from running all the tests on the current terminal
-        $termmatch_db               # the contents of "termmatch.src"
+    my ($current_fingerprint,       # the test results from the current terminal
+        $fingerprint_db             # the contents of "fingerprints.src"
             ) = @_;
 
-    #print ansi_escape_no_nl(Dumper $test_results);      exit;
-    #print ansi_escape_no_nl(Dumper $termmatch_db);      exit;
+    #print ansi_escape_no_nl(Dumper $current_fingerprint);      exit;
+    #print ansi_escape_no_nl(Dumper $fingerprint_db);      exit;
     
     my %pass_fail_count;
 
-    foreach my $termmatch_entry (values %$termmatch_db) {
-        my $termname = $termmatch_entry->{termnames}[0];
+    foreach my $fingerprint_entry (values %$fingerprint_db) {
+        my $termname = $fingerprint_entry->{termnames}[0];
 
-        next if (exists $termmatch_entry->{alias});     # skip aliases, we'll only process canonical names
+        next if (exists $fingerprint_entry->{alias});     # skip aliases, we'll only process canonical names
 
         my $check_this = (exists $::ARGV{check} &&
                 ($::ARGV{check} eq '1' || $::ARGV{check} eq $termname));
 
         print "========[ $termname ]========\n"         if $check_this;
-        #while (my ($cap, $test_result) = each %$test_results) {
-        foreach my $cap (sort keys %$test_results) {
-            my $test_result = $test_results->{$cap};
+        #while (my ($cap, $test_result) = each %$current_fingerprint) {
+        foreach my $cap (sort keys %$current_fingerprint) {
+            my $test_result = $current_fingerprint->{$cap};
 
             next if ($cap =~ /^c_/);
             next if ($Termdetect_Tests::rarely_tested_synthetics{$cap} &&
-                        !exists $termmatch_entry->{fields}{$cap});
+                        !exists $fingerprint_entry->{fields}{$cap});
             
             printf "\t%-20s  ", $cap            if $check_this;
             $pass_fail_count{$termname}{total}++;
-            if (exists $termmatch_entry->{fields}{$cap}) {
-                my $yn = match_one_field($test_result, $termmatch_entry->{fields}{$cap});
+            if (exists $fingerprint_entry->{fields}{$cap}) {
+                my $yn = match_one_field($test_result, $fingerprint_entry->{fields}{$cap});
                 if ($yn) {
                     print "match\n"         if $check_this;
                 } else {
                     printf "MISMATCH -- got: %-25s  wanted: %s\n",
                             quote(summarize_result($test_result)), 
-                            quote(ansi_escape($termmatch_entry->{fields}{$cap}{assign}))
+                            quote(ansi_escape($fingerprint_entry->{fields}{$cap}{assign}))
                                 if $check_this;
                 }
                 $pass_fail_count{$termname}{$yn ? 'y' : 'n'} ++;
@@ -165,7 +167,7 @@ sub calculate_match_statistics {
         }
 
 
-# Match one test-result against a capability in one termmatch entry.
+# Match one test-result against a capability in one fingerprint entry.
 # Returns true/false, regarding whether it matched.
 sub match_one_field {
     my ($test_result, $entry_cap) = @_;

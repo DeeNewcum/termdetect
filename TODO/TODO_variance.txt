@@ -1,8 +1,7 @@
-These are issues where we have an existing termmatch.src entry for a terminal, but we later discover
+These are issues where we have an existing fingerprint for a terminal, but we later discover
 it isn't 100% correct because:
-        1) testing on a different version of the terminal shows different results
-                (that prevent matching), or:
-        2) merely using different settings shows different results (that prevent matching)
+        1) testing on a different version of the terminal results in a different fingerprint, or:
+        2) merely using different settings results in a different fingerprint
 
 
 ==== putty, m_c1 ====
