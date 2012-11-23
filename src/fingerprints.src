@@ -132,7 +132,7 @@ putty-256color,
     r_window_pos=\E[3;%+t,
     r_window_size_char=\E[8;%+t,
     r_window_size_px=\E[4;%+t,
-    r_window_state=\E[1t,
+    r_window_state=\E[%+t,
     r_window_title=\E]l%*\E\\,
     s_ff_clears=true,
 
