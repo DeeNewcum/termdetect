@@ -29,7 +29,7 @@
 
     
     # constants
-    use constant VERSION => "0.11";
+    use constant VERSION => "0.12";
 
 
 our %ARGV;
