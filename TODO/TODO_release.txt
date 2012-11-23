@@ -4,6 +4,8 @@ Things to do in preparation for a release:
 #################################[ v0.12 ]######################################
 ################################################################################
 
+- move attribution to the top of each file
+
 - promotion
     - create a list of terminal-emulators that we currently support
             - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
