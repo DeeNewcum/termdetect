@@ -55,7 +55,8 @@ my $fingerprint = perform_all_tests();
 my $fingerprint_name = match_fingerprint($fingerprint, $fingerprint_db,
     !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check}));
 
-$fingerprint->{s_fingerprint_name}{received} = $fingerprint_name;
+($fingerprint->{s_fingerprint_name}{received} = $fingerprint_name)
+        =~ s/\*.*//;
 
 
 
