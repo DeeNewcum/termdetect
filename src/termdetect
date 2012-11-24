@@ -94,10 +94,12 @@ if ($ARGV{snapshot}) {
                 help_install_terminfos();
             }
         } else {
-            (my $fingerprint_name_short = $fingerprint_name) =~ s/\*.*//;
+            (my $fingerprint_name_display = $fingerprint_name) =~ s/\*.*//;
+            $fingerprint_name_display .= "  --  $fingerprint_db->{$fingerprint_name}{term_descr}"
+                        if ($fingerprint_db->{$fingerprint_name}{term_descr});
             my $suggested_term = find_best_TERM($fingerprint_name, $fingerprint_db);
             my @fields = (
-                    ['terminal',            $fingerprint_name_short],
+                    ['terminal',            $fingerprint_name_display],
                     ['terminal version',    $fingerprint->{s_term_version}],
                     ['encoding',            $fingerprint->{s_encoding}],
                     ['terminal size',       $fingerprint->{s_window_size},         '(characters)'  ],

@@ -5,7 +5,7 @@
 # For more info, see:
 #       https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md
 
-vte|libVTE - used in GNOME Terminal etc,
+vte|VTE is used in GNOME Terminal and XFCE4's Terminal etc,
     TERM=vte-256color|gnome-256color,
     m_c1=%x+3,
     m_cancel=%x+4,
@@ -226,7 +226,7 @@ mrxvt,
     r_window_title=,
     s_ff_clears=false,
 
-screen*4.00.02,
+screen*4.00.02|GNU Screen,
     TERM=screen-256color,
     m_c1=,
     m_cancel=,
@@ -254,7 +254,7 @@ screen*4.00.02,
 
 # in v4.00.03jw4 (git change b4aa8750b45e7b75ab5a837503dc0a6b2e177bf9),
 # support was added for CSI 11t, 7t, and 21t
-screen*4.00.03jw4,
+screen*4.00.03jw4|GNU Screen,
     use=screen*4.00.02,
     r_window_state=\E[1t,
     r_window_title=\E]l%*\E\\,
@@ -419,7 +419,8 @@ konsole,
     r_window_title=,
     s_ff_clears=false,
 
-nsterm-256color|Terminal.app as found in OS/X,
+nsterm|Terminal.app as found in OS/X,
+    TERM=nsterm-256color,
     m_c1=%x+3,
     m_cancel=%x+0,
     m_esc=%x+0,
