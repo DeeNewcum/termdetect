@@ -52,10 +52,10 @@ my $fingerprint = perform_all_tests();
     #print ansi_escape_no_nl(Dumper $fingerprint);      exit;
 
 ## ... and match them together
-my $term = match_fingerprint($fingerprint, $fingerprint_db,
+my $fingerprint_name = match_fingerprint($fingerprint, $fingerprint_db,
     !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check}));
 
-$fingerprint->{s_fingerprint_name}{received} = $term;
+$fingerprint->{s_fingerprint_name}{received} = $fingerprint_name;
 
 
 
@@ -78,9 +78,9 @@ if ($ARGV{snapshot}) {
     }
 
 } elsif (!$ARGV{check}) {
-    if (defined($term)) {
+    if (defined($fingerprint_name)) {
         if ($ARGV{t}) {
-            my $final_term = TERM_fallback($term, $fingerprint_db);
+            my $final_term = find_best_TERM($fingerprint_name, $fingerprint_db);
             if ($final_term) {
                 print "$final_term\n";
                 # to deal with the problem of the keyboard-buffer being cleared, we indicate to the
@@ -94,8 +94,8 @@ if ($ARGV{snapshot}) {
                 help_install_terminfos();
             }
         } else {
-            (my $fingerprint_name_short = $term) =~ s/\*.*//;
-            my $suggested_term = TERM_fallback($term, $fingerprint_db);
+            (my $fingerprint_name_short = $fingerprint_name) =~ s/\*.*//;
+            my $suggested_term = find_best_TERM($fingerprint_name, $fingerprint_db);
             my @fields = (
                     ['terminal',            $fingerprint_name_short],
                     ['terminal version',    $fingerprint->{s_term_version}],
@@ -214,14 +214,14 @@ EOF
 }
 
 
-sub TERM_fallback {
-    my ($proposed_term, $fingerprint_db) = @_;
+sub find_best_TERM {
+    my ($fingerprint_name, $fingerprint_db) = @_;
 
-    my $fingerprint = $fingerprint_db->{$proposed_term};
+    my $fingerprint = $fingerprint_db->{$fingerprint_name};
     my @fallback_list = 
             (exists $fingerprint->{fields}{TERM})
             ? (split '\|', $fingerprint->{fields}{TERM}{assign})
-            : ($proposed_term);
+            : ($fingerprint_name);
         #print Dumper \@fallback_list; exit;
 
     foreach my $fallback (@fallback_list) {
