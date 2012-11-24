@@ -40,6 +40,8 @@ Usually a 'TERM' field is specified with each fingerprint.  Several alternatives
 
 When no TERM field is given, the main fingerprint name is used.  A TERM field is often used, however, because the main fingerprint name shoudl be a stable identifier.
 
+When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is removed before displaying the name to the user.  Like the addition sign in terminfo files, the asterisk sign is used internally only.
+
 ## Capability names (tests)
 
 Unfortunately, there is very little overlap between terminfo capabilities and fingerprints.src capabilities, so these names are unique to fingerprints.src files.
