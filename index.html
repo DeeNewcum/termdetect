@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="termdetect : auto-detect which terminal emulator we're talking to" />
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <!-- http://relshorturl.appspot.com/ -->
-    <link rel="shorturl" href="http://bit.ly/termdetect" />
-    <link rel="shorturl" href="http://git.io/termd" />
-
-    <title>Termdetect by DeeNewcum</title>
+    <title>termdetect</title>
   </head>
 
   <body>
 
-    <header>
-      <div class="container">
-        <h1>Termdetect</h1>
-        <h2>auto-detect which terminal emulator we're talking to</h2>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/DeeNewcum/termdetect">View on GitHub</a>
 
-        <section id="downloads">
-          <a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/README.md" class="btn">Documentation</a>
-          <a href="https://github.com/DeeNewcum/termdetect" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+          <h1 id="project_title">termdetect</h1>
+          <h2 id="project_tagline">auto-detect which terminal emulator we're talking to</h2>
 
-    <div class="container">
-      <section id="main_content">
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/DeeNewcum/termdetect/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/DeeNewcum/termdetect/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <p align="center">
   <img src="http://deenewcum.github.com/termdetect/images/termdetect_putty.png"></p>
 
-<p>termdetect is a tool that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole).  It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, so it's much more reliable than $TERM.</p>
+<p>termdetect is a tool that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole). It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, so it's much more reliable than $TERM.</p>
 
 <p>There are various ways to use it, but one way to use it is to automatically set your $TERM:</p>
 
@@ -43,13 +43,14 @@
 
 <h2>How does it work?</h2>
 
-<p>Terdetect figures out a "fingerprint" of the current terminal by sending various ANSI escape codes to the terminal and seeing how the terminal responds.  It looks up the fingerprint in a <a href="https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src">database of known terminal fingerprints</a>, and reports which terminal matches the fingerprint.</p>
+<p>Terdetect figures out a "fingerprint" of the current terminal by sending various ANSI escape codes to the terminal and seeing how the terminal responds. It looks up the fingerprint in a <a href="https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src">database of known terminal fingerprints</a>, and reports which terminal matches the fingerprint.</p>
 
 <h2>Installation</h2>
 
-<pre class=nomargin><code>curl -L http://is.gd/termdetect -o termdetect;  chmod +x termdetect
-&nbsp; &nbsp; &nbsp; or
-wget http://is.gd/termdetect;  chmod +x termdetect</code></pre>
+<pre><code>curl -L http://is.gd/termdetect -o termdetect;  chmod +x termdetect
+    or
+wget http://is.gd/termdetect;  chmod +x termdetect
+</code></pre>
 
 <p>Requirements: A base installation of Perl, and <a href="https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt">any Un*x or OS/X</a>.</p>
 
@@ -68,8 +69,15 @@ wget http://is.gd/termdetect;  chmod +x termdetect</code></pre>
 </pre></div>
 
 <p>Most people have learned to mistrust $TERM and terminfo, and so hard-code everything.  Once you're able to trust them again, your configuration can be much more flexible and adaptive.</p>
-
       </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">termdetect maintained by <a href="https://github.com/DeeNewcum">DeeNewcum</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
     </div>
 
               <script type="text/javascript">
@@ -82,6 +90,7 @@ wget http://is.gd/termdetect;  chmod +x termdetect</code></pre>
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
