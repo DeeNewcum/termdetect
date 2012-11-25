@@ -62,11 +62,11 @@ wget http://is.gd/termdetect;  chmod +x termdetect
 <div class="highlight"><pre><span class="c">" ~/.vimrc</span>
 <span class="nb">syntax</span> <span class="k">on</span>
 <span class="k">if</span> &amp;<span class="nb">t_Co</span> <span class="p">&gt;=</span> <span class="m">256</span> <span class="p">||</span> has<span class="p">(</span><span class="s1">'gui_running'</span><span class="p">)</span>
-<span class="c">    " your prefered colorscheme when the current terminal supports 256 colors</span>
+<span class="c">    " your prefered colorscheme when the terminal supports 256 colors</span>
     <span class="k">let</span> <span class="k">g</span>:solarized_termcolors<span class="p">=</span>&amp;<span class="nb">t_Co</span>
     <span class="k">colorscheme</span> solarized
 <span class="k">else</span>
-<span class="c">    " your prefered colorscheme when the current terminal supports 16 colors</span>
+<span class="c">    " your prefered colorscheme when the terminal supports 16 colors</span>
     <span class="k">colorscheme</span> pablo
 <span class="k">endif</span>
 </pre></div>
