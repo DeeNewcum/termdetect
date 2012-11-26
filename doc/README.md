@@ -3,6 +3,7 @@
 User documentation:
 
 * run <tt>termdetect --help</tt>
+* [how to add your own fingerprint](https://github.com/DeeNewcum/termdetect/blob/master/doc/customize_fingerprintsdb.md)
 * [list of tests that termdetect runs](https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md) — this is a decent explanation of how termdetect works
 * [details of which side-effects can occur](https://github.com/DeeNewcum/termdetect/blob/master/doc/side-effects.md)
 * [configurations that have been tested so far](https://github.com/DeeNewcum/termdetect/blob/master/doc/tested_on.txt)
