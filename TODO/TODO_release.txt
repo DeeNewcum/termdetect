@@ -24,7 +24,6 @@ Things to do in preparation for a release:
             - post it on http://opencode.us/
             - post it on PerlMonks
             - email Eads
-            - email Bec
             - email the person that made ncurses, ask them if they know of anybody who would
               find this useful
             - post it as a CPAN module
@@ -46,10 +45,10 @@ Things to do in preparation for a release:
 (context:  this would be the final version before letting the project simmer for a bit)
 
 - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
-    and have it include a setting for $LANG
+    and have it include a setting for $LANG, as well as $TERMDETECT
 
-            - but ONLY if the character coding was detected -- trying to make a new locale is...
-              complicated enough that it'll have to wait until the next release
+            - but ONLY set $LANG if the character coding was detected -- trying to make
+              a new locale is...  complicated enough that it'll have to wait until the next release
 
             - I don't know if  Encode::Locale  could help with this at all?
 

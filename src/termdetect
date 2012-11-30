@@ -358,6 +358,9 @@ termdetect
   --snapshot
         Outputs the current fingerprint in a form that's suitable for
         cut-n-pasting into fingerprints.src.
+        
+        See here for more:
+            https://github.com/DeeNewcum/termdetect/blob/master/doc/customize_fingerprintsdb.md
 
   --version
         Show version number.
