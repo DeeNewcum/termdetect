@@ -16,8 +16,8 @@ There are a few side-effects that unfortunately can't be avoided, even when <tt>
 
 * **Screen is cleared**, rarely.  A test is run to see if your terminal responds to ^L by clearing the screen, and a small percentage of terminals do.
 
-## Is there a problem with using --nose all the time?
+## Would it be a problem to use --nose all the time?
 
-No, this should be fine.  Using <tt>--nose</tt> turns off a very small percentage of tests.  Usually there is enough data from the remaining tests that each terminal can still be uniquely identified.
+It should be fine to do this.  Using <tt>--nose</tt> turns off a very small percentage of tests.  Usually there is enough data from the remaining tests that each terminal can still be uniquely identified.
 
-There is a very small possibility that a terminal can't be uniquely identified without running the full set of tests. Termdetect does the safest thing by default, and runs every test just in case.
+There is a very small possibility that a terminal can't be uniquely identified without running the full set of tests. So termdetect does the safest thing by default, and runs every test just in case.

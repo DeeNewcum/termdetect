@@ -1,8 +1,16 @@
 #!/usr/bin/perl
 
 # Estimate the round-trip time to get a response from the terminal.
+
+
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/termdetect
 #
+# You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+
 # Caveat:   Latency != throughput.
+
 #
 # Caveat:   Also, note that this doesn't represent the latency to the end-user's terminal if you're
 #           running things like tmux/screen/mosh.  Each of those have their own VT translation
@@ -125,12 +133,3 @@ sub min  { reduce { $a < $b ? $a : $b } @_ }
 sub max  { reduce { $a > $b ? $a : $b } @_ }
 sub minstr  { reduce { $a lt $b ? $a : $b } @_ }
 sub maxstr  { reduce { $a gt $b ? $a : $b } @_ }
-
-
-
-# Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#
-# You may redistribute this program and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.

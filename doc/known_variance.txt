@@ -1,5 +1,5 @@
-"Variance" means any test-response for ONE TERMINAL that is different depending on various
-conditions, but that 'termdetect' should still detect detect it as the same terminal anyway.
+"Variance" indicates situations where one terminal can have multiple fingerprints (either between
+different versions, or due to settings changes)
 
 
 ========================================[ version variance ]========================================

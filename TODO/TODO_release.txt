@@ -1,7 +1,7 @@
 Things to do in preparation for a release:
 
 ################################################################################
-#################################[ v0.12 ]######################################
+#################################[ v0.13 ]######################################
 ################################################################################
 
 - promotion
@@ -22,7 +22,6 @@ Things to do in preparation for a release:
             - post it on http://opencode.us/
             - post it on PerlMonks
             - email Eads
-            - email Bec
             - email the person that made ncurses, ask them if they know of anybody who would
               find this useful
             - post it as a CPAN module
@@ -33,26 +32,21 @@ Things to do in preparation for a release:
                     - http://stackoverflow.com/questions/95710/how-do-you-promote-advertise-evangelize-your-open-source-project
                     - http://gsoc-wiki.osuosl.org/index.php/Promoting_Your_Open_Source_Project
                     - listen to Tribes by Seth Godin    http://stackoverflow.com/questions/95710/how-do-you-promote-advertise-evangelize-your-open-source-project/441859#441859
-                    - ask Eads how to get a few initial eyeballs
 
     - create a PPA install package for it, as a preliminary step towards getting a .deb integrated
       into Ubuntu and/or Debian
 
 ################################################################################
-#################################[ v0.13 ]######################################
+#################################[ v0.14 ]######################################
 ################################################################################
 
 (context:  this would be the final version before letting the project simmer for a bit)
 
-- if we're going to let the project simmer unattended for a while, it may be good to make a decision
-        about whether to use internal canonical names
-                (and ignorable suffixes)
-
 - change the 'termdetect -t' argument to be 'termdetect -e' (for "env"), 
-    and have it include a setting for $LANG
+    and have it include a setting for $LANG, as well as $TERMDETECT
 
-            - but ONLY if the character coding was detected -- trying to make a new locale is...
-              complicated enough that it'll have to wait until the next release
+            - but ONLY set $LANG if the character coding was detected -- trying to make
+              a new locale is...  complicated enough that it'll have to wait until the next release
 
             - I don't know if  Encode::Locale  could help with this at all?
 
@@ -65,7 +59,7 @@ Things to do in preparation for a release:
 
 
 ################################################################################
-#################################[ v0.14 ]######################################
+#################################[ v0.15 ]######################################
 ################################################################################
 
 - boot up an AWS AMI image of FreeBSD, and test it on that
@@ -101,7 +95,7 @@ Things to do in preparation for a release:
 
 
 ################################################################################
-#################################[ v0.15 ]######################################
+#################################[ v0.16 ]######################################
 ################################################################################
 
 - integrate the termping functionality directly into termdetect --ping.  The reasoning for this:
