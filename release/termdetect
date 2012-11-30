@@ -26,8 +26,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
   # For more info, see:
   #       https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md
   
-  vte-256color|gnome-terminal|xfce4-terminal|libVTE - used in GNOME Terminal etc,
-      fallback=gnome-256color,
+  vte|VTE is used in GNOME Terminal and XFCE4's Terminal etc,
+      TERM=vte-256color|gnome-256color,
       m_c1=%x+3,
       m_cancel=%x+4,
       m_esc=%x+5,
@@ -52,7 +52,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_title=\E]l%*\E\\,
       s_ff_clears=false,
   
-  linux-16color|Linux console,
+  linux|Linux console,
+      TERM=linux-16color,
       m_c1=%x+3,
       m_cancel=,
       m_esc=,
@@ -78,7 +79,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       s_ff_clears=false,
   
   # The xterm from http://invisible-island.net/ (specifically version #271)
-  xterm+256color,
+  xterm,
+      TERM=xterm+256color,
   #    m_c1=%x+2,
       m_cancel=,
       m_esc=,
@@ -131,7 +133,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_title=,
       s_ff_clears=false,
   
-  putty-256color,
+  putty,
+      TERM=putty-256color,
       m_c1=,
       m_cancel=,
       m_esc=,
@@ -153,11 +156,12 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_pos=\E[3;%+t,
       r_window_size_char=\E[8;%+t,
       r_window_size_px=\E[4;%+t,
-      r_window_state=\E[1t,
+      r_window_state=\E[%+t,
       r_window_title=\E]l%*\E\\,
       s_ff_clears=true,
   
-  rxvt-256color,
+  rxvt,
+      TERM=rxvt-256color,
       m_c1=%x+3,
       m_cancel=%x+1,
       m_esc=,
@@ -188,11 +192,11 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_size_px=,
       r_window_state=,
       r_window_title=\E]l%*\E\\,
-      use=rxvt-256color,
+      use=rxvt,
   
   rxvt-unicode,
   # the $TERM name of "rxvt-unicode" is a patch added by Debian, in package 'ncurses-base'
-      fallback=rxvt-88color|rxvt,
+      TERM=rxvt-unicode|rxvt-88color|rxvt,
       m_c1=%x+2,
       m_cancel=,
       m_esc=,
@@ -217,7 +221,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_title=%+,
       s_ff_clears=false,
   
-  mrxvt-256color,
+  mrxvt,
+      TERM=mrxvt-256color,
       m_c1=%x+3,
       m_cancel=,
       m_esc=,
@@ -242,8 +247,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_title=,
       s_ff_clears=false,
   
-  screen_4.00.02,
-      fallback=screen-256color,
+  screen*4.00.02|GNU Screen,
+      TERM=screen-256color,
       m_c1=,
       m_cancel=,
       m_esc=,
@@ -270,13 +275,13 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
   
   # in v4.00.03jw4 (git change b4aa8750b45e7b75ab5a837503dc0a6b2e177bf9),
   # support was added for CSI 11t, 7t, and 21t
-  screen_4.00.03jw4,
-      use=screen_4.00.02,
+  screen*4.00.03jw4|GNU Screen,
+      use=screen*4.00.02,
       r_window_state=\E[1t,
       r_window_title=\E]l%*\E\\,
   
   securecrt,
-      fallback=vt100,
+      TERM=vt100,
   #    ^^ this REALLY varies, based on what its "emulation" setting is
   #    ^^ TODO: do some work to see what the closest match actually is
   #
@@ -306,7 +311,7 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       s_ff_clears=false,
   
   tmux,
-      fallback=xterm-new|screen-256color|screen,
+      TERM=xterm-new|screen-256color|screen,
       m_c1=%x+3,
       m_cancel=,
       m_esc=,
@@ -332,7 +337,7 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       s_ff_clears=false,
   
   mosh,
-      fallback=xterm-256color,
+      TERM=xterm-256color,
   #            ^^ this is the value that's automatically set by the Mosh server
       m_c1=%x+3,
       m_cancel=,
@@ -409,7 +414,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_title=\E]l%*\E\\,
       s_ff_clears=false,
   
-  konsole-256color,
+  konsole,
+      TERM=konsole-256color,
       m_c1=,
       m_cancel=%x+1,
       m_esc=,
@@ -434,7 +440,8 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
       r_window_title=,
       s_ff_clears=false,
   
-  nsterm-256color|Terminal.app as found in OS/X,
+  nsterm|Terminal.app as found in OS/X,
+      TERM=nsterm-256color,
       m_c1=%x+3,
       m_cancel=%x+0,
       m_esc=%x+0,
@@ -486,10 +493,15 @@ $fatpacked{"FingerprintDB.pm"} = <<'FINGERPRINTDB';
 FINGERPRINTDB
 
 $fatpacked{"Termdetect_Encoding.pm"} = <<'TERMDETECT_ENCODING';
+  # Copyright (C) 2012  Dee Newcum
+  # https://github.com/DeeNewcum/termdetect
+  #
+  # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  
+  
+  
   # This performs tests on the terminal, to try to determine what character-encoding the terminal
   # is set to.
-  
-  
   package Termdetect_Encoding;
   
       use strict;
@@ -630,21 +642,18 @@ $fatpacked{"Termdetect_Encoding.pm"} = <<'TERMDETECT_ENCODING';
   
   
   1;
-  
-  
-  # Copyright (C) 2012  Dee Newcum
-  # https://github.com/DeeNewcum/
-  #
-  # You may redistribute this program and/or modify it under the terms of the GNU
-  # General Public License as published by the Free Software Foundation; either
-  # version 2 of the License, or (at your option) any later version.
 TERMDETECT_ENCODING
 
 $fatpacked{"Termdetect_IO.pm"} = <<'TERMDETECT_IO';
+  # Copyright (C) 2012  Dee Newcum
+  # https://github.com/DeeNewcum/termdetect
+  #
+  # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  
+  
+  
   # This module handles the lower-level I/O with the terminal -- sending ANSI sequences, and reading
   # responses.
-  
-  
   package Termdetect_IO;
   
       use strict;
@@ -990,21 +999,18 @@ $fatpacked{"Termdetect_IO.pm"} = <<'TERMDETECT_IO';
   
   
   1;
-  
-  
-  # Copyright (C) 2012  Dee Newcum
-  # https://github.com/DeeNewcum/
-  #
-  # You may redistribute this program and/or modify it under the terms of the GNU
-  # General Public License as published by the Free Software Foundation; either
-  # version 2 of the License, or (at your option) any later version.
 TERMDETECT_IO
 
 $fatpacked{"Termdetect_Match.pm"} = <<'TERMDETECT_MATCH';
+  # Copyright (C) 2012  Dee Newcum
+  # https://github.com/DeeNewcum/termdetect
+  #
+  # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  
+  
+  
   # After we get a fingerprint from the current terminal, this module does the work of figuring 
   # out which database entries most closely match the fingerprint.
-  
-  
   package Termdetect_Match;
   
       use strict;
@@ -1218,21 +1224,19 @@ $fatpacked{"Termdetect_Match.pm"} = <<'TERMDETECT_MATCH';
   
   
   1;
-  
-  # Copyright (C) 2012  Dee Newcum
-  # https://github.com/DeeNewcum/
-  #
-  # You may redistribute this program and/or modify it under the terms of the GNU
-  # General Public License as published by the Free Software Foundation; either
-  # version 2 of the License, or (at your option) any later version.
 TERMDETECT_MATCH
 
 $fatpacked{"Termdetect_Tests.pm"} = <<'TERMDETECT_TESTS';
+  # Copyright (C) 2012  Dee Newcum
+  # https://github.com/DeeNewcum/termdetect
+  #
+  # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  
+  
+  
   # This module directly performs terminal-type tests on the terminal.
   # Routines that deal only with the test RESULTS are located elsewhere.
   # (also, tests that are encoding-specific are located in Termdetect_Encoding.pm)
-  
-  
   package Termdetect_Tests;
   
       use strict;
@@ -1629,23 +1633,20 @@ $fatpacked{"Termdetect_Tests.pm"} = <<'TERMDETECT_TESTS';
   
   
   1;
-  
-  
-  # Copyright (C) 2012  Dee Newcum
-  # https://github.com/DeeNewcum/
-  #
-  # You may redistribute this program and/or modify it under the terms of the GNU
-  # General Public License as published by the Free Software Foundation; either
-  # version 2 of the License, or (at your option) any later version.
 TERMDETECT_TESTS
 
 $fatpacked{"Terminfo_Parser.pm"} = <<'TERMINFO_PARSER';
+  # Copyright (C) 2012  Dee Newcum
+  # https://github.com/DeeNewcum/termdetect
+  #
+  # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  
+  
+  
   # A Perl implemntation of a terminfo source parser.
   #
   # See the unit tests in parser/parser_unit_test -- we tested this somewhat well against the
   # original tic(1) parser.
-  
-  
   package Terminfo_Parser;
   
       use strict;
@@ -2067,15 +2068,6 @@ $fatpacked{"Terminfo_Parser.pm"} = <<'TERMINFO_PARSER';
   sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"(.*)"$/$1/s;$q}
   
   1;
-  
-  
-  
-  # Copyright (C) 2012  Dee Newcum
-  # https://github.com/DeeNewcum/
-  #
-  # You may redistribute this program and/or modify it under the terms of the GNU
-  # General Public License as published by the Free Software Foundation; either
-  # version 2 of the License, or (at your option) any later version.
 TERMINFO_PARSER
 
 s/^  //mg for values %fatpacked;
@@ -2093,15 +2085,13 @@ unshift @INC, sub {
 #!/usr/bin/perl
 
 # auto-detect which terminal emulator we're talking to
-#
-# https://github.com/DeeNewcum/termdetect
 
 
 # Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#       You may redistribute this program and/or modify it under the terms of the GNU General Public
-#       License as published by the Free Software Foundation; either version 2 of the License, or
-#       (at your option) any later version.
+# https://github.com/DeeNewcum/termdetect
+#
+# You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
 
 
     use strict;
@@ -2121,7 +2111,7 @@ unshift @INC, sub {
 
     
     # constants
-    use constant VERSION => "0.12";
+    use constant VERSION => "0.13";
 
 
 our %ARGV;
@@ -2144,8 +2134,11 @@ my $fingerprint = perform_all_tests();
     #print ansi_escape_no_nl(Dumper $fingerprint);      exit;
 
 ## ... and match them together
-my $term = match_fingerprint($fingerprint, $fingerprint_db,
+my $fingerprint_name = match_fingerprint($fingerprint, $fingerprint_db,
     !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check}));
+
+($fingerprint->{s_fingerprint_name}{received} = $fingerprint_name)
+        =~ s/\*.*//;
 
 
 
@@ -2168,9 +2161,9 @@ if ($ARGV{snapshot}) {
     }
 
 } elsif (!$ARGV{check}) {
-    if (defined($term)) {
+    if (defined($fingerprint_name)) {
         if ($ARGV{t}) {
-            my $final_term = TERM_fallback($term, $fingerprint_db);
+            my $final_term = find_best_TERM($fingerprint_name, $fingerprint_db);
             if ($final_term) {
                 print "$final_term\n";
                 # to deal with the problem of the keyboard-buffer being cleared, we indicate to the
@@ -2178,16 +2171,19 @@ if ($ARGV{snapshot}) {
                 print STDERR "-\n"
                         unless (-t STDOUT);
             } else {
-                print STDERR "The suggested \$TERM \"$term\" wasn't found.\n";
+                print STDERR "The suggested \$TERM \"$final_term\" wasn't found.\n";
                 print STDERR "        \n";
                 print STDERR "\nTo install the full set of terminfo files:\n";
                 help_install_terminfos();
             }
         } else {
-            my $all_aliases = join " / ", @{ $fingerprint_db->{$term}{termnames}};
+            (my $fingerprint_name_display = $fingerprint_name) =~ s/\*.*//;
+            $fingerprint_name_display .= "  --  $fingerprint_db->{$fingerprint_name}{term_descr}"
+                        if ($fingerprint_db->{$fingerprint_name}{term_descr});
+            my $suggested_term = find_best_TERM($fingerprint_name, $fingerprint_db);
             my @fields = (
-                    ['terminal',            $all_aliases],
-                    ['version',             $fingerprint->{s_term_version}],
+                    ['terminal',            $fingerprint_name_display],
+                    ['terminal version',    $fingerprint->{s_term_version}],
                     ['encoding',            $fingerprint->{s_encoding}],
                     ['terminal size',       $fingerprint->{s_window_size},         '(characters)'  ],
                     ['font size',           $fingerprint->{s_font_size},           '(pixels)'  ],
@@ -2303,16 +2299,14 @@ EOF
 }
 
 
-sub TERM_fallback {
-    my ($proposed_term, $fingerprint_db) = @_;
+sub find_best_TERM {
+    my ($fingerprint_name, $fingerprint_db) = @_;
 
-    my $fingerprint = $fingerprint_db->{$proposed_term};
-    my @fallback_list = @{$fingerprint->{termnames}};
-    if ($fingerprint->{fields}{fallback}) {
-        push @fallback_list,
-             split /\|/,
-                   $fingerprint->{fields}{fallback}{assign};
-    }
+    my $fingerprint = $fingerprint_db->{$fingerprint_name};
+    my @fallback_list = 
+            (exists $fingerprint->{fields}{TERM})
+            ? (split '\|', $fingerprint->{fields}{TERM}{assign})
+            : ($fingerprint_name);
         #print Dumper \@fallback_list; exit;
 
     foreach my $fallback (@fallback_list) {
@@ -2446,6 +2440,9 @@ termdetect
   --snapshot
         Outputs the current fingerprint in a form that's suitable for
         cut-n-pasting into fingerprints.src.
+        
+        See here for more:
+            https://github.com/DeeNewcum/termdetect/blob/master/doc/customize_fingerprintsdb.md
 
   --version
         Show version number.
