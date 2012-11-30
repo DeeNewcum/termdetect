@@ -1,7 +1,12 @@
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/termdetect
+#
+# You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+
+
 # After we get a fingerprint from the current terminal, this module does the work of figuring 
 # out which database entries most closely match the fingerprint.
-
-
 package Termdetect_Match;
 
     use strict;
@@ -215,10 +220,3 @@ sub match_one_field {
 
 
 1;
-
-# Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#
-# You may redistribute this program and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.

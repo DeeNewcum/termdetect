@@ -1,9 +1,14 @@
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/termdetect
+#
+# You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+
+
 # A Perl implemntation of a terminfo source parser.
 #
 # See the unit tests in parser/parser_unit_test -- we tested this somewhat well against the
 # original tic(1) parser.
-
-
 package Terminfo_Parser;
 
     use strict;
@@ -425,12 +430,3 @@ sub ti_field_type {
 sub qquote {my$q=Data::Dumper::qquote($_[0]);$q=~s/^"(.*)"$/$1/s;$q}
 
 1;
-
-
-
-# Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#
-# You may redistribute this program and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.

@@ -1,8 +1,13 @@
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/termdetect
+#
+# You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+
+
 # This module directly performs terminal-type tests on the terminal.
 # Routines that deal only with the test RESULTS are located elsewhere.
 # (also, tests that are encoding-specific are located in Termdetect_Encoding.pm)
-
-
 package Termdetect_Tests;
 
     use strict;
@@ -399,11 +404,3 @@ sub ansi_escape_no_nl {
 
 
 1;
-
-
-# Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#
-# You may redistribute this program and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.

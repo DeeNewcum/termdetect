@@ -1,7 +1,12 @@
+# Copyright (C) 2012  Dee Newcum
+# https://github.com/DeeNewcum/termdetect
+#
+# You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+
+
 # This module handles the lower-level I/O with the terminal -- sending ANSI sequences, and reading
 # responses.
-
-
 package Termdetect_IO;
 
     use strict;
@@ -347,11 +352,3 @@ END {
 
 
 1;
-
-
-# Copyright (C) 2012  Dee Newcum
-# https://github.com/DeeNewcum/
-#
-# You may redistribute this program and/or modify it under the terms of the GNU
-# General Public License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.
