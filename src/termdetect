@@ -173,10 +173,9 @@ the fingerprint for your particular terminal.
 
     - the name and version number of your terminal
 
-    - the reason for submitting the data:
-            - there was no entry for this terminal
-            - there was an entry, but it didn't correctly identify your terminal
+    - the reason for submitting the data:   if an existing entry didn't work, or it's a new entry
 
+And thank you!
 EOF
     exit;
 }
