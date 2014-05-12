@@ -55,9 +55,6 @@ sub match_fingerprint {
 
     #show_match_percentages($match_stats, 3);       exit;
 
-    ## TESTING
-    #@no_mismatches = ();
-
     if (@no_mismatches > 1) {
         if ($die_if_not_one) {
             print STDERR "Error: Multiple terminals matched: ",
