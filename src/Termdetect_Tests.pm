@@ -194,6 +194,9 @@ sub ensure_cursor_position_supported {
     read_phase {
         my $reply = read_ansi_reply(1.0, qr/\e[^a-zA-Z]*[a-zA-Z]/);
         if (!defined($reply) || $reply !~ /\e\[\d+;\d+R$/s) {
+            if ($ARGV{term_env}) {
+                print "$ENV{TERM}\n";       # passthrough existing terminal
+            }
             close STDOUT; select undef,undef,undef,0.001;
             die "Terminal is unable to report the cursor position.  This is required for many tests.\n";
         }
