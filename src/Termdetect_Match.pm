@@ -59,7 +59,8 @@ sub match_fingerprint {
         if ($die_if_not_one) {
             print STDERR "Error: Multiple terminals matched: ",
                         join(", ", @no_mismatches), "\n";
-            print STDERR "\n\nIt would help out greatly if you could submit data about this.\n";
+            print STDERR "\n\nIt would help out greatly if you could submit data about this,\n";
+            print STDERR "since I don't have access to every terminal.\n";
             print STDERR "See       termdetect --help-submit\n";
             exit 1;
         } else {

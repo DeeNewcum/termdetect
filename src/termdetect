@@ -78,7 +78,7 @@ if ($ARGV{snapshot}) {
 
 } elsif (!$ARGV{check}) {
     if (defined($fingerprint_name)) {
-        if ($ARGV{t}) {
+        if ($ARGV{term_env}) {
             my $final_term = find_best_TERM($fingerprint_name, $fingerprint_db);
             if ($final_term) {
                 print "$final_term\n";
@@ -127,7 +127,7 @@ if ($ARGV{snapshot}) {
         }
     } else {
         print STDERR "No \$TERM matched.  Run again with --check for more information.\n";
-        print "$ENV{TERM}\n"        if ($ARGV{t});      # pass through the existing terminal
+        print "$ENV{TERM}\n"        if ($ARGV{term_env});      # pass through the existing terminal
     }
 }
 
@@ -135,7 +135,7 @@ if ($ARGV{snapshot}) {
 
 
 sub process_cmdline {
-    GetOptions( \%ARGV,
+    Getopt::Long::GetOptions( \%ARGV,
                     map {"$_:s"}        # all options have optional arguments, like Getopt::Casual
         "help|h|?",
         qw( check nose t snapshot result dump help-submit version ),
@@ -326,10 +326,6 @@ termdetect
   -t    Display only the matched $TERM.  Intended to be used like this:
                 export TERM=$(termdetect -t)
 
-  --result=<test_id>
-        Display the result of a single test.  To get a list of test_ids you
-        can use, run      termdetect --dump
-
   --nose
         "No Side Effects".  Doesn't run tests that have significant side-effects.
         Most tests don't have side-effects, so using this option doesn't greatly
@@ -337,20 +333,6 @@ termdetect
         Note that there are some smaller side-effects that are unavoidable,
         even when --nose is used.  Read more at:
             https://github.com/DeeNewcum/termdetect/blob/master/doc/side-effects.md
-
-  --dump
-        Dumps the current terminal's fingerprint.
-        Similar to --snapshot, but gives a little more detailed information.
-        See here for details on what each line means:
-            https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md
-
-  --check=<term>
-        In cases that a fingerprint can't be identified, this gives you
-        information about the closest matches, including differences between the
-        entries in the database and the current terminal's fingerprint.
-
-        If no terminal name is given, it displays information about EVERY
-        fingerprint in the database.
 
   --snapshot
         Outputs the current fingerprint in a form that's suitable for
@@ -365,3 +347,24 @@ termdetect
   --help-submit
         A guide for submitting a fingerprint to the developer, so that more
         terminal types will be recognized.
+
+
+Mostly for internal use:
+
+  --result=<test_id>
+        Display the result of a single test.  To get a list of test_ids you
+        can use, run      termdetect --dump
+
+  --dump
+        Dumps the current terminal's fingerprint.
+        Similar to --snapshot, but gives a little more detailed information.
+        See here for details on what each line means:
+            https://github.com/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md
+
+  --check=<term>
+        In cases that a fingerprint can't be identified, this gives you
+        information about the closest matches, including differences between the
+        entries in the database and the current terminal's fingerprint.
+
+        If no terminal name is given, it displays information about EVERY
+        fingerprint in the database.
