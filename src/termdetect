@@ -54,7 +54,7 @@ my ($fingerprint_name, $num_matches) = match_fingerprint($fingerprint, $fingerpr
     !($ARGV{snapshot} || $ARGV{dump} || $ARGV{check} || $ARGV{term_env}));
 
 ($fingerprint->{s_fingerprint_name}{received} = $fingerprint_name)
-        =~ s/\*.*//;
+        =~ s/\*.*//     if $fingerprint_name;
 
 
 
