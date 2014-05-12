@@ -13,6 +13,7 @@ my @script = slurp("index.html");
 
 @script = grep {!/class="downloads"/}  @script;
 @script = grep {!/<li class="title">DOWNLOADS</}  @script;
+@script = grep {!/<span class="credits/}  @script;
 
 my $script = join("", @script);
 
