@@ -1,8 +1,8 @@
-# Copyright (C) 2012  Dee Newcum
+# Copyright (C) 2014  Dee Newcum
 # https://github.com/DeeNewcum/termdetect
 #
 # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
+#---------------------------------------------------------------------------------------------------
 
 
 # This performs tests on the terminal, to try to determine what character-encoding the terminal
