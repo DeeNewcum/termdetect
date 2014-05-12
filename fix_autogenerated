@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+# To update the contents of the page:
+#
+#   1. go to the repo       https://github.com/DeeNewcum/termdetect
+#   2. click "Settings"     (on the right)
+#   3. click the "Automatic page generator" button
+#   4. edit
+#   5. after you're done editing, choose the "Midnight" theme
+#   6. run this script
+
+my @script = slurp("index.html");
+
+@script = grep {!/class="downloads"/}  @script;
+@script = grep {!/<li class="title">DOWNLOADS</}  @script;
+
+my $script = join("", @script);
+
+$script =~ s|</nav>|<li class="downloads"><a href="https://github.com/DeeNewcum/termdetect/tree/master/doc#termdetect">Documentation</a></li></nav>|is;
+
+open F, '>', 'index.html'    or die $!;
+print F $script;
+close F;
+
+
+
+
+# quickly read a whole file
+# equivalent to File::Slurp or IO::All->slurp
+sub slurp {my$p=open(my$f,"$_[0]")or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
