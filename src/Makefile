@@ -1,5 +1,7 @@
-
-# create the fatpacked version of termdetect
+# Created a self-contained single-file version.  All modules are included in the single-file
+# version.  This way, all someone needs to do to try it out is wget a single file.
+# 
+# All this is done thanks to App::FatPacker.
 
 
 all:	termdetect.fatpacked termping.fatpacked
