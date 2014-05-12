@@ -55,6 +55,9 @@ sub match_fingerprint {
 
     #show_match_percentages($match_stats, 3);       exit;
 
+    ## TESTING
+    #@no_mismatches = ();
+
     if (@no_mismatches > 1) {
         if ($die_if_not_one) {
             print STDERR "Error: Multiple terminals matched: ",
@@ -84,7 +87,7 @@ sub match_fingerprint {
         Termdetect_Tests::calculate_derived_values_after_match($current_fingerprint, $fingerprint_db, $highest_match);
     }
 
-    return $highest_match;
+    return ($highest_match, scalar(@no_mismatches));
 }
 
 
