@@ -224,7 +224,7 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <td>Does the form-feed character (^L) move the cursor to the upper-left? (an indirect measure of whether ^L clears the screen)  ("true" or "false")
 
 <tr><td><tt>s_term_version
-    <td>The specific version number of the terminal.†
+    <td>The specific version number of the terminal.  This only works† for VTE, GNU Screen, mrxvt, or xterm.  Even then, it's sometimes inaccurate.
 
 <tr><td><tt>s_window_title
     <td>†
@@ -241,9 +241,12 @@ Some tests have custom code written for each test.  Their behavior may be more c
 <tr><td><tt>s_screen_size
     <td>The size of the screen, in pixels.†   Note that this is a guesstimate, and it's sometimes off by a small amount.  Generally, the smaller your font, the more accurate this is.
 
+<tr><td><tt>s_window_pos
+    <td>The position of the upper-left corner of the terminal, in pixels.†
+
 <tr><td><tt>s_fingerprint_name
-    <td>The internal identifier that termdetect uses for your current terminal.  This is [similar to what you see in $TERM, but is often more specific.](/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md#how-the-term-value-is-determined)
-        <br>This can't be used in the fingerprints database.  It is useful only in combination with the   `--result=s_fingerprint_name`  flag.
+    <td>The internal identifier that termdetect uses for your current terminal.  This is similar to what you see in $TERM, but is often more specific. (see the "How the $TERM value is determined" section above)
+        <p>This can't be used in the fingerprints database, it can only be used with the <tt>--result=s_fingerprint_name</tt>  flag.
 
 </table>
 

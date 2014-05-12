@@ -361,6 +361,7 @@ termdetect
             s_font_size         size of a single character, in pixels
             s_screen_size       size of the terminal, in pixels
             s_term_version      the terminal's version
+            s_encoding          UTF-8, Shift-JIS, etc
         To get a full list of test_ids, run:      termdetect --dump
 
   --dump
