@@ -6,8 +6,8 @@ Things to do in preparation for a release:
 
 - promotion
     - create a list of terminal-emulators that we currently support
-            - SEE?  A way to ignore suffixes and produce a list of canonical names might be really
-              handy.
+
+            perl -nle 'print if /^\w/' fingerprints.src | perl -ple 's/[-|,*].*//' | sort | uniq
 
 - on release:
 

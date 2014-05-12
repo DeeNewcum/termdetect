@@ -354,11 +354,14 @@ termdetect
         terminal types will be recognized.
 
 
-Mostly for internal use:
 
   --result=<test_id>
-        Display the result of a single test.  To get a list of test_ids you
-        can use, run      termdetect --dump
+        Display the result of a single test.  This is partiularly useful for:
+            s_window_size       size of the terminal, in characters
+            s_font_size         size of a single character, in pixels
+            s_screen_size       size of the terminal, in pixels
+            s_term_version      the terminal's version
+        To get a full list of test_ids, run:      termdetect --dump
 
   --dump
         Dumps the current terminal's fingerprint.

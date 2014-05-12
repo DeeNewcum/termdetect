@@ -2,7 +2,7 @@ The 'fingerprints.src' file is the database of known fingerprints.  It is the co
 
 ## Syntax
 
-The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
+The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L23), with only a few differences:
 
 * there's a special "fallback" capability entry
 * the percent syntax is entirely different
@@ -38,7 +38,7 @@ The empty string means that nothing happened — no characters were received, an
 
 Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.
 
-When no TERM field is given, the main fingerprint name is used.  A TERM field is often used, however, because the main fingerprint name shoudl be a stable identifier.
+When no TERM field is given, the main fingerprint name is used.  A TERM field is often used, however, because the main fingerprint name should be a stable identifier.
 
 When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is removed before displaying the name to the user.  Like the addition sign in terminfo files, the asterisk sign is used internally only.
 
@@ -240,6 +240,10 @@ Some tests have custom code written for each test.  Their behavior may be more c
 
 <tr><td><tt>s_screen_size
     <td>The size of the screen, in pixels.†   Note that this is a guesstimate, and it's sometimes off by a small amount.  Generally, the smaller your font, the more accurate this is.
+
+<tr><td><tt>s_fingerprint_name
+    <td>The internal identifier that termdetect uses for your current terminal.  This is [similar to what you see in $TERM, but is often more specific.](/DeeNewcum/termdetect/blob/master/doc/fingerprint_db.md#how-the-term-value-is-determined)
+        <br>This can't be used in the fingerprints database.  It is useful only in combination with the   `--result=s_fingerprint_name`  flag.
 
 </table>
 
