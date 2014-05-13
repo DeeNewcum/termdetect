@@ -39,7 +39,13 @@ if (!-t STDERR || !-t STDIN) {       # isatty(3)
     die "Not connected to a terminal.\n";
 }
 
-my $fingerprintdb_file = locate_fingerprintdb_file();
+my ($fingerprintdb_file, $fingerprintdb_location) = locate_fingerprintdb_file();
+
+if ($ARGV{version}) {
+    printf "termdetect, version %s  %s\n",
+            VERSION, $fingerprintdb_location eq '<internal>' ? '(embedded fingerprints_db)' : '';
+    exit;
+}
 
 ## read in the fingerprint database
 my $fingerprint_db = parse_terminfo($fingerprintdb_file);
@@ -149,10 +155,6 @@ sub process_cmdline {
     %ARGV = map {length()?$_:1} %ARGV;      # arguments are optional
     $ARGV{help} and usage();
     $ARGV{'help-submit'} and help_submit();
-    if ($ARGV{version}) {
-        print "termdetect, version ", VERSION, "\n";
-        exit;
-    }
 }
 
 
@@ -204,9 +206,9 @@ sub locate_fingerprintdb_file {
                 use FingerprintDB;
                 FingerprintDB::fingerprint_db();
             };
-            return $internal if (defined $internal);
+            return ($internal, $loc) if (defined $internal);
         }
-        return scalar(slurp($loc)) if (-e $loc);
+        return (scalar(slurp($loc)), $loc) if (-e $loc);
     }
     print STDERR <<"EOF";
 Error: File 'fingerprints.src' not found.
