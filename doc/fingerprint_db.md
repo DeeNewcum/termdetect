@@ -36,11 +36,11 @@ The empty string means that nothing happened — no characters were received, an
 
 ## How the $TERM value is determined
 
-Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.
+There are two related names here — the fingerprint name, and $TERM.  The fingerprint name is termdetect's internal name for the terminal that it detected.  $TERM is the name that the local terminfo system uses.  Unfortunately these two can't always be the same, because termdetect is designed to work with a variety of different terminfo databases that don't always agree on a canonical name.  Also, fingerprint names are often more specific than terminfo names, since fingerprints sometimes change as new versions of the terminal are released.
 
-When no TERM field is given, the main fingerprint name is used.  A TERM field is often used, however, because the main fingerprint name should be a stable identifier.
+Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.  The leftmost is tried first, moving to the right until a name is found that the local terminfo database supports.
 
-When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is removed before displaying the name to the user.  Like the addition sign in terminfo files, the asterisk sign is used internally only.
+When no TERM field is given, the main fingerprint name is used as a fallback.  When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is **removed** before displaying the name to the user, because the suffix is mostly only useful for internal purposes.
 
 ## Capability names (tests)
 

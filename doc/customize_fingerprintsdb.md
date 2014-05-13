@@ -1,4 +1,4 @@
-## Adding or modifying fingerprints in the fingerprint database
+## How to add or modify fingerprints in the fingerprint database
 
 The fingerprints.src file can be placed in three possible places: (higher ones take precedence)
 

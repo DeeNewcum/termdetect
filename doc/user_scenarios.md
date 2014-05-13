@@ -8,8 +8,7 @@ How she uses this information is up to her — she might set the shell prompt di
 
 ### Implementation
 
-In this case, she doesn't necessarily need a global database to recognize her terminals.  She just wants to recognize the one, so she uses the <tt>--snapshot</tt> function to record the one terminal she's interested in, names the terminal with her own name, and triggers her extra functionality based on that.
-
+In this case, she doesn't necessarily need a global database to recognize her terminals.  She just wants to recognize the one, so she uses the <tt>--snapshot</tt> function to record the one terminal she's interested in, and names the terminal with her own name. Then when termdetect is normally run, she uses <tt>--result=s_fingerprint_name</tt> to check if the current terminal matches, and triggers her extra functionality based on that.
 
 ## Single exception, already in the global database
 
