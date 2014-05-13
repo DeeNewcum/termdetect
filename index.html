@@ -21,7 +21,10 @@
       <div id="header">
         <nav>
           <li class="fork"><a href="https://github.com/DeeNewcum/termdetect">View On GitHub</a></li>
-        <li class="downloads"><a href="https://github.com/DeeNewcum/termdetect/tree/master/doc#termdetect">Documentation</a></li></nav>
+          <li class="downloads"><a href="https://github.com/DeeNewcum/termdetect/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/DeeNewcum/termdetect/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
       </div><!-- end header -->
 
     <div class="wrapper">
@@ -31,12 +34,14 @@
           <h1>termdetect</h1>
           <p>auto-detect which terminal emulator we&#39;re talking to</p>
           <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/DeeNewcum">DeeNewcum</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
         </div>
 
         <p align="center">
   <img src="http://deenewcum.github.com/termdetect/images/termdetect_putty.png"></p>
 
-<p>termdetect is a script that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole). It's typically used by server-side scripts that want to tailor their behavior to specific terminals. Termdetect does its job by communicating directly with the terminal via escape codes, so it's much more reliable than $TERM.</p>
+<p>Termdetect is a script that auto-detects which terminal you're using (eg. Putty, Xterm, Konsole).  Termdetect does its job solely by communicating with the terminal via escape codes, so it's much more reliable than $TERM.</p>
 
 <p>There are various ways to use it, but one way to use it is to automatically set your $TERM:</p>
 
