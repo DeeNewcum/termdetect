@@ -1,4 +1,4 @@
-The 'fingerprints.src' file is the database of known fingerprints.  It is the core of how termdetect does its job.
+The [fingerprints.src](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src) file is the database of known fingerprints.  It is the core of how termdetect does its job.
 
 ## Syntax
 
