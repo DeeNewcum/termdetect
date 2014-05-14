@@ -1,8 +1,8 @@
-The 'fingerprints.src' file is the database of known fingerprints.  It is the core of how termdetect does its job.
+The [fingerprints.src](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src) file is the database of known fingerprints.  It is the core of how termdetect does its job.
 
 ## Syntax
 
-The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L17), with only a few differences:
+The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L23), with only a few differences:
 
 * there's a special "fallback" capability entry
 * the percent syntax is entirely different
@@ -36,11 +36,11 @@ The empty string means that nothing happened — no characters were received, an
 
 ## How the $TERM value is determined
 
-Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.
+There are two related names here — the fingerprint name, and $TERM.  The fingerprint name is termdetect's internal name for the terminal that it detected.  $TERM is the name that the local terminfo system uses.  Unfortunately these two can't always be the same, because termdetect is designed to work with a variety of different terminfo databases that don't always agree on a canonical name.  Also, fingerprint names are often more specific than terminfo names, since fingerprints sometimes change as new versions of the terminal are released.
 
-When no TERM field is given, the main fingerprint name is used.  A TERM field is often used, however, because the main fingerprint name shoudl be a stable identifier.
+Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.  The leftmost is tried first, moving to the right until a name is found that the local terminfo database supports.
 
-When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is removed before displaying the name to the user.  Like the addition sign in terminfo files, the asterisk sign is used internally only.
+When no TERM field is given, the main fingerprint name is used as a fallback.  When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is **removed** before displaying the name to the user, because the suffix is mostly only useful for internal purposes.
 
 ## Capability names (tests)
 
@@ -224,7 +224,7 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <td>Does the form-feed character (^L) move the cursor to the upper-left? (an indirect measure of whether ^L clears the screen)  ("true" or "false")
 
 <tr><td><tt>s_term_version
-    <td>The specific version number of the terminal.†
+    <td>The specific version number of the terminal.  This only works† for VTE, GNU Screen, mrxvt, or xterm.  Even then, it's sometimes inaccurate.
 
 <tr><td><tt>s_window_title
     <td>†
@@ -240,6 +240,13 @@ Some tests have custom code written for each test.  Their behavior may be more c
 
 <tr><td><tt>s_screen_size
     <td>The size of the screen, in pixels.†   Note that this is a guesstimate, and it's sometimes off by a small amount.  Generally, the smaller your font, the more accurate this is.
+
+<tr><td><tt>s_window_pos
+    <td>The position of the upper-left corner of the terminal, in pixels.†
+
+<tr><td><tt>s_fingerprint_name
+    <td>The internal identifier that termdetect uses for your current terminal.  This is similar to what you see in $TERM, but is often more specific. (see the "How the $TERM value is determined" section above)
+        <p>This can't be used in the fingerprints database, it can only be used with the <tt>--result=s_fingerprint_name</tt>  flag.
 
 </table>
 

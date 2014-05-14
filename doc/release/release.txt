@@ -1,8 +1,13 @@
-Things to do to do a release:
+Procedure for doing a release:
 
 
 - Eat your own dogfood -- TEST THE VERSION ON YOUR OWN COMPUTERS for a day or three before
   releasing it, to ensure there weren't any last-minute breakages. 
+
+- run:
+    ./release--help.pl
+    git add ../README.md
+    git commit -m 'update --help link'
 
 - update the $VERSION at the top of src/termdetect
 
@@ -13,7 +18,7 @@ Things to do to do a release:
     cp termdetect.fatpacked ../release/termdetect
     git add ../release/termdetect
     git commit 
-    git push origin release
+    git push origin
     git checkout master
 
 - check that the new version actually shows up at http://is.gd/termdetect

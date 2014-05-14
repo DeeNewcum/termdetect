@@ -69,7 +69,8 @@ sub unittest_terminfo {
     my $num_errors = 0;
 
     eval 'use Term::Terminfo';
-    $@ and die "the unit test requires Term::Terminfo to be installed\n\t";
+    $@ and die "\nERROR: the unit test requires Term::Terminfo to be installed\n" .
+                "(before doing that, you'll want to   apt-get install libncurses-dev)\n\t";
 
     foreach my $entry (sort {$a->{termnames}[0] cmp $b->{termnames}[0]} @$parsed) {
         next if ($entry->{alias});

@@ -1,8 +1,8 @@
-# Copyright (C) 2012  Dee Newcum
+# Copyright (C) 2014  Dee Newcum
 # https://github.com/DeeNewcum/termdetect
 #
 # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
+#---------------------------------------------------------------------------------------------------
 
 
 # This module directly performs terminal-type tests on the terminal.
@@ -194,6 +194,9 @@ sub ensure_cursor_position_supported {
     read_phase {
         my $reply = read_ansi_reply(1.0, qr/\e[^a-zA-Z]*[a-zA-Z]/);
         if (!defined($reply) || $reply !~ /\e\[\d+;\d+R$/s) {
+            if ($ARGV{term_env}) {
+                print "$ENV{TERM}\n";       # passthrough existing terminal
+            }
             close STDOUT; select undef,undef,undef,0.001;
             die "Terminal is unable to report the cursor position.  This is required for many tests.\n";
         }

@@ -1,8 +1,8 @@
-# Copyright (C) 2012  Dee Newcum
+# Copyright (C) 2014  Dee Newcum
 # https://github.com/DeeNewcum/termdetect
 #
 # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
+#---------------------------------------------------------------------------------------------------
 
 
 # This module handles the lower-level I/O with the terminal -- sending ANSI sequences, and reading
@@ -27,7 +27,7 @@ package Termdetect_IO;
     our $DEBUG = 0;     # turns on lots of debugging
 
         # To watch the debug logs, run this command in another window:
-        #     tail -fs0 --retry /var/tmp/termdetect.debug\n";
+        #     tail -fs0 --retry /var/tmp/termdetect.debug
 
     our $ASYNC = 1;     # Should reads be done asynchronously?
                         # If things are confusing AT ALL, just set this to 0 and debug from there.
@@ -36,8 +36,9 @@ package Termdetect_IO;
                         # misaligned.
 
     our $CHECK_ALIGNMENT = 0;
-                        # Do some extra work to check that reads/writes are aligned properly.
-                        # This makes the tests go *much* slower, but it's worth it to 
+                        # When $ASYNC is enabled, reads and writes can get misaligned.
+                        # This option enables some extra work to check that reads/writes are aligned
+                        # properly.  This makes the tests go *much* slower, but it's worth it to 
                         # find out where misalignment is happening.
                         #
                         # While testing, do NOT press any keys on the keyboard.

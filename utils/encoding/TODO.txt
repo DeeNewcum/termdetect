@@ -1,3 +1,10 @@
+It's not clear if more work on the encoding-tests will reveal solutions or not.
+There may be a lot of useful things we can do, but I don't have the background knowledge to be able
+to know what direction to go in.  So work has been slow-going so far.
+
+----------------------------------------------------------------------------------------------------
+
+
 
 - look through the ICU data, see if they'll help me identify which encodings are double-byte and
   which are variable-byte

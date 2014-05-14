@@ -1,8 +1,8 @@
-# Copyright (C) 2012  Dee Newcum
+# Copyright (C) 2014  Dee Newcum
 # https://github.com/DeeNewcum/termdetect
 #
 # You may redistribute this program and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
+#---------------------------------------------------------------------------------------------------
 
 
 # After we get a fingerprint from the current terminal, this module does the work of figuring 
@@ -59,7 +59,8 @@ sub match_fingerprint {
         if ($die_if_not_one) {
             print STDERR "Error: Multiple terminals matched: ",
                         join(", ", @no_mismatches), "\n";
-            print STDERR "\n\nIt would help out greatly if you could submit data about this.\n";
+            print STDERR "\n\nIt would help out greatly if you could submit data about this,\n";
+            print STDERR "since I don't have access to every terminal.\n";
             print STDERR "See       termdetect --help-submit\n";
             exit 1;
         } else {
@@ -83,7 +84,7 @@ sub match_fingerprint {
         Termdetect_Tests::calculate_derived_values_after_match($current_fingerprint, $fingerprint_db, $highest_match);
     }
 
-    return $highest_match;
+    return ($highest_match, scalar(@no_mismatches));
 }
 
 
