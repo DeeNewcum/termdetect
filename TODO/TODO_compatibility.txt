@@ -1,0 +1,21 @@
+====================[ additional terminals ]==============================
+
+- some hardware terminals
+        - mail Ed about his Televideo 910
+
+- run a much older verision of Ubuntu / Debian in a VM, and use the xterm / rxvt / etc found there?
+
+        https://en.wikipedia.org/wiki/Debian#Timeline
+        https://www.debian.org/distrib/archive
+        NOTE that you will have to update the /etc/apt/sources.list:
+                http://www.howtoforge.com/using-old-debian-versions-in-your-sources.list
+
+- mintty (cygwin)
+
+
+====================[ additional OS's ]==============================
+
+- test if it will actually run on a base cygwin install
+
+- FreeBSD
+        This shouldn't be too hard:  http://www.daemonology.net/freebsd-on-ec2/

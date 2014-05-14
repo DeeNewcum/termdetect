@@ -12,10 +12,11 @@ Things to do in preparation for a release:
 - on release:
 
     - distribute it somewhat widely:
-            - post it to reddit.com/r/ScriptSwap
+            - post it to reddit.com/r/ScriptSwap,
+                         reddit.com/r/somethingimade,
+                         reddit.com/r/commandline
             - post it here:  http://serverfault.com/questions/350401/detect-terminal-type-with-tput
             - post it on Facebook
-            - post it on reddit.com/r/commandline
             - post it on Freecode  (formerly Freshmeat)
             - post it on Ohloh
             - post it to Softpedia
@@ -74,9 +75,6 @@ Things to do in preparation for a release:
     - change the top-line name to be a "canonical name"
     - change the documentation to say "termdetect works best with ncurses' terminfo, but it will
                         work acceptably with others"
-
-- point out in the manual or somewhere that if the user wants to customize fingerprints.src,
-    they have to download their own copy and modify that, rather than starting with a blank file
 
 - find a version of FreeBSD to test this on
 
