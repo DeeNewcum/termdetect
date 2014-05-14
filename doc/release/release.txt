@@ -16,7 +16,8 @@ Procedure for doing a release:
     git merge master
     cd src; make
     cp termdetect.fatpacked ../release/termdetect
-    git add ../release/termdetect
+    cp termping.fatpacked ../release/termping
+    git add ../release/*
     git commit 
     git push origin
     git checkout master
