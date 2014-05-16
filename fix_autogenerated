@@ -17,7 +17,7 @@ my @script = slurp("index.html");
 
 my $script = join("", @script);
 
-$script =~ s|</nav>|<li class="downloads"><a href="https://github.com/DeeNewcum/termdetect/tree/master/doc#termdetect">Documentation</a></li></nav>|is;
+$script =~ s|</nav>|<li class="downloads"><a href="https://github.com/DeeNewcum/termdetect/tree/release/doc#termdetect">Documentation</a></li></nav>|is;
 
 open F, '>', 'index.html'    or die $!;
 print F $script;
