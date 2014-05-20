@@ -1,46 +1,4 @@
-The [fingerprints.src](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src) file is the database of known fingerprints.  It is the core of how termdetect does its job.
-
-## Syntax
-
-The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L23), with only a few differences:
-
-* there's a special "fallback" capability entry
-* the percent syntax is entirely different
-* capability names are different  (and often longer)
-
-
-## Percent codes
-
-Percent codes may sometimes look like termcap entries, but they have completely different meanings:
-
-<table>
-
-<tr><td><tt>%x[-+][0-9]
-    <td>The terminal responded by moving the cursor right N positions, often because it printed some characters.  (+x is right, -x is left)
-
-<tr><td><tt>%y[-+][0-9]
-    <td>The terminal responded by moving the cursor down N positions.  (+y is down, -y is up)
-
-<tr><td><tt>%*
-    <td>Matches zero or more of *any* character.   (it's not a regexp, so you don't have to put anything like a "%." in front)
-
-<tr><td><tt>%+
-    <td>Matches one or more of *any* character.  (it's not a regexp, so you don't have to put anything like a "%." in front)
-
-<tr><td><tt>%%
-    <td>A literal "%"
-
-</table>
-
-The empty string means that nothing happened — no characters were received, and no cursor movement occurred.
-
-## How the $TERM value is determined
-
-There are two related names here — the fingerprint name, and $TERM.  The fingerprint name is termdetect's internal name for the terminal that it detected.  $TERM is the name that the local terminfo system uses.  Unfortunately these two can't always be the same, because termdetect is designed to work with a variety of different terminfo databases that don't always agree on a canonical name.  Also, fingerprint names are often more specific than terminfo names, since fingerprints sometimes change as new versions of the terminal are released.
-
-Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.  The leftmost is tried first, moving to the right until a name is found that the local terminfo database supports.
-
-When no TERM field is given, the main fingerprint name is used as a fallback.  When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is **removed** before displaying the name to the user, because the suffix is mostly only useful for internal purposes.
+The [fingerprints.src file](https://github.com/DeeNewcum/termdetect/blob/master/src/fingerprints.src) is the database of known fingerprints.  It is the core of how termdetect does its job.
 
 ## Capability names (tests)
 
@@ -245,7 +203,7 @@ Some tests have custom code written for each test.  Their behavior may be more c
     <td>The position of the upper-left corner of the terminal, in pixels.†
 
 <tr><td><tt>s_fingerprint_name
-    <td>The internal identifier that termdetect uses for your current terminal.  This is similar to what you see in $TERM, but is often more specific. (see the "How the $TERM value is determined" section above)
+    <td>The internal identifier that termdetect uses for your current terminal.  This is similar to what you see in $TERM, but is often more specific. (see the "How the $TERM value is determined" section below)
         <p>This can't be used in the fingerprints database, it can only be used with the <tt>--result=s_fingerprint_name</tt>  flag.
 
 </table>
@@ -253,6 +211,50 @@ Some tests have custom code written for each test.  Their behavior may be more c
 All sizes are given in "width x height".
 
 † Not available on all terminals.
+
+## Low-level syntax
+
+The 'fingerprints.src' file has the *exact* same [syntax as terminfo files](https://github.com/DeeNewcum/termdetect/blob/master/src/Terminfo_Parser.pm#L23), with only a few differences:
+
+* there's a special "fallback" capability entry
+* the percent syntax is entirely different
+* capability names are different  (and often longer)
+
+
+## Percent codes
+
+Percent codes may sometimes look like termcap entries, but they have completely different meanings:
+
+<table>
+
+<tr><td><tt>%x[-+][0-9]
+    <td>The terminal responded by moving the cursor right N positions, often because it printed some characters.  (+x is right, -x is left)
+
+<tr><td><tt>%y[-+][0-9]
+    <td>The terminal responded by moving the cursor down N positions.  (+y is down, -y is up)
+
+<tr><td><tt>%*
+    <td>Matches zero or more of *any* character.   (it's not a regexp, so you don't have to put anything like a "%." in front)
+
+<tr><td><tt>%+
+    <td>Matches one or more of *any* character.  (it's not a regexp, so you don't have to put anything like a "%." in front)
+
+<tr><td><tt>%%
+    <td>A literal "%"
+
+</table>
+
+The empty string means that nothing happened — no characters were received, and no cursor movement occurred.
+
+## How the $TERM value is determined
+
+There are two related names here — the fingerprint name, and $TERM.  The fingerprint name is termdetect's internal name for the terminal that it detected.  $TERM is the name that the local terminfo system uses.  Unfortunately these two can't always be the same, because termdetect is designed to work with a variety of different terminfo databases that don't always agree on a canonical name.  Also, fingerprint names are often more specific than terminfo names, since fingerprints sometimes change as new versions of the terminal are released.
+
+Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.  The leftmost is tried first, moving to the right until a name is found that the local terminfo database supports.
+
+When no TERM field is given, the main fingerprint name is used as a fallback.  When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is **removed** before displaying the name to the user, because the suffix is mostly only useful for internal purposes.
+
+
 
 ### Documents referenced
 
