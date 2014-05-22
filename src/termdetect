@@ -266,7 +266,7 @@ sub does_terminfo_exist {
 
 
 sub help_install_terminfos {
-    if (`which apt-get`) {
+    if (`which apt-get 2>&1 `) {
         # Debian/Ubuntu/et al don't come with the full set of terminfo entries
         # installed by default, but they're easy to install
         die "    sudo apt-get install ncurses-term\n";
