@@ -53,11 +53,17 @@ define FATPACK_HEADER
 # This file is generated code.
 # Please DO NOT EDIT or send patches for it.
 #
-# Please take a look at the source from
+# The source is available at:
 #    https://github.com/DeeNewcum/termdetect
-# and submit patches against the individual files
-# that build it.
+# Submit patches against the individual files that build it.
 #
+#
+# You may redistribute this program and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Copyright (C) 2014  Dee Newcum
+ 
 
 
 
