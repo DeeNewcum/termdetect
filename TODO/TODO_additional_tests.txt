@@ -89,6 +89,16 @@
         http://www.vt100.net/docs/vt510-rm/DECRQM#T5-8
 
 
+============================================================
+========================[ encoding ]========================
+============================================================
+
+- Test some of the invalid byte sequences.  It's possible that different terminals use 
+  different lexers, and this could be revealed by different problems with each lexer.
+
+        http://en.wikipedia.org/wiki/UTF-8#Invalid_byte_sequences
+        http://www.unicode.org/reports/tr36/#Canonical_Represenation
+
 
 
 
