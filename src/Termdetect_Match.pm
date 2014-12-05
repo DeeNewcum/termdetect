@@ -72,7 +72,7 @@ sub match_fingerprint {
             if (keys %$match_stats) {
                 print STDERR "Error: No terminals matched exactly.  Terminals that were close:\n";
                 my $closest_match = show_match_percentages($match_stats, 5);
-                print STDERR "\nRun this for more info:\n    $0 --check=$closest_match\n";
+                print STDERR "\nRun this for more info:\n    $0 --check='$closest_match'\n";
                 print STDERR "\n\nIt would help out greatly if you could submit data about this.\n";
                 print STDERR "See       termdetect --help-submit\n";
                 exit 1;
