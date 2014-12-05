@@ -14,7 +14,7 @@ Within fingerprints.src files, "capabilities" can also be called "tests" — eac
     <th>other names
     <th>request
     <th>example reply
-    <th>reference
+    <th>reference‡
 
 <tr><td><tt>r_device_status
     <td>DSR, device status report
@@ -131,7 +131,7 @@ Group #3 happens because there is no standard or agreement on the format of all 
 <tr><th>capability name
     <th>other names
     <th>test
-    <th>reference
+    <th>reference‡
 
 <tr><td><tt>m_c1
     <td>is the C1 character set supported?<br>C1-CSI version of erase to EOL
@@ -256,7 +256,7 @@ When no TERM field is given, the main fingerprint name is used as a fallback.  W
 
 
 
-### Documents referenced
+### Documents referenced ‡
 
 * vt102 — [VT102 User Guide, Appendix C](http://vt100.net/docs/vt102-ug/appendixc.html)
 * vt510 — [VT510 Video Terminal Programmer Information](http://www.vt100.net/docs/vt510-rm/chapter4#S4.6)
