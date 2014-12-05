@@ -95,7 +95,7 @@ sub _parse_terminfo  {
         our @fields = ();
         our $is_continuation = 1;
         $lines[$lineno] =~ m{
-              ^ \# .*           # ignore comment lines
+              ^ \s* \# .*       # ignore comment lines
             | ^ \s* $           # ignore blank lines
             | ^( \s* )
                                     (?{ $is_continuation = length $^N    })
