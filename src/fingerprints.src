@@ -57,29 +57,46 @@ linux|Linux console,
     r_window_title=,
     s_ff_clears=false,
 
-# The xterm from http://invisible-island.net/ (specifically version #271)
+# The xterm from http://invisible-island.net/ (specifically version #297)
 # 
 # Tips for looking through source code:
 #       - search for "unparse"
 #       - charproc.c -- most of the reply code is here
-xterm*v271,
-    TERM=xterm+256color|xtermc,
-#    m_c1=%x+2,
+#       - for the actual characters that trigger these conditions (eg. CASE_DA2), run:
+#               grep PARSE_T VTPrsTbl.c | sed 's/CSI/ESC [/'
+#               
+# You can also get the "trace" messages by rebuilding the source code:
+#       sudo apt-get install xutils-dev x11proto-core-dev libxt-dev libxmu-headers libxaw7-dev
+#       ./configure --enable-trace
+#       make
+# then it should leave files named "Trace-*.out" in the current directory.
+xterm*v297,
+    TERM=xterm+255color|xtermc,
+    # m_c1=%x+2,
     m_cancel=,
     m_esc=,
     m_null_inside=,
     m_pad_null=,
     m_sub=,
-    r_device_attr=\E[?1;2c,
-    r_device_attr2=\E[>0;%+;0c,
-    r_device_attr3=,
+        # source code -- search for "CASE_DA1"
+    r_device_attr=\E[?%+c,
+        # source code -- search for "CASE_DA2"
+    r_device_attr2=\E[>%+;0c,
+        # source code -- search for "CASE_DECRPTUI"
+    # blank most of the time, except when in VT420 mode
+    r_device_attr3=%*,
     r_device_status=\E[0n,
     r_enquiry=,
     r_ext_cursor_pos=\E%+R,
-    r_printer_status=,
+        # source code -- search for "CASE_CPR" then "case 15"
+    # blank unless it's in VT200 mode or above
+    r_printer_status=%*,
     r_screen_size=,
-    r_term_id=\E[?1;2c,
-    r_term_param=\E[2;1;1;128;128;1;0x,
+        # source code -- search for "DECID"  (gotcha -- note fallthrough to CASE_DA1!)
+    r_term_id=\E[?%+c,
+        # source code -- search for "CASE_DECREQTPARM"
+    # can be blank sometimes
+    r_term_param=%*,
     r_window_icon_label=,
     r_window_pos=,
     r_window_size_char=,
@@ -87,12 +104,6 @@ xterm*v271,
     r_window_state=,
     r_window_title=,
     s_ff_clears=false,
-
-xterm*v297,
-    m_c1=%x+3,
-    r_printer_status=\E[?13n,
-    r_term_param=,
-    use=xterm*v271,
 
 # The xterm that comes with X11 release 6.
 #   (specifically, this data comes from Solaris 10, and X11 release 6.4)

@@ -29,7 +29,7 @@ Within fingerprints.src files, "capabilities" can also be called "tests" — eac
     <td>
 
 <tr><td><tt>r_term_id
-    <td>DCID, identify terminal
+    <td>DECID, identify terminal
     <td><tt>\eZ
     <td>
     <td>vt510
