@@ -3,3 +3,4 @@ termdetect.fatpacked
 termping.fatpacked
 release/*.bz2
 *.swp
+src/fatlib/
