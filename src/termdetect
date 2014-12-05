@@ -345,6 +345,10 @@ termdetect
   --snapshot
         Outputs the current fingerprint in a form that's suitable for
         cut-n-pasting into fingerprints.src.
+
+        (the difference between this and --dump:  some fields are tweaked to include regexes that
+         allow them to match a slightly wider range of values;  this is more appropriate for
+         fingerprint matching, but it does obscure some of of the fine details)
         
         See here for more:
             https://github.com/DeeNewcum/termdetect/blob/master/doc/customize_fingerprintsdb.md
