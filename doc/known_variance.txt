@@ -9,3 +9,34 @@ different versions, or due to settings changes)
         in v6.7.2, it displays as a single character
         in v7.0.2, it reads the 4-byte utf8 sequence as a 3-byte sequence, followed by an 0x9E,
                 which causes it to eat the following escape sequence
+
+                
+========================================[ settings variance ]========================================
+
+- Xterm has many different settings, including command-line settings:
+                -ti vt52            start in VT52 mode
+                -ti vt102           start in VT102 mode
+                -ti vt220           start in VT220 mode
+                -wc and -u8         enable/disable processing of UTF-8 characters
+        and resource settings:
+                allowColorOps       allowed to set/query color information?
+                allowFontOps        allowed to set/query font information?
+                allowScrollLock     allowed to set/query the scroll-lock information?
+                allowSendEvents     holy fuck, big security hole
+                allowTcapOps        allowed to query termcap-related info?
+                allowTitleOps       allowed to set/query the title?
+                allowWindowOps      allow escape sequences to control the window
+                answerbackString    sets the response for ENQ  (defaults to "")
+                autoWrap            
+                cjkWidth
+                combiningChars
+                disallowedColorOps
+                limitResize
+                mkWidth
+                reverseWrap
+                tekInhibit
+                titeInhibit
+                titleModes
+                utf8Title
+                vt100Graphics
+                wideChars

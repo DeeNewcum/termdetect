@@ -58,7 +58,11 @@ linux|Linux console,
     s_ff_clears=false,
 
 # The xterm from http://invisible-island.net/ (specifically version #271)
-xterm,
+# 
+# Tips for looking through source code:
+#       - search for "unparse"
+#       - charproc.c -- most of the reply code is here
+xterm*v271,
     TERM=xterm+256color|xtermc,
 #    m_c1=%x+2,
     m_cancel=,
@@ -84,6 +88,11 @@ xterm,
     r_window_title=,
     s_ff_clears=false,
 
+xterm*v297,
+    m_c1=%x+3,
+    r_printer_status=\E[?13n,
+    r_term_param=,
+    use=xterm*v271,
 
 # The xterm that comes with X11 release 6.
 #   (specifically, this data comes from Solaris 10, and X11 release 6.4)
