@@ -69,7 +69,13 @@ linux|Linux console,
 #       sudo apt-get install xutils-dev x11proto-core-dev libxt-dev libxmu-headers libxaw7-dev
 #       ./configure --enable-trace
 #       make
-# then it should leave files named "Trace-*.out" in the current directory.
+# then it should leave a file named Trace-parent.out in the current directory.
+# To create a log for a specific escape code, run:
+#       ./xterm &
+#       echo -e -n "\e[?6n"; exit
+# Then to view the log, run this outside of xterm:
+#       grep '^CASE_\|^parse' Trace-parent.out  | perl -ple 's/^(CASE_.*)/$1\n/' | tail -50
+# and ignore sections with "CASE_PRINT".  Note that "001B" is the escape character.
 xterm*v297,
     TERM=xterm+255color|xtermc,
     # m_c1=%x+2,
@@ -132,6 +138,7 @@ xterm-r6,
     r_window_title=,
     s_ff_clears=false,
 
+# source code -- search for "ldisc_send" in terminal.c
 putty,
     TERM=putty-256color,
     m_c1=,
@@ -141,7 +148,7 @@ putty,
     m_pad_null=,
     m_sub=,
     r_device_attr=\E[?6c,
-# it ALWAYS reports version 136
+    # DA2 *ALWAYS* reports version 136
     r_device_attr2=\E[>0;136;0c,
     r_device_attr3=,
     r_device_status=\E[0n,
@@ -149,7 +156,9 @@ putty,
     r_ext_cursor_pos=,
     r_printer_status=,
     r_screen_size=,
+    # This is the usual response.  However, it can be changed via:    \e [ 50 ; ... " p
     r_term_id=\E[?6c,
+    # source code -- search for "DECREQTPARM";  this is a hard-coded value
     r_term_param=\E[2;1;1;112;112;1;0x,
     r_window_icon_label=\E]L%*\E\\,
     r_window_pos=\E[3;%+t,
@@ -209,7 +218,7 @@ aterm,
     use=rxvt*unknown_version,
 
 rxvt-unicode,
-# the $TERM name of "rxvt-unicode" is a patch added by Debian, in package 'ncurses-base'
+    # the $TERM name of "rxvt-unicode" is a patch added by Debian, in package 'ncurses-base'
     TERM=rxvt-unicode|rxvt-88color|rxvt,
     m_c1=%x+2,
     m_cancel=,
@@ -296,11 +305,11 @@ screen*4.00.03jw4|GNU Screen,
 
 securecrt,
     TERM=vt100,
-#    ^^ this REALLY varies, based on what its "emulation" setting is
-#    ^^ TODO: do some work to see what the closest match actually is
-#
-#   online suggestions:
-#       - http://tech.groups.yahoo.com/group/mutt-users/message/37609
+    # ^^ this REALLY varies, based on what its "emulation" setting is
+    # ^^ TODO: do some work to see what the closest match actually is
+    #
+    # online suggestions:
+    #       - http://tech.groups.yahoo.com/group/mutt-users/message/37609
     m_cancel=,
     m_esc=,
     m_null_inside=,
@@ -352,7 +361,7 @@ tmux,
 
 mosh,
     TERM=xterm-256color,
-#            ^^ this is the value that's automatically set by the Mosh server
+       # ^^ this is the value that's automatically set by the Mosh server
     m_c1=%x+3,
     m_cancel=,
     m_esc=,
@@ -386,7 +395,7 @@ teraterm,
     m_sub=,
     r_device_attr=\E[?1;2c,
     r_device_attr2=\E[>32;100;2c,
-# TeraTerm has a curious response to DA3:    http://ttssh2.sourceforge.jp/manual/en/setup/teraterm-term.html#TerminalUID
+    # TeraTerm has a curious response to DA3:    http://ttssh2.sourceforge.jp/manual/en/setup/teraterm-term.html#TerminalUID
     r_device_attr3=\EP!|%*\E\\,
     r_device_status=\E[0n,
     r_enquiry=,

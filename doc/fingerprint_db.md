@@ -252,7 +252,7 @@ There are two related names here — the fingerprint name, and $TERM.  The finge
 
 Usually a 'TERM' field is specified with each fingerprint.  Several alternatives can be given by separating them with pipes.  The leftmost is tried first, moving to the right until a name is found that the local terminfo database supports.
 
-When no TERM field is given, the main fingerprint name is used as a fallback.  When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is **removed** before displaying the name to the user, because the suffix is mostly only useful for internal purposes.
+When no TERM field is given, the main fingerprint name is used as a fallback.  When an asterisk is used in the main fingerprint name, it indicates that there are slightly different fingerprints for the same terminal.  The asterisk suffix is **removed** before displaying the name to the user, because the suffix is mostly only useful for internal purposes, such as indicating slightly different behavior exhibited by different versions of the terminal.
 
 
 
