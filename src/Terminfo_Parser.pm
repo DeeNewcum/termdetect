@@ -199,7 +199,7 @@ sub terminfo_unescape {
         \\(\d\d\d)    |
         (\%)(?=\\)    |         # i have no clue what the fuck this is...  but this is required to match the official parser's behavior
         ([\\^].)      |
-        \%{(\d\d+)}   |
+        \%\{(\d\d+)\} |
         \%'([^']+)'   |
         (%'[^']+'|%.)
     /
