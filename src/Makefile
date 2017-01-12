@@ -4,6 +4,11 @@
 # All this is done thanks to App::FatPacker.
 
 
+# IF YOU GET AN ERROR MESSAGE about fatpack not existing, then:
+#       apt install libapp-fatpacker-perl
+# or
+#       cpanm App::FatPacker
+
 all:	termdetect.fatpacked termping.fatpacked
 
 termdetect.fatpacked:	termdetect *.pm

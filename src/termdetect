@@ -117,7 +117,7 @@ if ($ARGV{snapshot}) {
                 ['font size',           $fingerprint->{s_font_size},           '(pixels)'  ],
                 ['window position',     $fingerprint->{s_window_pos},          '(pixels)'  ],
                 ['screen size',         $fingerprint->{s_screen_size},         '(pixels)'  ],
-                ['$TERM',               $suggested_term  ],
+                ['suggested $TERM',     $suggested_term  ],
         );
         foreach my $field (@fields) {
             next unless defined($field->[1]);
